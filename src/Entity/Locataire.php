@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\LocataireRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\User;
 
@@ -36,6 +38,24 @@ class Locataire extends User
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $photoProfile = null;
+
+    /**
+     * @var Collection<int, Reservation>
+     */
+    #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'locataire')]
+    private Collection $reservations;
+
+    /**
+     * @var Collection<int, Conversation>
+     */
+    #[ORM\OneToMany(targetEntity: Conversation::class, mappedBy: 'locataire')]
+    private Collection $conversations;
+
+    public function __construct()
+    {
+        $this->reservations = new ArrayCollection();
+        $this->conversations = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -155,5 +175,65 @@ class Locataire extends User
         $roles = parent::getRoles();
         $roles[] = 'ROLE_LOCATAIRE';
         return array_unique($roles);
+    }
+
+    /**
+     * @return Collection<int, Reservation>
+     */
+    public function getReservations(): Collection
+    {
+        return $this->reservations;
+    }
+
+    public function addReservation(Reservation $reservation): static
+    {
+        if (!$this->reservations->contains($reservation)) {
+            $this->reservations->add($reservation);
+            $reservation->setLocataire($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReservation(Reservation $reservation): static
+    {
+        if ($this->reservations->removeElement($reservation)) {
+            // set the owning side to null (unless already changed)
+            if ($reservation->getLocataire() === $this) {
+                $reservation->setLocataire(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Conversation>
+     */
+    public function getConversations(): Collection
+    {
+        return $this->conversations;
+    }
+
+    public function addConversation(Conversation $conversation): static
+    {
+        if (!$this->conversations->contains($conversation)) {
+            $this->conversations->add($conversation);
+            $conversation->setLocataire($this);
+        }
+
+        return $this;
+    }
+
+    public function removeConversation(Conversation $conversation): static
+    {
+        if ($this->conversations->removeElement($conversation)) {
+            // set the owning side to null (unless already changed)
+            if ($conversation->getLocataire() === $this) {
+                $conversation->setLocataire(null);
+            }
+        }
+
+        return $this;
     }
 }

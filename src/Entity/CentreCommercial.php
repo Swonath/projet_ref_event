@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\CentreCommercialRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\User;
@@ -43,6 +45,27 @@ class CentreCommercial extends User
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $photoProfile = null;
+
+    /**
+     * @var Collection<int, Emplacement>
+     */
+    #[ORM\OneToMany(targetEntity: Emplacement::class, mappedBy: 'centreCommercial', orphanRemoval: true)]
+    private Collection $emplacements;
+
+    /**
+     * @var Collection<int, Conversation>
+     */
+    #[ORM\OneToMany(targetEntity: Conversation::class, mappedBy: 'centreCommercial')]
+    private Collection $conversations;
+
+    #[ORM\ManyToOne(inversedBy: 'centreValides')]
+    private ?Administrateur $adminValidateur = null;
+
+    public function __construct()
+    {
+        $this->emplacements = new ArrayCollection();
+        $this->conversations = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -186,5 +209,77 @@ class CentreCommercial extends User
         $roles = parent::getRoles();
         $roles[] = 'ROLE_CENTRE';
         return array_unique($roles);
+    }
+
+    /**
+     * @return Collection<int, Emplacement>
+     */
+    public function getEmplacements(): Collection
+    {
+        return $this->emplacements;
+    }
+
+    public function addEmplacement(Emplacement $emplacement): static
+    {
+        if (!$this->emplacements->contains($emplacement)) {
+            $this->emplacements->add($emplacement);
+            $emplacement->setCentreCommercial($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEmplacement(Emplacement $emplacement): static
+    {
+        if ($this->emplacements->removeElement($emplacement)) {
+            // set the owning side to null (unless already changed)
+            if ($emplacement->getCentreCommercial() === $this) {
+                $emplacement->setCentreCommercial(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Conversation>
+     */
+    public function getConversations(): Collection
+    {
+        return $this->conversations;
+    }
+
+    public function addConversation(Conversation $conversation): static
+    {
+        if (!$this->conversations->contains($conversation)) {
+            $this->conversations->add($conversation);
+            $conversation->setCentreCommercial($this);
+        }
+
+        return $this;
+    }
+
+    public function removeConversation(Conversation $conversation): static
+    {
+        if ($this->conversations->removeElement($conversation)) {
+            // set the owning side to null (unless already changed)
+            if ($conversation->getCentreCommercial() === $this) {
+                $conversation->setCentreCommercial(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getAdminValidateur(): ?Administrateur
+    {
+        return $this->adminValidateur;
+    }
+
+    public function setAdminValidateur(?Administrateur $adminValidateur): static
+    {
+        $this->adminValidateur = $adminValidateur;
+
+        return $this;
     }
 }

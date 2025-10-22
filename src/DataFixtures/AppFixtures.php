@@ -1,0 +1,863 @@
+<?php
+
+namespace App\DataFixtures;
+
+use App\Entity\Administrateur;
+use App\Entity\CentreCommercial;
+use App\Entity\Locataire;
+use App\Entity\Emplacement;
+use App\Entity\Reservation;
+use App\Entity\Paiement;
+use App\Entity\Document;
+use App\Entity\Avis;
+use App\Entity\Photo;
+use App\Entity\PeriodeIndisponibilite;
+use App\Entity\Conversation;
+use App\Entity\Message;
+use App\Entity\Parametre;
+use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Persistence\ObjectManager;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+
+class AppFixtures extends Fixture
+{
+    private UserPasswordHasherInterface $passwordHasher;
+
+    public function __construct(UserPasswordHasherInterface $passwordHasher)
+    {
+        $this->passwordHasher = $passwordHasher;
+    }
+
+    public function load(ObjectManager $manager): void
+    {
+        // ========================================
+        // 1. CRÉER L'ADMINISTRATEUR
+        // ========================================
+        $admin = new Administrateur();
+        $admin->setNom('Audet');
+        $admin->setPrenom('Nathan');
+        $admin->setEmail('naudet2003@gmail.com');
+        $admin->setPassword($this->passwordHasher->hashPassword($admin, 'admin123'));
+        $admin->setTelephone('0781794524');
+        $manager->persist($admin);
+
+        // ========================================
+        // 2. CRÉER LES CENTRES COMMERCIAUX
+        // ========================================
+        $centres = [];
+
+        // Centre 1 - Validé
+        $centre1 = new CentreCommercial();
+        $centre1->setNomCentre('Carrefour Belle Épine');
+        $centre1->setEmail('contact@belleepine.fr');
+        $centre1->setPassword($this->passwordHasher->hashPassword($centre1, 'centre123'));
+        $centre1->setSiret('12345678901234');
+        $centre1->setNumeroTva('FR12345678901');
+        $centre1->setAdresse('2 Avenue du Luxembourg');
+        $centre1->setCodePostal('94320');
+        $centre1->setVille('Thiais');
+        $centre1->setTelephone('0149806060');
+        $centre1->setDescription('Grand centre commercial au sud de Paris avec plus de 200 boutiques');
+        $centre1->setIban('FR7612345678901234567890123');
+        $centre1->setStatutCompte('actif');
+        $centre1->setAdminValidateur($admin);
+        $manager->persist($centre1);
+        $centres[] = $centre1;
+
+        // Centre 2 - Validé
+        $centre2 = new CentreCommercial();
+        $centre2->setNomCentre('Les Quatre Temps');
+        $centre2->setEmail('contact@4temps.fr');
+        $centre2->setPassword($this->passwordHasher->hashPassword($centre2, 'centre123'));
+        $centre2->setSiret('98765432109876');
+        $centre2->setNumeroTva('FR98765432109');
+        $centre2->setAdresse('15 Parvis de la Défense');
+        $centre2->setCodePostal('92092');
+        $centre2->setVille('Paris La Défense');
+        $centre2->setTelephone('0141020000');
+        $centre2->setDescription('Centre commercial emblématique de la Défense, cœur du quartier d\'affaires');
+        $centre2->setIban('FR7698765432109876543210987');
+        $centre2->setStatutCompte('actif');
+        $centre2->setAdminValidateur($admin);
+        $manager->persist($centre2);
+        $centres[] = $centre2;
+
+        // Centre 3 - En attente de validation
+        $centre3 = new CentreCommercial();
+        $centre3->setNomCentre('So Ouest');
+        $centre3->setEmail('contact@so-ouest.com');
+        $centre3->setPassword($this->passwordHasher->hashPassword($centre3, 'centre123'));
+        $centre3->setSiret('11223344556677');
+        $centre3->setAdresse('15 Rue du Dôme');
+        $centre3->setCodePostal('92100');
+        $centre3->setVille('Boulogne-Billancourt');
+        $centre3->setTelephone('0155200000');
+        $centre3->setDescription('Centre commercial moderne dans l\'ouest parisien');
+        $centre3->setStatutCompte('en_attente');
+        $manager->persist($centre3);
+        $centres[] = $centre3;
+
+        // ========================================
+        // 3. CRÉER LES LOCATAIRES
+        // ========================================
+        $locataires = [];
+
+        // Locataire 1 - Particulier
+        $locataire1 = new Locataire();
+        $locataire1->setNom('Martin Sophie');
+        $locataire1->setEmail('sophie.martin@email.fr');
+        $locataire1->setPassword($this->passwordHasher->hashPassword($locataire1, 'locataire123'));
+        $locataire1->setAdresseFacturation('12 Rue de la Paix');
+        $locataire1->setCodePostal('75002');
+        $locataire1->setVille('Paris');
+        $locataire1->setTelephone('0612345678');
+        $locataire1->setStatutCompte('actif');
+        $locataire1->setTypeActivite('Artisanat - Bijoux faits main');
+        $manager->persist($locataire1);
+        $locataires[] = $locataire1;
+
+        // Locataire 2 - Entreprise
+        $locataire2 = new Locataire();
+        $locataire2->setNom('TechStore SARL');
+        $locataire2->setEmail('contact@techstore.fr');
+        $locataire2->setPassword($this->passwordHasher->hashPassword($locataire2, 'locataire123'));
+        $locataire2->setSiret('55566677788899');
+        $locataire2->setTypeActivite('Électronique et informatique');
+        $locataire2->setAdresseFacturation('45 Avenue des Champs-Élysées');
+        $locataire2->setCodePostal('75008');
+        $locataire2->setVille('Paris');
+        $locataire2->setTelephone('0145678901');
+        $locataire2->setStatutCompte('actif');
+        $manager->persist($locataire2);
+        $locataires[] = $locataire2;
+
+        // Locataire 3 - Entreprise
+        $locataire3 = new Locataire();
+        $locataire3->setNom('Bio & Vous');
+        $locataire3->setEmail('contact@bioevous.fr');
+        $locataire3->setPassword($this->passwordHasher->hashPassword($locataire3, 'locataire123'));
+        $locataire3->setSiret('99988877766655');
+        $locataire3->setTypeActivite('Alimentation bio et produits naturels');
+        $locataire3->setAdresseFacturation('78 Boulevard Voltaire');
+        $locataire3->setCodePostal('75011');
+        $locataire3->setVille('Paris');
+        $locataire3->setTelephone('0156789012');
+        $locataire3->setStatutCompte('actif');
+        $manager->persist($locataire3);
+        $locataires[] = $locataire3;
+
+        // Locataire 4 - Particulier
+        $locataire4 = new Locataire();
+        $locataire4->setNom('Dubois Pierre');
+        $locataire4->setEmail('pierre.dubois@email.fr');
+        $locataire4->setPassword($this->passwordHasher->hashPassword($locataire4, 'locataire123'));
+        $locataire4->setAdresseFacturation('23 Rue du Commerce');
+        $locataire4->setCodePostal('92100');
+        $locataire4->setVille('Boulogne-Billancourt');
+        $locataire4->setTelephone('0623456789');
+        $locataire4->setStatutCompte('actif');
+        $locataire4->setTypeActivite('Mode - Vêtements vintage');
+        $manager->persist($locataire4);
+        $locataires[] = $locataire4;
+
+        // Locataire 5 - Suspendu
+        $locataire5 = new Locataire();
+        $locataire5->setNom('Express Food');
+        $locataire5->setEmail('contact@expressfood.fr');
+        $locataire5->setPassword($this->passwordHasher->hashPassword($locataire5, 'locataire123'));
+        $locataire5->setSiret('44433322211100');
+        $locataire5->setTypeActivite('Restauration rapide');
+        $locataire5->setAdresseFacturation('90 Rue de Rivoli');
+        $locataire5->setCodePostal('75004');
+        $locataire5->setVille('Paris');
+        $locataire5->setTelephone('0167890123');
+        $locataire5->setStatutCompte('suspendu');
+        $manager->persist($locataire5);
+        $locataires[] = $locataire5;
+
+        // ========================================
+        // 4. CRÉER LES EMPLACEMENTS
+        // ========================================
+        $emplacements = [];
+
+        // Emplacement 1 - Centre 1
+        $emplacement1 = new Emplacement();
+        $emplacement1->setTitreAnnonce('Stand central idéal pour pop-up store');
+        $emplacement1->setDescription('Emplacement stratégique en plein cœur du centre, forte affluence toute la journée. Parfait pour lancement de produit ou vente événementielle.');
+        $emplacement1->setSurface('15.50');
+        $emplacement1->setLocalisationPrecise('Niveau 0 - Galerie principale, face aux escalators');
+        $emplacement1->setTypeEmplacement('stand');
+        $emplacement1->setEquipements('Électricité, éclairage LED, comptoir modulable');
+        $emplacement1->setTarifJour('180.00');
+        $emplacement1->setTarifSemaine('950.00');
+        $emplacement1->setTarifMois('3200.00');
+        $emplacement1->setCaution('500.00');
+        $emplacement1->setDureeMinLocation(1);
+        $emplacement1->setDureeMaxLocation(90);
+        $emplacement1->setStatutAnnonce('publiee');
+        $emplacement1->setDateCreation(new \DateTime('-60 days'));
+        $emplacement1->setDateModification(new \DateTime('-10 days'));
+        $emplacement1->setNombreVues(234);
+        $emplacement1->setCentreCommercial($centre1);
+        $manager->persist($emplacement1);
+        $emplacements[] = $emplacement1;
+
+        // Emplacement 2 - Centre 1
+        $emplacement2 = new Emplacement();
+        $emplacement2->setTitreAnnonce('Kiosque lumineux - Zone restauration');
+        $emplacement2->setDescription('Petit kiosque idéal pour vente de boissons, snacks ou accessoires. Situé dans la zone de restauration avec fort passage.');
+        $emplacement2->setSurface('8.00');
+        $emplacement2->setLocalisationPrecise('Niveau 1 - Food court, entrée principale');
+        $emplacement2->setTypeEmplacement('kiosque');
+        $emplacement2->setEquipements('Point d\'eau, électricité, vitrine réfrigérée possible');
+        $emplacement2->setTarifJour('120.00');
+        $emplacement2->setTarifSemaine('650.00');
+        $emplacement2->setTarifMois('2200.00');
+        $emplacement2->setCaution('400.00');
+        $emplacement2->setDureeMinLocation(7);
+        $emplacement2->setDureeMaxLocation(180);
+        $emplacement2->setStatutAnnonce('publiee');
+        $emplacement2->setDateCreation(new \DateTime('-45 days'));
+        $emplacement2->setNombreVues(156);
+        $emplacement2->setCentreCommercial($centre1);
+        $manager->persist($emplacement2);
+        $emplacements[] = $emplacement2;
+
+        // Emplacement 3 - Centre 1
+        $emplacement3 = new Emplacement();
+        $emplacement3->setTitreAnnonce('Boutique éphémère 30m² - Galerie mode');
+        $emplacement3->setDescription('Véritable boutique avec vitrine sur rue, système de fermeture sécurisé. Proche des enseignes de mode reconnues.');
+        $emplacement3->setSurface('30.00');
+        $emplacement3->setLocalisationPrecise('Niveau 2 - Galerie mode, entre Zara et H&M');
+        $emplacement3->setTypeEmplacement('boutique');
+        $emplacement3->setEquipements('Vitrine, rideau métallique, éclairage, cabine d\'essayage, stockage arrière');
+        $emplacement3->setTarifJour('250.00');
+        $emplacement3->setTarifSemaine('1400.00');
+        $emplacement3->setTarifMois('4800.00');
+        $emplacement3->setCaution('1000.00');
+        $emplacement3->setDureeMinLocation(30);
+        $emplacement3->setDureeMaxLocation(365);
+        $emplacement3->setStatutAnnonce('publiee');
+        $emplacement3->setDateCreation(new \DateTime('-30 days'));
+        $emplacement3->setNombreVues(89);
+        $emplacement3->setCentreCommercial($centre1);
+        $manager->persist($emplacement3);
+        $emplacements[] = $emplacement3;
+
+        // Emplacement 4 - Centre 2
+        $emplacement4 = new Emplacement();
+        $emplacement4->setTitreAnnonce('Corner premium - Hall d\'entrée');
+        $emplacement4->setDescription('Emplacement d\'exception dans le hall principal. Visibilité maximale, idéal pour marques premium ou lancement produit.');
+        $emplacement4->setSurface('20.00');
+        $emplacement4->setLocalisationPrecise('Niveau 0 - Hall principal, entrée métro');
+        $emplacement4->setTypeEmplacement('corner');
+        $emplacement4->setEquipements('Électricité triple phase, éclairage design, mobilier haut de gamme fourni');
+        $emplacement4->setTarifJour('350.00');
+        $emplacement4->setTarifSemaine('2000.00');
+        $emplacement4->setTarifMois('7000.00');
+        $emplacement4->setCaution('1500.00');
+        $emplacement4->setDureeMinLocation(3);
+        $emplacement4->setDureeMaxLocation(90);
+        $emplacement4->setStatutAnnonce('publiee');
+        $emplacement4->setDateCreation(new \DateTime('-20 days'));
+        $emplacement4->setNombreVues(312);
+        $emplacement4->setCentreCommercial($centre2);
+        $manager->persist($emplacement4);
+        $emplacements[] = $emplacement4;
+
+        // Emplacement 5 - Centre 2
+        $emplacement5 = new Emplacement();
+        $emplacement5->setTitreAnnonce('Stand modulable - Zone loisirs');
+        $emplacement5->setDescription('Stand adaptable selon vos besoins, proche du cinéma et de l\'espace enfants. Clientèle familiale.');
+        $emplacement5->setSurface('12.00');
+        $emplacement5->setLocalisationPrecise('Niveau 3 - Galerie loisirs, face au cinéma');
+        $emplacement5->setTypeEmplacement('stand');
+        $emplacement5->setEquipements('Électricité, tables pliantes, chaises disponibles');
+        $emplacement5->setTarifJour('150.00');
+        $emplacement5->setTarifSemaine('800.00');
+        $emplacement5->setTarifMois('2800.00');
+        $emplacement5->setCaution('500.00');
+        $emplacement5->setDureeMinLocation(1);
+        $emplacement5->setDureeMaxLocation(60);
+        $emplacement5->setStatutAnnonce('publiee');
+        $emplacement5->setDateCreation(new \DateTime('-15 days'));
+        $emplacement5->setNombreVues(178);
+        $emplacement5->setCentreCommercial($centre2);
+        $manager->persist($emplacement5);
+        $emplacements[] = $emplacement5;
+
+        // Emplacement 6 - Centre 2 (temporairement indisponible)
+        $emplacement6 = new Emplacement();
+        $emplacement6->setTitreAnnonce('Boutique 25m² - Secteur beauté');
+        $emplacement6->setDescription('Boutique avec vitrine, idéale pour cosmétiques, parfumerie ou accessoires beauté. Clientèle féminine ciblée.');
+        $emplacement6->setSurface('25.00');
+        $emplacement6->setLocalisationPrecise('Niveau 1 - Galerie beauté, près de Sephora');
+        $emplacement6->setTypeEmplacement('boutique');
+        $emplacement6->setEquipements('Vitrine, miroirs, éclairage adapté beauté, point d\'eau');
+        $emplacement6->setTarifJour('220.00');
+        $emplacement6->setTarifSemaine('1200.00');
+        $emplacement6->setTarifMois('4200.00');
+        $emplacement6->setCaution('800.00');
+        $emplacement6->setDureeMinLocation(14);
+        $emplacement6->setDureeMaxLocation(180);
+        $emplacement6->setStatutAnnonce('publiee');
+        $emplacement6->setDateCreation(new \DateTime('-50 days'));
+        $emplacement6->setNombreVues(267);
+        $emplacement6->setCentreCommercial($centre2);
+        $manager->persist($emplacement6);
+        $emplacements[] = $emplacement6;
+
+        // Emplacement 7 - Centre 3
+        $emplacement7 = new Emplacement();
+        $emplacement7->setTitreAnnonce('Kiosque d\'angle - Passage central');
+        $emplacement7->setDescription('Petit emplacement stratégique à l\'angle de deux galeries. Parfait pour vente de petits articles.');
+        $emplacement7->setSurface('6.00');
+        $emplacement7->setLocalisationPrecise('Niveau 0 - Intersection galerie A et B');
+        $emplacement7->setTypeEmplacement('kiosque');
+        $emplacement7->setEquipements('Électricité, comptoir fixe');
+        $emplacement7->setTarifJour('90.00');
+        $emplacement7->setTarifSemaine('500.00');
+        $emplacement7->setTarifMois('1700.00');
+        $emplacement7->setCaution('300.00');
+        $emplacement7->setDureeMinLocation(3);
+        $emplacement7->setDureeMaxLocation(90);
+        $emplacement7->setStatutAnnonce('brouillon');
+        $emplacement7->setDateCreation(new \DateTime('-5 days'));
+        $emplacement7->setNombreVues(12);
+        $emplacement7->setCentreCommercial($centre3);
+        $manager->persist($emplacement7);
+        $emplacements[] = $emplacement7;
+
+        // Emplacement 8 - Centre 1 (archivé)
+        $emplacement8 = new Emplacement();
+        $emplacement8->setTitreAnnonce('Stand temporaire - Fêtes de fin d\'année');
+        $emplacement8->setDescription('Stand saisonnier pour les fêtes. Location courte durée uniquement.');
+        $emplacement8->setSurface('10.00');
+        $emplacement8->setLocalisationPrecise('Niveau 0 - Près du sapin de Noël');
+        $emplacement8->setTypeEmplacement('stand');
+        $emplacement8->setEquipements('Électricité, décoration fournie');
+        $emplacement8->setTarifJour('200.00');
+        $emplacement8->setTarifSemaine('1100.00');
+        $emplacement8->setCaution('400.00');
+        $emplacement8->setDureeMinLocation(1);
+        $emplacement8->setDureeMaxLocation(30);
+        $emplacement8->setStatutAnnonce('archivee');
+        $emplacement8->setDateCreation(new \DateTime('-90 days'));
+        $emplacement8->setNombreVues(423);
+        $emplacement8->setCentreCommercial($centre1);
+        $manager->persist($emplacement8);
+        $emplacements[] = $emplacement8;
+
+        // Emplacement 9 - Centre 2
+        $emplacement9 = new Emplacement();
+        $emplacement9->setTitreAnnonce('Espace dégustation - Zone alimentaire');
+        $emplacement9->setDescription('Espace équipé pour démonstrations culinaires et dégustations. Normes alimentaires respectées.');
+        $emplacement9->setSurface('18.00');
+        $emplacement9->setLocalisationPrecise('Niveau 1 - Marché gourmand');
+        $emplacement9->setTypeEmplacement('corner');
+        $emplacement9->setEquipements('Point d\'eau, électricité, plan de travail inox, réfrigération');
+        $emplacement9->setTarifJour('280.00');
+        $emplacement9->setTarifSemaine('1600.00');
+        $emplacement9->setTarifMois('5500.00');
+        $emplacement9->setCaution('1000.00');
+        $emplacement9->setDureeMinLocation(7);
+        $emplacement9->setDureeMaxLocation(120);
+        $emplacement9->setStatutAnnonce('publiee');
+        $emplacement9->setDateCreation(new \DateTime('-12 days'));
+        $emplacement9->setNombreVues(94);
+        $emplacement9->setCentreCommercial($centre2);
+        $manager->persist($emplacement9);
+        $emplacements[] = $emplacement9;
+
+        // Emplacement 10 - Centre 1
+        $emplacement10 = new Emplacement();
+        $emplacement10->setTitreAnnonce('Mini-boutique 15m² - Galerie sport');
+        $emplacement10->setDescription('Petit espace commercial dans la galerie dédiée au sport et loisirs actifs.');
+        $emplacement10->setSurface('15.00');
+        $emplacement10->setLocalisationPrecise('Niveau 2 - Galerie sport, près de Decathlon');
+        $emplacement10->setTypeEmplacement('boutique');
+        $emplacement10->setEquipements('Vitrine, étagères murales, éclairage, rideau de fer');
+        $emplacement10->setTarifJour('170.00');
+        $emplacement10->setTarifSemaine('950.00');
+        $emplacement10->setTarifMois('3300.00');
+        $emplacement10->setCaution('650.00');
+        $emplacement10->setDureeMinLocation(14);
+        $emplacement10->setDureeMaxLocation(180);
+        $emplacement10->setStatutAnnonce('publiee');
+        $emplacement10->setDateCreation(new \DateTime('-25 days'));
+        $emplacement10->setNombreVues(143);
+        $emplacement10->setCentreCommercial($centre1);
+        $manager->persist($emplacement10);
+        $emplacements[] = $emplacement10;
+
+        // ========================================
+        // 5. CRÉER DES PHOTOS POUR LES EMPLACEMENTS
+        // ========================================
+        
+        // Photos pour emplacement 1
+        $photo1 = new Photo();
+        $photo1->setCheminFichier('/uploads/emplacements/emplacement1_vue1.jpg');
+        $photo1->setLegende('Vue générale du stand');
+        $photo1->setOrdreAffichage(1);
+        $photo1->setDateUpload(new \DateTime('-60 days'));
+        $photo1->setEmplacement($emplacement1);
+        $manager->persist($photo1);
+
+        $photo2 = new Photo();
+        $photo2->setCheminFichier('/uploads/emplacements/emplacement1_vue2.jpg');
+        $photo2->setLegende('Vue depuis l\'entrée principale');
+        $photo2->setOrdreAffichage(2);
+        $photo2->setDateUpload(new \DateTime('-60 days'));
+        $photo2->setEmplacement($emplacement1);
+        $manager->persist($photo2);
+
+        // Photos pour emplacement 4
+        $photo3 = new Photo();
+        $photo3->setCheminFichier('/uploads/emplacements/emplacement4_vue1.jpg');
+        $photo3->setLegende('Corner dans le hall principal');
+        $photo3->setOrdreAffichage(1);
+        $photo3->setDateUpload(new \DateTime('-20 days'));
+        $photo3->setEmplacement($emplacement4);
+        $manager->persist($photo3);
+
+        // ========================================
+        // 6. CRÉER DES PÉRIODES D'INDISPONIBILITÉ
+        // ========================================
+        
+        // Indisponibilité pour emplacement 6 (travaux)
+        $periode1 = new PeriodeIndisponibilite();
+        $periode1->setDateDebut(new \DateTime('+5 days'));
+        $periode1->setDateFin(new \DateTime('+12 days'));
+        $periode1->setMotif('Travaux de rénovation de la galerie');
+        $periode1->setEmplacement($emplacement6);
+        $manager->persist($periode1);
+
+        // Indisponibilité pour emplacement 1 (événement privé)
+        $periode2 = new PeriodeIndisponibilite();
+        $periode2->setDateDebut(new \DateTime('+30 days'));
+        $periode2->setDateFin(new \DateTime('+33 days'));
+        $periode2->setMotif('Événement privé du centre commercial');
+        $periode2->setEmplacement($emplacement1);
+        $manager->persist($periode2);
+
+        // ========================================
+        // 7. CRÉER LES RÉSERVATIONS
+        // ========================================
+        $reservations = [];
+
+        // Réservation 1 - Terminée avec avis
+        $reservation1 = new Reservation();
+        $reservation1->setDateDebut(new \DateTime('-45 days'));
+        $reservation1->setDateFin(new \DateTime('-38 days'));
+        $reservation1->setMontantLocation('950.00');
+        $reservation1->setMontantCommission('95.00');
+        $reservation1->setMontantTotal('1045.00');
+        $reservation1->setCautionVersee('500.00');
+        $reservation1->setStatut('terminee');
+        $reservation1->setDateDemande(new \DateTime('-50 days'));
+        $reservation1->setDateValidation(new \DateTime('-48 days'));
+        $reservation1->setDatePaiement(new \DateTime('-47 days'));
+        $reservation1->setLocataire($locataire1);
+        $reservation1->setEmplacement($emplacement1);
+        $manager->persist($reservation1);
+        $reservations[] = $reservation1;
+
+        // Réservation 2 - En cours
+        $reservation2 = new Reservation();
+        $reservation2->setDateDebut(new \DateTime('-3 days'));
+        $reservation2->setDateFin(new \DateTime('+4 days'));
+        $reservation2->setMontantLocation('180.00');
+        $reservation2->setMontantCommission('18.00');
+        $reservation2->setMontantTotal('198.00');
+        $reservation2->setCautionVersee('500.00');
+        $reservation2->setStatut('en_cours');
+        $reservation2->setDateDemande(new \DateTime('-10 days'));
+        $reservation2->setDateValidation(new \DateTime('-8 days'));
+        $reservation2->setDatePaiement(new \DateTime('-7 days'));
+        $reservation2->setLocataire($locataire2);
+        $reservation2->setEmplacement($emplacement1);
+        $manager->persist($reservation2);
+        $reservations[] = $reservation2;
+
+        // Réservation 3 - En attente de validation
+        $reservation3 = new Reservation();
+        $reservation3->setDateDebut(new \DateTime('+15 days'));
+        $reservation3->setDateFin(new \DateTime('+44 days'));
+        $reservation3->setMontantLocation('4800.00');
+        $reservation3->setMontantCommission('480.00');
+        $reservation3->setMontantTotal('5280.00');
+        $reservation3->setCautionVersee('1000.00');
+        $reservation3->setStatut('en_attente');
+        $reservation3->setDateDemande(new \DateTime('-2 days'));
+        $reservation3->setLocataire($locataire3);
+        $reservation3->setEmplacement($emplacement3);
+        $manager->persist($reservation3);
+        $reservations[] = $reservation3;
+
+        // Réservation 4 - Validée, en attente de paiement
+        $reservation4 = new Reservation();
+        $reservation4->setDateDebut(new \DateTime('+20 days'));
+        $reservation4->setDateFin(new \DateTime('+26 days'));
+        $reservation4->setMontantLocation('2000.00');
+        $reservation4->setMontantCommission('200.00');
+        $reservation4->setMontantTotal('2200.00');
+        $reservation4->setCautionVersee('1500.00');
+        $reservation4->setStatut('validee');
+        $reservation4->setDateDemande(new \DateTime('-5 days'));
+        $reservation4->setDateValidation(new \DateTime('-3 days'));
+        $reservation4->setLocataire($locataire2);
+        $reservation4->setEmplacement($emplacement4);
+        $manager->persist($reservation4);
+        $reservations[] = $reservation4;
+
+        // Réservation 5 - Refusée
+        $reservation5 = new Reservation();
+        $reservation5->setDateDebut(new \DateTime('+10 days'));
+        $reservation5->setDateFin(new \DateTime('+17 days'));
+        $reservation5->setMontantLocation('800.00');
+        $reservation5->setMontantCommission('80.00');
+        $reservation5->setMontantTotal('880.00');
+        $reservation5->setStatut('refusee');
+        $reservation5->setDateDemande(new \DateTime('-4 days'));
+        $reservation5->setDateValidation(new \DateTime('-2 days'));
+        $reservation5->setMotifRefus('Dates indisponibles en raison d\'un événement planifié');
+        $reservation5->setLocataire($locataire4);
+        $reservation5->setEmplacement($emplacement5);
+        $manager->persist($reservation5);
+        $reservations[] = $reservation5;
+
+        // Réservation 6 - Annulée par le locataire
+        $reservation6 = new Reservation();
+        $reservation6->setDateDebut(new \DateTime('+25 days'));
+        $reservation6->setDateFin(new \DateTime('+32 days'));
+        $reservation6->setMontantLocation('1200.00');
+        $reservation6->setMontantCommission('120.00');
+        $reservation6->setMontantTotal('1320.00');
+        $reservation6->setStatut('annulee');
+        $reservation6->setDateDemande(new \DateTime('-15 days'));
+        $reservation6->setDateValidation(new \DateTime('-13 days'));
+        $reservation6->setDatePaiement(new \DateTime('-12 days'));
+        $reservation6->setAnnuleePar('locataire');
+        $reservation6->setDateAnnulation(new \DateTime('-5 days'));
+        $reservation6->setLocataire($locataire1);
+        $reservation6->setEmplacement($emplacement6);
+        $manager->persist($reservation6);
+        $reservations[] = $reservation6;
+
+        // Réservation 7 - Confirmée (payée, à venir)
+        $reservation7 = new Reservation();
+        $reservation7->setDateDebut(new \DateTime('+40 days'));
+        $reservation7->setDateFin(new \DateTime('+46 days'));
+        $reservation7->setMontantLocation('1600.00');
+        $reservation7->setMontantCommission('160.00');
+        $reservation7->setMontantTotal('1760.00');
+        $reservation7->setCautionVersee('1000.00');
+        $reservation7->setStatut('confirmee');
+        $reservation7->setDateDemande(new \DateTime('-8 days'));
+        $reservation7->setDateValidation(new \DateTime('-6 days'));
+        $reservation7->setDatePaiement(new \DateTime('-5 days'));
+        $reservation7->setLocataire($locataire3);
+        $reservation7->setEmplacement($emplacement9);
+        $manager->persist($reservation7);
+        $reservations[] = $reservation7;
+
+        // ========================================
+        // 8. CRÉER LES PAIEMENTS
+        // ========================================
+        
+        // Paiement pour réservation 1
+        $paiement1 = new Paiement();
+        $paiement1->setMontant('1045.00');
+        $paiement1->setDatePaiement(new \DateTime('-47 days'));
+        $paiement1->setMethodePaiement('carte_bancaire');
+        $paiement1->setStatut('accepte');
+        $paiement1->setTransactionId('TRX_' . uniqid());
+        $paiement1->setReservation($reservation1);
+        $manager->persist($paiement1);
+
+        // Paiement pour réservation 2
+        $paiement2 = new Paiement();
+        $paiement2->setMontant('198.00');
+        $paiement2->setDatePaiement(new \DateTime('-7 days'));
+        $paiement2->setMethodePaiement('carte_bancaire');
+        $paiement2->setStatut('accepte');
+        $paiement2->setTransactionId('TRX_' . uniqid());
+        $paiement2->setReservation($reservation2);
+        $manager->persist($paiement2);
+
+        // Paiement pour réservation 6 (remboursé suite annulation)
+        $paiement3 = new Paiement();
+        $paiement3->setMontant('1320.00');
+        $paiement3->setDatePaiement(new \DateTime('-12 days'));
+        $paiement3->setMethodePaiement('virement');
+        $paiement3->setStatut('rembourse');
+        $paiement3->setTransactionId('TRX_' . uniqid());
+        $paiement3->setDateRemboursement(new \DateTime('-4 days'));
+        $paiement3->setMontantRembourse('1200.00'); // Frais de 120€ retenus
+        $paiement3->setReservation($reservation6);
+        $manager->persist($paiement3);
+
+        // Paiement pour réservation 7
+        $paiement4 = new Paiement();
+        $paiement4->setMontant('1760.00');
+        $paiement4->setDatePaiement(new \DateTime('-5 days'));
+        $paiement4->setMethodePaiement('carte_bancaire');
+        $paiement4->setStatut('accepte');
+        $paiement4->setTransactionId('TRX_' . uniqid());
+        $paiement4->setReservation($reservation7);
+        $manager->persist($paiement4);
+
+        // ========================================
+        // 9. CRÉER LES DOCUMENTS
+        // ========================================
+        
+        // Documents pour réservation 1
+        $document1 = new Document();
+        $document1->setTypeDocument('contrat');
+        $document1->setNumeroDocument('CONT-2024-001');
+        $document1->setDateGeneration(new \DateTime('-48 days'));
+        $document1->setCheminFichier('/uploads/documents/contrat_001.pdf');
+        $document1->setStatut('signe');
+        $document1->setReservation($reservation1);
+        $manager->persist($document1);
+
+        $document2 = new Document();
+        $document2->setTypeDocument('facture');
+        $document2->setNumeroDocument('FACT-2024-001');
+        $document2->setDateGeneration(new \DateTime('-47 days'));
+        $document2->setCheminFichier('/uploads/documents/facture_001.pdf');
+        $document2->setStatut('payee');
+        $document2->setReservation($reservation1);
+        $manager->persist($document2);
+
+        // Documents pour réservation 2
+        $document3 = new Document();
+        $document3->setTypeDocument('contrat');
+        $document3->setNumeroDocument('CONT-2024-002');
+        $document3->setDateGeneration(new \DateTime('-8 days'));
+        $document3->setCheminFichier('/uploads/documents/contrat_002.pdf');
+        $document3->setStatut('signe');
+        $document3->setReservation($reservation2);
+        $manager->persist($document3);
+
+        $document4 = new Document();
+        $document4->setTypeDocument('facture');
+        $document4->setNumeroDocument('FACT-2024-002');
+        $document4->setDateGeneration(new \DateTime('-7 days'));
+        $document4->setCheminFichier('/uploads/documents/facture_002.pdf');
+        $document4->setStatut('payee');
+        $document4->setReservation($reservation2);
+        $manager->persist($document4);
+
+        // Document pour réservation 4 (en attente de signature)
+        $document5 = new Document();
+        $document5->setTypeDocument('contrat');
+        $document5->setNumeroDocument('CONT-2024-004');
+        $document5->setDateGeneration(new \DateTime('-3 days'));
+        $document5->setCheminFichier('/uploads/documents/contrat_004.pdf');
+        $document5->setStatut('en_attente');
+        $document5->setReservation($reservation4);
+        $manager->persist($document5);
+
+        // ========================================
+        // 10. CRÉER LES AVIS
+        // ========================================
+        
+        // Avis du locataire 1 sur réservation 1
+        $avis1 = new Avis();
+        $avis1->setNoteGlobale(5);
+        $avis1->setNotePropreteConformite(5);
+        $avis1->setNoteEmplacement(5);
+        $avis1->setNoteQualitePrix(4);
+        $avis1->setNoteCommunication(5);
+        $avis1->setCommentaire('Emplacement parfait pour mon pop-up store de bijoux ! Très bon passage, personnel du centre très aidant. Je recommande vivement cet emplacement.');
+        $avis1->setTypeAuteur('locataire');
+        $avis1->setDateCreation(new \DateTime('-36 days'));
+        $avis1->setDatePublication(new \DateTime('-35 days'));
+        $avis1->setEstPublie(true);
+        $avis1->setReservation($reservation1);
+        $manager->persist($avis1);
+
+        // Réponse du centre à l'avis 1
+        $avis1->setReponse('Merci beaucoup Sophie pour votre retour positif ! Nous sommes ravis que votre expérience se soit bien déroulée. Au plaisir de vous accueillir à nouveau.');
+        $avis1->setDateReponse(new \DateTime('-34 days'));
+        
+        // Avis du centre sur locataire 1
+        $avis2 = new Avis();
+        $avis2->setNoteGlobale(5);
+        $avis2->setNoteCommunication(5);
+        $avis2->setCommentaire('Locataire idéale, professionnelle et respectueuse des lieux. Stand très bien tenu, belle présentation. Nous serions heureux de la revoir.');
+        $avis2->setTypeAuteur('centre');
+        $avis2->setDateCreation(new \DateTime('-35 days'));
+        $avis2->setDatePublication(new \DateTime('-35 days'));
+        $avis2->setEstPublie(true);
+        $avis2->setReservation($reservation1);
+        $manager->persist($avis2);
+
+        // Avis non publié (modération en cours)
+        $avis3 = new Avis();
+        $avis3->setNoteGlobale(3);
+        $avis3->setNotePropreteConformite(3);
+        $avis3->setNoteEmplacement(4);
+        $avis3->setNoteQualitePrix(2);
+        $avis3->setNoteCommunication(3);
+        $avis3->setCommentaire('Emplacement correct mais prix un peu élevé pour la durée. Manque de prises électriques supplémentaires.');
+        $avis3->setTypeAuteur('locataire');
+        $avis3->setDateCreation(new \DateTime('-2 days'));
+        $avis3->setEstPublie(false);
+        $avis3->setReservation($reservation2);
+        $manager->persist($avis3);
+
+        // ========================================
+        // 11. CRÉER LES CONVERSATIONS ET MESSAGES
+        // ========================================
+        
+        // Conversation 1 - Entre locataire 1 et centre 1
+        $conversation1 = new Conversation();
+        $conversation1->setSujet('Question sur équipements stand central');
+        $conversation1->setDateCreation(new \DateTime('-52 days'));
+        $conversation1->setDernierMessageDate(new \DateTime('-49 days'));
+        $conversation1->setEstArchivee(false);
+        $conversation1->setLocataire($locataire1);
+        $conversation1->setCentreCommercial($centre1);
+        $conversation1->setReservation($reservation1);
+        $manager->persist($conversation1);
+
+        // Messages de la conversation 1
+        $message1 = new Message();
+        $message1->setContenu('Bonjour, je souhaiterais savoir si le stand dispose d\'assez de prises électriques pour mon matériel de présentation ?');
+        $message1->setDateEnvoi(new \DateTime('-52 days'));
+        $message1->setEstLu(true);
+        $message1->setDateLecture(new \DateTime('-52 days'));
+        $message1->setTypeExpediteur('locataire');
+        $message1->setConversation($conversation1);
+        $manager->persist($message1);
+
+        $message2 = new Message();
+        $message2->setContenu('Bonjour Sophie, le stand dispose de 2 prises classiques et 1 prise triphasée. Si vous avez besoin de plus, nous pouvons installer une multiprise. Combien de prises vous faut-il ?');
+        $message2->setDateEnvoi(new \DateTime('-51 days'));
+        $message2->setEstLu(true);
+        $message2->setDateLecture(new \DateTime('-51 days'));
+        $message2->setTypeExpediteur('centre');
+        $message2->setConversation($conversation1);
+        $manager->persist($message2);
+
+        $message3 = new Message();
+        $message3->setContenu('Parfait, 3 prises suffiront largement. Merci pour votre réactivité !');
+        $message3->setDateEnvoi(new \DateTime('-49 days'));
+        $message3->setEstLu(true);
+        $message3->setDateLecture(new \DateTime('-49 days'));
+        $message3->setTypeExpediteur('locataire');
+        $message3->setConversation($conversation1);
+        $manager->persist($message3);
+
+        // Conversation 2 - Entre locataire 3 et centre 1
+        $conversation2 = new Conversation();
+        $conversation2->setSujet('Demande d\'informations boutique 30m²');
+        $conversation2->setDateCreation(new \DateTime('-3 days'));
+        $conversation2->setDernierMessageDate(new \DateTime('-1 day'));
+        $conversation2->setEstArchivee(false);
+        $conversation2->setLocataire($locataire3);
+        $conversation2->setCentreCommercial($centre1);
+        $conversation2->setReservation($reservation3);
+        $manager->persist($conversation2);
+
+        $message4 = new Message();
+        $message4->setContenu('Bonjour, je suis intéressée par votre boutique de 30m². Serait-il possible de la visiter avant de confirmer ma réservation ?');
+        $message4->setDateEnvoi(new \DateTime('-3 days'));
+        $message4->setEstLu(true);
+        $message4->setDateLecture(new \DateTime('-3 days'));
+        $message4->setTypeExpediteur('locataire');
+        $message4->setConversation($conversation2);
+        $manager->persist($message4);
+
+        $message5 = new Message();
+        $message5->setContenu('Bonjour, bien sûr ! Nous pouvons organiser une visite. Seriez-vous disponible cette semaine ? Nous proposons des créneaux mardi et jeudi entre 10h et 16h.');
+        $message5->setDateEnvoi(new \DateTime('-2 days'));
+        $message5->setEstLu(true);
+        $message5->setDateLecture(new \DateTime('-2 days'));
+        $message5->setTypeExpediteur('centre');
+        $message5->setConversation($conversation2);
+        $manager->persist($message5);
+
+        $message6 = new Message();
+        $message6->setContenu('Jeudi 14h serait parfait pour moi. Merci !');
+        $message6->setDateEnvoi(new \DateTime('-1 day'));
+        $message6->setEstLu(false);
+        $message6->setTypeExpediteur('locataire');
+        $message6->setConversation($conversation2);
+        $manager->persist($message6);
+
+        // Conversation 3 - Question générale (sans réservation)
+        $conversation3 = new Conversation();
+        $conversation3->setSujet('Renseignement sur les modalités de location');
+        $conversation3->setDateCreation(new \DateTime('-7 days'));
+        $conversation3->setDernierMessageDate(new \DateTime('-6 days'));
+        $conversation3->setEstArchivee(false);
+        $conversation3->setLocataire($locataire4);
+        $conversation3->setCentreCommercial($centre2);
+        $manager->persist($conversation3);
+
+        $message7 = new Message();
+        $message7->setContenu('Bonjour, quelles sont les modalités de paiement ? Faut-il payer l\'intégralité à la réservation ?');
+        $message7->setDateEnvoi(new \DateTime('-7 days'));
+        $message7->setEstLu(true);
+        $message7->setDateLecture(new \DateTime('-7 days'));
+        $message7->setTypeExpediteur('locataire');
+        $message7->setConversation($conversation3);
+        $manager->persist($message7);
+
+        $message8 = new Message();
+        $message8->setContenu('Bonjour Pierre, le paiement se fait en ligne une fois votre réservation validée par nos équipes. La caution est débitée séparément et vous sera restituée dans les 7 jours suivant la fin de la location si tout est conforme.');
+        $message8->setDateEnvoi(new \DateTime('-6 days'));
+        $message8->setEstLu(true);
+        $message8->setDateLecture(new \DateTime('-6 days'));
+        $message8->setTypeExpediteur('centre');
+        $message8->setConversation($conversation3);
+        $manager->persist($message8);
+
+        // ========================================
+        // 12. CRÉER LES PARAMÈTRES SYSTÈME
+        // ========================================
+        
+        $parametre1 = new Parametre();
+        $parametre1->setNomParametre('taux_commission');
+        $parametre1->setValeur('10');
+        $parametre1->setDescription('Taux de commission en pourcentage appliqué sur chaque location');
+        $parametre1->setDateModification(new \DateTime('-90 days'));
+        $manager->persist($parametre1);
+
+        $parametre2 = new Parametre();
+        $parametre2->setNomParametre('delai_annulation_gratuite');
+        $parametre2->setValeur('7');
+        $parametre2->setDescription('Nombre de jours avant le début de la location pour annulation gratuite');
+        $parametre2->setDateModification(new \DateTime('-90 days'));
+        $manager->persist($parametre2);
+
+        $parametre3 = new Parametre();
+        $parametre3->setNomParametre('delai_validation_reservation');
+        $parametre3->setValeur('48');
+        $parametre3->setDescription('Délai en heures pour que le centre valide une demande de réservation');
+        $parametre3->setDateModification(new \DateTime('-90 days'));
+        $manager->persist($parametre3);
+
+        $parametre4 = new Parametre();
+        $parametre4->setNomParametre('email_contact');
+        $parametre4->setValeur('support@mallplace.fr');
+        $parametre4->setDescription('Email de contact pour le support technique');
+        $parametre4->setDateModification(new \DateTime('-90 days'));
+        $manager->persist($parametre4);
+
+        $parametre5 = new Parametre();
+        $parametre5->setNomParametre('duree_affichage_avis');
+        $parametre5->setValeur('365');
+        $parametre5->setDescription('Durée en jours pendant laquelle les avis restent visibles');
+        $parametre5->setDateModification(new \DateTime('-90 days'));
+        $manager->persist($parametre5);
+
+        // ========================================
+        // SAUVEGARDER TOUTES LES DONNÉES
+        // ========================================
+        $manager->flush();
+    }
+}
