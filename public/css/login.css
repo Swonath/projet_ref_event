@@ -1,0 +1,193 @@
+/* ===================================
+   LOGIN.CSS - Styles page de connexion
+   =================================== */
+
+/* ===================================
+   FORM HEADER
+   =================================== */
+
+.form-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.form-title {
+    font-size: 32px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    letter-spacing: -0.5px;
+}
+
+.form-subtitle {
+    font-size: 16px;
+    color: #6b6b6b;
+}
+
+/* ===================================
+   FORM GROUPS
+   =================================== */
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #1a1a1a;
+}
+
+.form-input,
+.form-control {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #e5e5e5;
+    border-radius: 6px;
+    font-size: 15px;
+    transition: all 0.2s;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.form-input:focus,
+.form-control:focus {
+    outline: none;
+    border-color: #1a1a1a;
+}
+
+/* ===================================
+   FORM LINKS (Remember me + Forgot password)
+   =================================== */
+
+.form-links {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 0;
+    font-size: 14px;
+}
+
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.checkbox-group input[type="checkbox"] {
+    cursor: pointer;
+}
+
+.checkbox-group label {
+    cursor: pointer;
+    color: #6b6b6b;
+}
+
+.form-link {
+    color: #1a1a1a;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.form-link:hover {
+    text-decoration: underline;
+    color: #2a2a2a;
+}
+
+/* ===================================
+   BUTTON
+   =================================== */
+
+.btn-primary {
+    width: 100%;
+    padding: 14px;
+    background: #1a1a1a;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-primary:hover {
+    background: #2a2a2a;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* ===================================
+   INFO BOX
+   =================================== */
+
+.info-box {
+    text-align: center;
+    margin-top: 24px;
+    padding: 16px;
+    background: #f5f5f5;
+    border-radius: 6px;
+    font-size: 14px;
+    color: #6b6b6b;
+}
+
+.info-box a {
+    color: #1a1a1a;
+    text-decoration: underline;
+    font-weight: 600;
+    transition: color 0.2s;
+}
+
+.info-box a:hover {
+    color: #2a2a2a;
+}
+
+/* ===================================
+   ALERTS
+   =================================== */
+
+.alert {
+    padding: 16px;
+    border-radius: 6px;
+    margin-bottom: 24px;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.alert-danger {
+    background: #ffebee;
+    color: #c62828;
+    border: 1px solid #ef9a9a;
+}
+
+.alert-success {
+    background: #e8f5e9;
+    color: #2e7d32;
+    border: 1px solid #a5d6a7;
+}
+
+/* ===================================
+   RESPONSIVE
+   =================================== */
+
+@media (max-width: 576px) {
+    .form-links {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+    
+    .form-title {
+        font-size: 28px;
+    }
+    
+    .form-subtitle {
+        font-size: 15px;
+    }
+}
