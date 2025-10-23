@@ -105,5 +105,5 @@
         Vous avez déjà un compte ? <a href="{{ path('app_login') }}">Se connecter</a>
     </div>
 
-{{ form_end(registrationForm) }}
+{{ form_end(registrationForm, {'render_rest': false}) }}
 {% endblock %}
