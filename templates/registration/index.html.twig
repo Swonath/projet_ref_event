@@ -1,20 +1,173 @@
-{% extends 'base.html.twig' %}
+{% extends 'base_auth.html.twig' %}
 
-{% block title %}Hello RegistrationController!{% endblock %}
+{% block title %}Inscription - MallPlace{% endblock %}
+
+{% block stylesheets %}
+<style>
+    .form-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+    
+    .form-title {
+        font-size: 32px;
+        font-weight: 600;
+        margin-bottom: 12px;
+        letter-spacing: -0.5px;
+    }
+    
+    .form-subtitle {
+        font-size: 16px;
+        color: #6b6b6b;
+    }
+    
+    /* Account Type Selection */
+    .account-type {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-bottom: 24px;
+    }
+    
+    .account-type-card {
+        display: block;
+        text-decoration: none;
+        color: inherit;
+    }
+    
+    .account-type-label {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 40px 20px;
+        border: 2px solid #e5e5e5;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s;
+        background: white;
+        text-align: center;
+    }
+    
+    .account-type-label:hover {
+        border-color: #1a1a1a;
+        background: #fafafa;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+    
+    .account-type-icon {
+        font-size: 48px;
+        margin-bottom: 16px;
+    }
+    
+    .account-type-name {
+        font-size: 18px;
+        font-weight: 600;
+        color: #1a1a1a;
+        margin-bottom: 8px;
+    }
+    
+    .account-type-description {
+        font-size: 14px;
+        color: #6b6b6b;
+        line-height: 1.5;
+    }
+    
+    .info-box {
+        text-align: center;
+        margin-top: 24px;
+        padding: 16px;
+        background: #f5f5f5;
+        border-radius: 6px;
+        font-size: 14px;
+        color: #6b6b6b;
+    }
+    
+    .info-box a {
+        color: #1a1a1a;
+        text-decoration: underline;
+        font-weight: 600;
+    }
+    
+    @media (max-width: 576px) {
+        .account-type {
+            grid-template-columns: 1fr;
+        }
+        
+        .form-title {
+            font-size: 28px;
+        }
+        
+        .account-type-icon {
+            font-size: 40px;
+        }
+    }
+</style>
+{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+<div class="main-container">
+    <!-- Left Side - Info -->
+    <div class="left-side">
+        <div class="left-content">
+            <h1>Rejoignez MallPlace</h1>
+            <p>La plateforme qui connecte les centres commerciaux et les locataires pour des locations d'emplacements éphémères.</p>
+            
+            <ul class="features-list">
+                <li>
+                    <div class="feature-icon">✓</div>
+                    <span>Réservation simple et rapide</span>
+                </li>
+                <li>
+                    <div class="feature-icon">✓</div>
+                    <span>Paiement sécurisé en ligne</span>
+                </li>
+                <li>
+                    <div class="feature-icon">✓</div>
+                    <span>Gestion complète de vos réservations</span>
+                </li>
+                <li>
+                    <div class="feature-icon">✓</div>
+                    <span>Support client disponible 7j/7</span>
+                </li>
+            </ul>
+        </div>
+    </div>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <!-- Right Side - Form -->
+    <div class="right-side">
+        <div class="form-container">
+            <div class="form-header">
+                <h2 class="form-title">Créer un compte</h2>
+                <p class="form-subtitle">Choisissez le type de compte qui vous correspond</p>
+            </div>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/Users/natha/references-evenements/src/Controller/RegistrationController.php</code></li>
-        <li>Your template at <code>C:/Users/natha/references-evenements/templates/registration/index.html.twig</code></li>
-    </ul>
+            <div class="account-type">
+                <a href="{{ path('app_register_locataire') }}" class="account-type-card">
+                    <div class="account-type-label">
+                        <div class="account-type-icon">👤</div>
+                        <div class="account-type-name">Locataire</div>
+                        <div class="account-type-description">
+                            Je recherche un emplacement temporaire pour mon activité
+                        </div>
+                    </div>
+                </a>
+                
+                <a href="{{ path('app_register_centre') }}" class="account-type-card">
+                    <div class="account-type-label">
+                        <div class="account-type-icon">🏢</div>
+                        <div class="account-type-name">Centre commercial</div>
+                        <div class="account-type-description">
+                            Je propose des emplacements à la location dans mon centre
+                        </div>
+                    </div>
+                </a>
+            </div>
+            
+            <div class="info-box">
+                Vous avez déjà un compte ? <a href="{{ path('app_login') }}">Se connecter</a>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

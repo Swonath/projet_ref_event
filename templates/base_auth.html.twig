@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}MallPlace{% endblock %}</title>
+    
+    {# Fichiers CSS externes #}
+    <link rel="stylesheet" href="{{ asset('css/auth.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/forms.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/responsive.css') }}">
+    
+    {% block stylesheets %}{% endblock %}
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <a href="{{ path('app_register') }}" class="logo">MallPlace</a>
+    </div>
+
+    {% block body %}{% endblock %}
+    
+    {% block javascripts %}{% endblock %}
+</body>
+</html>

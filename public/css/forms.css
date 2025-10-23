@@ -1,0 +1,301 @@
+/* ===================================
+   FORMS.CSS - Styles des formulaires
+   =================================== */
+
+/* ===================================
+   FORM GROUPS
+   =================================== */
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+/* ===================================
+   LABELS
+   =================================== */
+
+.form-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #1a1a1a;
+}
+
+/* ===================================
+   INPUTS, TEXTAREAS, SELECTS
+   =================================== */
+
+.form-input,
+.form-control,
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="tel"],
+input[type="number"],
+textarea,
+select {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #e5e5e5;
+    border-radius: 6px;
+    font-size: 15px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    transition: all 0.2s;
+    background-color: white;
+    color: #1a1a1a;
+}
+
+.form-input:focus,
+.form-control:focus,
+input:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: #1a1a1a;
+    background-color: #fafafa;
+}
+
+.form-input::placeholder,
+.form-control::placeholder,
+input::placeholder,
+textarea::placeholder {
+    color: #9b9b9b;
+}
+
+/* Textarea spécifique */
+textarea.form-control {
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* ===================================
+   FORM ROW (2 colonnes)
+   =================================== */
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+/* ===================================
+   HELP TEXT
+   =================================== */
+
+.form-text,
+.form-help,
+small.form-text {
+    display: block;
+    margin-top: 6px;
+    font-size: 13px;
+    color: #6b6b6b;
+    line-height: 1.4;
+}
+
+/* ===================================
+   ERROR MESSAGES (VALIDATION)
+   =================================== */
+
+.invalid-feedback {
+    display: block;
+    margin-top: 6px;
+    font-size: 13px;
+    color: #dc3545;
+    font-weight: 500;
+}
+
+.form-control.is-invalid,
+.form-input.is-invalid,
+input.is-invalid {
+    border-color: #dc3545;
+    background-color: #fff5f5;
+}
+
+.form-control.is-invalid:focus,
+.form-input.is-invalid:focus,
+input.is-invalid:focus {
+    border-color: #c62828;
+    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+}
+
+/* Erreurs du formulaire entier */
+.form-error-message {
+    padding: 12px;
+    background: #ffebee;
+    border: 1px solid #ef9a9a;
+    border-radius: 6px;
+    color: #c62828;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+/* ===================================
+   BUTTONS
+   =================================== */
+
+.btn-primary {
+    width: 100%;
+    padding: 14px;
+    background: #1a1a1a;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.btn-primary:hover {
+    background: #2a2a2a;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.btn-primary:disabled {
+    background: #9b9b9b;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.btn-secondary {
+    width: 100%;
+    padding: 14px;
+    background: white;
+    color: #1a1a1a;
+    border: 2px solid #e5e5e5;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.btn-secondary:hover {
+    border-color: #1a1a1a;
+    background: #fafafa;
+}
+
+/* ===================================
+   BUTTON GROUP
+   =================================== */
+
+.btn-group {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.btn-group .btn-primary,
+.btn-group .btn-secondary {
+    width: auto;
+    flex: 1;
+}
+
+/* ===================================
+   FORM SUBMIT BUTTON
+   =================================== */
+
+button[type="submit"] {
+    margin-top: 8px;
+}
+
+/* ===================================
+   DISABLED STATE
+   =================================== */
+
+input:disabled,
+textarea:disabled,
+select:disabled,
+.form-control:disabled {
+    background-color: #f5f5f5;
+    color: #9b9b9b;
+    cursor: not-allowed;
+}
+
+/* ===================================
+   REQUIRED FIELD INDICATOR
+   =================================== */
+
+.form-label.required::after {
+    content: " *";
+    color: #dc3545;
+    font-weight: 700;
+}
+
+/* ===================================
+   FORM VALIDATION SUCCESS
+   =================================== */
+
+.form-control.is-valid,
+input.is-valid {
+    border-color: #28a745;
+    background-color: #f0fff4;
+}
+
+.valid-feedback {
+    display: block;
+    margin-top: 6px;
+    font-size: 13px;
+    color: #28a745;
+    font-weight: 500;
+}
+
+/* ===================================
+   SELECT CUSTOM ARROW
+   =================================== */
+
+select.form-control {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%231a1a1a' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 36px;
+}
+
+/* ===================================
+   CHECKBOX & RADIO CUSTOM
+   =================================== */
+
+input[type="checkbox"],
+input[type="radio"] {
+    width: auto;
+    margin: 0;
+    cursor: pointer;
+}
+
+/* ===================================
+   FORM LOADING STATE
+   =================================== */
+
+.form-loading {
+    position: relative;
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+.form-loading::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 24px;
+    height: 24px;
+    margin: -12px 0 0 -12px;
+    border: 3px solid #e5e5e5;
+    border-top-color: #1a1a1a;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}

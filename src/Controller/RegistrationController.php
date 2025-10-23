@@ -2,17 +2,137 @@
 
 namespace App\Controller;
 
+use App\Entity\Locataire;
+use App\Entity\CentreCommercial;
+use App\Form\LocataireRegistrationType;
+use App\Form\CentreCommercialRegistrationType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Doctrine\ORM\EntityManagerInterface;
 
-final class RegistrationController extends AbstractController
+class RegistrationController extends AbstractController
 {
-    #[Route('/registration', name: 'app_registration')]
+    /**
+     * Page d'inscription - Choix du type de compte
+     */
+    #[Route('/inscription', name: 'app_register')]
     public function index(): Response
     {
-        return $this->render('registration/index.html.twig', [
-            'controller_name' => 'RegistrationController',
+        return $this->render('registration/index.html.twig');
+    }
+
+    /**
+     * Inscription d'un locataire (particulier ou entreprise)
+     */
+    #[Route('/inscription/locataire', name: 'app_register_locataire')]
+    public function registerLocataire(
+        Request $request, 
+        UserPasswordHasherInterface $passwordHasher,
+        EntityManagerInterface $entityManager
+    ): Response
+    {
+        // 1. CRÉER UN NOUVEAU LOCATAIRE VIDE
+        $locataire = new Locataire();
+        
+        // 2. CRÉER LE FORMULAIRE
+        $form = $this->createForm(LocataireRegistrationType::class, $locataire);
+        
+        // 3. TRAITER LA SOUMISSION DU FORMULAIRE
+        $form->handleRequest($request);
+        
+        // 4. VÉRIFIER SI LE FORMULAIRE EST SOUMIS ET VALIDE
+        if ($form->isSubmitted() && $form->isValid()) {
+            // À ce stade, $locataire contient déjà toutes les données du formulaire
+            // sauf le mot de passe (qui est dans 'plainPassword')
+            
+            // 5. VÉRIFIER SI L'EMAIL EXISTE DÉJÀ
+            $existingUser = $entityManager->getRepository(Locataire::class)
+                ->findOneBy(['email' => $locataire->getEmail()]);
+            
+            if ($existingUser) {
+                $this->addFlash('error', 'Cet email est déjà utilisé.');
+                return $this->redirectToRoute('app_register_locataire');
+            }
+            
+            // 6. CHIFFRER LE MOT DE PASSE
+            // Récupérer le mot de passe en clair depuis le formulaire
+            $plainPassword = $form->get('plainPassword')->getData();
+            
+            // Le chiffrer
+            $hashedPassword = $passwordHasher->hashPassword($locataire, $plainPassword);
+            $locataire->setPassword($hashedPassword);
+            
+            // 7. DÉFINIR LE STATUT DU COMPTE
+            $locataire->setStatutCompte('actif');
+            
+            // 8. SAUVEGARDER EN BASE DE DONNÉES
+            $entityManager->persist($locataire);
+            $entityManager->flush();
+            
+            // 9. MESSAGE DE CONFIRMATION ET REDIRECTION
+            $this->addFlash('success', 'Votre compte a été créé avec succès ! Vous pouvez maintenant vous connecter.');
+            return $this->redirectToRoute('app_login');
+        }
+        
+        // 10. AFFICHER LE FORMULAIRE (première visite ou formulaire invalide)
+        return $this->render('registration/locataire.html.twig', [
+            'registrationForm' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * Inscription d'un centre commercial
+     */
+    #[Route('/inscription/centre', name: 'app_register_centre')]
+    public function registerCentre(
+        Request $request, 
+        UserPasswordHasherInterface $passwordHasher,
+        EntityManagerInterface $entityManager
+    ): Response
+    {
+        // 1. CRÉER UN NOUVEAU CENTRE COMMERCIAL VIDE
+        $centre = new CentreCommercial();
+        
+        // 2. CRÉER LE FORMULAIRE
+        $form = $this->createForm(CentreCommercialRegistrationType::class, $centre);
+        
+        // 3. TRAITER LA SOUMISSION DU FORMULAIRE
+        $form->handleRequest($request);
+        
+        // 4. VÉRIFIER SI LE FORMULAIRE EST SOUMIS ET VALIDE
+        if ($form->isSubmitted() && $form->isValid()) {
+            // 5. VÉRIFIER SI L'EMAIL EXISTE DÉJÀ
+            $existingUser = $entityManager->getRepository(CentreCommercial::class)
+                ->findOneBy(['email' => $centre->getEmail()]);
+            
+            if ($existingUser) {
+                $this->addFlash('error', 'Cet email est déjà utilisé.');
+                return $this->redirectToRoute('app_register_centre');
+            }
+            
+            // 6. CHIFFRER LE MOT DE PASSE
+            $plainPassword = $form->get('plainPassword')->getData();
+            $hashedPassword = $passwordHasher->hashPassword($centre, $plainPassword);
+            $centre->setPassword($hashedPassword);
+            
+            // 7. DÉFINIR LE STATUT DU COMPTE (en attente de validation par un admin)
+            $centre->setStatutCompte('en_attente');
+            
+            // 8. SAUVEGARDER EN BASE DE DONNÉES
+            $entityManager->persist($centre);
+            $entityManager->flush();
+            
+            // 9. MESSAGE DE CONFIRMATION ET REDIRECTION
+            $this->addFlash('success', 'Votre demande d\'inscription a été envoyée. Un administrateur doit valider votre compte avant que vous puissiez vous connecter.');
+            return $this->redirectToRoute('app_login');
+        }
+        
+        // 10. AFFICHER LE FORMULAIRE
+        return $this->render('registration/centre.html.twig', [
+            'registrationForm' => $form->createView(),
         ]);
     }
 }

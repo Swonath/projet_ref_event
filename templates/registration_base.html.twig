@@ -1,0 +1,96 @@
+{% extends 'base_auth.html.twig' %}
+
+{% block title %}Inscription - MallPlace{% endblock %}
+
+{% block body %}
+<div class="main-container">
+    <!-- Left Side - Info -->
+    <div class="left-side">
+        <div class="left-content">
+            <h1>Rejoignez MallPlace</h1>
+            <p>La plateforme qui connecte les centres commerciaux et les locataires pour des locations d'emplacements éphémères.</p>
+            
+            <ul class="features-list">
+                <li>
+                    <div class="feature-icon">✓</div>
+                    <span>Réservation simple et rapide</span>
+                </li>
+                <li>
+                    <div class="feature-icon">✓</div>
+                    <span>Paiement sécurisé en ligne</span>
+                </li>
+                <li>
+                    <div class="feature-icon">✓</div>
+                    <span>Gestion complète de vos réservations</span>
+                </li>
+                <li>
+                    <div class="feature-icon">✓</div>
+                    <span>Support client disponible 7j/7</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Right Side - Form -->
+    <div class="right-side">
+        <div class="form-container">
+            <div class="form-header">
+                <h2 class="form-title">
+                    {% if app.request.get('_route') == 'app_register_locataire' %}
+                        Inscription Locataire
+                    {% elseif app.request.get('_route') == 'app_register_centre' %}
+                        Inscription Centre Commercial
+                    {% else %}
+                        Créer un compte
+                    {% endif %}
+                </h2>
+                <p class="form-subtitle">
+                    {% if app.request.get('_route') == 'app_register_locataire' %}
+                        Créez votre compte pour réserver des emplacements
+                    {% elseif app.request.get('_route') == 'app_register_centre' %}
+                        Créez votre compte pour proposer vos emplacements
+                    {% else %}
+                        Choisissez votre type de compte
+                    {% endif %}
+                </p>
+            </div>
+
+            {% if app.request.get('_route') == 'app_register' %}
+                <!-- Page de choix du type de compte -->
+                <div class="account-type">
+                    <a href="{{ path('app_register_locataire') }}" class="account-type-card">
+                        <div class="account-type-label">
+                            <div class="account-type-icon">👤</div>
+                            <div class="account-type-name">Locataire</div>
+                        </div>
+                    </a>
+                    <a href="{{ path('app_register_centre') }}" class="account-type-card">
+                        <div class="account-type-label">
+                            <div class="account-type-icon">🏢</div>
+                            <div class="account-type-name">Centre commercial</div>
+                        </div>
+                    </a>
+                </div>
+            {% else %}
+                <!-- Messages flash -->
+                {% for message in app.flashes('error') %}
+                    <div class="alert alert-danger">{{ message }}</div>
+                {% endfor %}
+                
+                {% for message in app.flashes('success') %}
+                    <div class="alert alert-success">{{ message }}</div>
+                {% endfor %}
+                
+                {% if app.request.get('_route') == 'app_register_centre' %}
+                    <div class="alert alert-info">
+                        <strong>Information :</strong> Votre compte devra être validé par un administrateur avant de pouvoir vous connecter.
+                    </div>
+                {% endif %}
+
+                <!-- Formulaire d'inscription -->
+                {% block registration_form %}{% endblock %}
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

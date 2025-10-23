@@ -1,0 +1,109 @@
+{% extends 'registration_base.html.twig' %}
+
+{% block registration_form %}
+{{ form_start(registrationForm, {'attr': {'novalidate': 'novalidate'}}) }}
+
+    {# Section : Informations de connexion #}
+    <div class="form-section">
+        <h3 class="form-section-title">Informations de connexion</h3>
+        
+        <div class="form-group">
+            {{ form_label(registrationForm.email, 'Email de contact', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(registrationForm.email, {'attr': {'class': 'form-control', 'placeholder': 'contact@centreatlantis.fr'}}) }}
+            {{ form_errors(registrationForm.email) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(registrationForm.plainPassword, 'Mot de passe', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'form-control', 'placeholder': '••••••••'}}) }}
+            {{ form_errors(registrationForm.plainPassword) }}
+        </div>
+    </div>
+
+    {# Section : Informations du centre #}
+    <div class="form-section">
+        <h3 class="form-section-title">Informations du centre commercial</h3>
+        
+        <div class="form-group">
+            {{ form_label(registrationForm.nomCentre, 'Nom du centre commercial', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(registrationForm.nomCentre, {'attr': {'class': 'form-control', 'placeholder': 'Ex: Centre Atlantis'}}) }}
+            {{ form_errors(registrationForm.nomCentre) }}
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                {{ form_label(registrationForm.siret, 'SIRET', {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(registrationForm.siret, {'attr': {'class': 'form-control', 'placeholder': '123 456 789 00012'}}) }}
+                {{ form_errors(registrationForm.siret) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(registrationForm.numeroTva, 'Numéro de TVA', {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(registrationForm.numeroTva, {'attr': {'class': 'form-control', 'placeholder': 'FR12345678901'}}) }}
+                {{ form_errors(registrationForm.numeroTva) }}
+                {{ form_help(registrationForm.numeroTva) }}
+            </div>
+        </div>
+
+        <div class="form-group">
+            {{ form_label(registrationForm.description, 'Description du centre', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(registrationForm.description, {'attr': {'class': 'form-control', 'rows': 3, 'placeholder': 'Décrivez votre centre commercial...'}}) }}
+            {{ form_errors(registrationForm.description) }}
+            {{ form_help(registrationForm.description) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(registrationForm.telephone, 'Téléphone', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(registrationForm.telephone, {'attr': {'class': 'form-control', 'placeholder': '02 40 12 34 56'}}) }}
+            {{ form_errors(registrationForm.telephone) }}
+        </div>
+    </div>
+
+    {# Section : Adresse du centre #}
+    <div class="form-section">
+        <h3 class="form-section-title">Adresse du centre</h3>
+        
+        <div class="form-group">
+            {{ form_label(registrationForm.adresse, 'Adresse complète', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(registrationForm.adresse, {'attr': {'class': 'form-control', 'placeholder': 'Numéro et nom de rue'}}) }}
+            {{ form_errors(registrationForm.adresse) }}
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                {{ form_label(registrationForm.codePostal, 'Code postal', {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(registrationForm.codePostal, {'attr': {'class': 'form-control', 'placeholder': '44000'}}) }}
+                {{ form_errors(registrationForm.codePostal) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(registrationForm.ville, 'Ville', {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(registrationForm.ville, {'attr': {'class': 'form-control', 'placeholder': 'Nantes'}}) }}
+                {{ form_errors(registrationForm.ville) }}
+            </div>
+        </div>
+    </div>
+
+    {# Section : Informations bancaires #}
+    <div class="form-section">
+        <h3 class="form-section-title">Informations bancaires</h3>
+        
+        <div class="form-group">
+            {{ form_label(registrationForm.iban, 'IBAN', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(registrationForm.iban, {'attr': {'class': 'form-control', 'placeholder': 'FR76 1234 5678 9012 3456 7890 123'}}) }}
+            {{ form_errors(registrationForm.iban) }}
+            {{ form_help(registrationForm.iban) }}
+        </div>
+    </div>
+
+    {# Bouton de soumission #}
+    <button type="submit" class="btn-primary">
+        Créer mon compte centre
+    </button>
+
+    <div class="info-box">
+        Vous avez déjà un compte ? <a href="{{ path('app_login') }}">Se connecter</a>
+    </div>
+
+{{ form_end(registrationForm) }}
+{% endblock %}

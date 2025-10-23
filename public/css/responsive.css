@@ -1,0 +1,295 @@
+/* ===================================
+   RESPONSIVE.CSS - Media Queries
+   =================================== */
+
+/* ===================================
+   TABLETTE (≤992px)
+   =================================== */
+
+@media (max-width: 992px) {
+    /* Split-screen devient vertical */
+    .main-container {
+        flex-direction: column;
+    }
+    
+    /* Left side */
+    .left-side {
+        padding: 40px 20px;
+        min-height: 300px;
+    }
+    
+    .left-content h1 {
+        font-size: 32px;
+    }
+    
+    .left-content p {
+        font-size: 16px;
+    }
+    
+    /* Right side */
+    .right-side {
+        padding: 40px 20px;
+    }
+    
+    /* Header */
+    .header {
+        padding: 16px 20px;
+    }
+}
+
+/* ===================================
+   MOBILE (≤768px)
+   =================================== */
+
+@media (max-width: 768px) {
+    /* Left side */
+    .left-content h1 {
+        font-size: 28px;
+        margin-bottom: 16px;
+    }
+    
+    .left-content p {
+        font-size: 15px;
+        margin-bottom: 24px;
+    }
+    
+    .features-list li {
+        font-size: 14px;
+        margin-bottom: 12px;
+    }
+    
+    /* Form */
+    .form-title {
+        font-size: 28px;
+    }
+    
+    .form-subtitle {
+        font-size: 15px;
+    }
+    
+    .form-header {
+        margin-bottom: 32px;
+    }
+    
+    /* Account type */
+    .account-type {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    
+    .account-type-icon {
+        font-size: 40px;
+    }
+    
+    .account-type-label {
+        padding: 30px 20px;
+    }
+}
+
+/* ===================================
+   PETIT MOBILE (≤576px)
+   =================================== */
+
+@media (max-width: 576px) {
+    /* Container */
+    .left-side {
+        padding: 30px 16px;
+        min-height: 250px;
+    }
+    
+    .right-side {
+        padding: 30px 16px;
+    }
+    
+    /* Typography */
+    .left-content h1 {
+        font-size: 24px;
+        letter-spacing: -0.5px;
+    }
+    
+    .left-content p {
+        font-size: 14px;
+    }
+    
+    .form-title {
+        font-size: 24px;
+    }
+    
+    .form-subtitle {
+        font-size: 14px;
+    }
+    
+    /* Form rows deviennent single column */
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+    
+    /* Account type single column */
+    .account-type {
+        grid-template-columns: 1fr;
+    }
+    
+    /* Form links stack vertically */
+    .form-links {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+    
+    /* Buttons */
+    .btn-primary,
+    .btn-secondary {
+        padding: 12px;
+        font-size: 14px;
+    }
+    
+    /* Sections */
+    .form-section {
+        margin: 24px 0;
+        padding-top: 20px;
+    }
+    
+    .form-section-title {
+        font-size: 16px;
+        margin-bottom: 16px;
+    }
+    
+    /* Alerts */
+    .alert {
+        padding: 12px;
+        font-size: 13px;
+    }
+    
+    /* Info box */
+    .info-box {
+        padding: 12px;
+        font-size: 13px;
+        margin-top: 20px;
+    }
+    
+    /* Features list */
+    .features-list {
+        display: none; /* Cache sur très petit écran pour gagner de la place */
+    }
+    
+    /* Header */
+    .header {
+        padding: 12px 16px;
+    }
+    
+    .logo {
+        font-size: 18px;
+    }
+}
+
+/* ===================================
+   TRÈS PETIT MOBILE (≤375px)
+   =================================== */
+
+@media (max-width: 375px) {
+    .left-content h1 {
+        font-size: 22px;
+    }
+    
+    .form-title {
+        font-size: 22px;
+    }
+    
+    .form-container {
+        max-width: 100%;
+    }
+    
+    .account-type-icon {
+        font-size: 36px;
+        margin-bottom: 12px;
+    }
+    
+    .account-type-name {
+        font-size: 16px;
+    }
+    
+    .account-type-description {
+        font-size: 13px;
+    }
+}
+
+/* ===================================
+   GRAND ÉCRAN (≥1400px)
+   =================================== */
+
+@media (min-width: 1400px) {
+    .left-content {
+        max-width: 600px;
+    }
+    
+    .left-content h1 {
+        font-size: 48px;
+    }
+    
+    .left-content p {
+        font-size: 20px;
+    }
+    
+    .form-container {
+        max-width: 480px;
+    }
+}
+
+/* ===================================
+   ORIENTATION PAYSAGE MOBILE
+   =================================== */
+
+@media (max-height: 600px) and (orientation: landscape) {
+    .left-side {
+        min-height: auto;
+        padding: 30px 20px;
+    }
+    
+    .left-content h1 {
+        font-size: 24px;
+        margin-bottom: 12px;
+    }
+    
+    .left-content p {
+        font-size: 14px;
+        margin-bottom: 16px;
+    }
+    
+    .features-list {
+        display: none;
+    }
+    
+    .right-side {
+        padding: 30px 20px;
+    }
+    
+    .form-header {
+        margin-bottom: 24px;
+    }
+}
+
+/* ===================================
+   PRINT (pour impression)
+   =================================== */
+
+@media print {
+    .left-side,
+    .header,
+    .info-box {
+        display: none;
+    }
+    
+    .right-side {
+        padding: 0;
+    }
+    
+    .main-container {
+        min-height: auto;
+    }
+    
+    .btn-primary,
+    .btn-secondary {
+        display: none;
+    }
+}

@@ -1,0 +1,88 @@
+{% extends 'registration_base.html.twig' %}
+
+{% block registration_form %}
+{{ form_start(registrationForm, {'attr': {'novalidate': 'novalidate'}}) }}
+
+    {# Section : Informations de connexion #}
+    <div class="form-section">
+        <h3 class="form-section-title">Informations de connexion</h3>
+        
+        <div class="form-group">
+            {{ form_label(registrationForm.email, null, {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(registrationForm.email, {'attr': {'class': 'form-control', 'placeholder': 'votre@email.com'}}) }}
+            {{ form_errors(registrationForm.email) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(registrationForm.plainPassword, 'Mot de passe', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'form-control', 'placeholder': '••••••••'}}) }}
+            {{ form_errors(registrationForm.plainPassword) }}
+        </div>
+    </div>
+
+    {# Section : Informations personnelles #}
+    <div class="form-section">
+        <h3 class="form-section-title">Informations personnelles</h3>
+        
+        <div class="form-group">
+            {{ form_label(registrationForm.nom, null, {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(registrationForm.nom, {'attr': {'class': 'form-control', 'placeholder': 'Martin Sophie ou Nom de l\'entreprise'}}) }}
+            {{ form_errors(registrationForm.nom) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(registrationForm.telephone, 'Téléphone', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(registrationForm.telephone, {'attr': {'class': 'form-control', 'placeholder': '06 12 34 56 78'}}) }}
+            {{ form_errors(registrationForm.telephone) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(registrationForm.siret, 'SIRET (optionnel si professionnel)', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(registrationForm.siret, {'attr': {'class': 'form-control', 'placeholder': '123 456 789 00012'}}) }}
+            {{ form_errors(registrationForm.siret) }}
+            {{ form_help(registrationForm.siret) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(registrationForm.typeActivite, 'Type d\'activité', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(registrationForm.typeActivite, {'attr': {'class': 'form-control', 'placeholder': 'Ex: Vente de bijoux, Restauration...'}}) }}
+            {{ form_errors(registrationForm.typeActivite) }}
+        </div>
+    </div>
+
+    {# Section : Adresse de facturation #}
+    <div class="form-section">
+        <h3 class="form-section-title">Adresse de facturation</h3>
+        
+        <div class="form-group">
+            {{ form_label(registrationForm.adresseFacturation, 'Adresse complète', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(registrationForm.adresseFacturation, {'attr': {'class': 'form-control', 'placeholder': 'Numéro et nom de rue'}}) }}
+            {{ form_errors(registrationForm.adresseFacturation) }}
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                {{ form_label(registrationForm.codePostal, 'Code postal', {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(registrationForm.codePostal, {'attr': {'class': 'form-control', 'placeholder': '44000'}}) }}
+                {{ form_errors(registrationForm.codePostal) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(registrationForm.ville, 'Ville', {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(registrationForm.ville, {'attr': {'class': 'form-control', 'placeholder': 'Nantes'}}) }}
+                {{ form_errors(registrationForm.ville) }}
+            </div>
+        </div>
+    </div>
+
+    {# Bouton de soumission #}
+    <button type="submit" class="btn-primary">
+        Créer mon compte
+    </button>
+
+    <div class="info-box">
+        Vous avez déjà un compte ? <a href="{{ path('app_login') }}">Se connecter</a>
+    </div>
+
+{{ form_end(registrationForm) }}
+{% endblock %}
