@@ -1,0 +1,501 @@
+/* ===================================
+   HOMEPAGE.CSS - Styles page d'accueil
+   =================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #1a1a1a;
+    background: #fff;
+}
+
+/* ===================================
+   HEADER
+   =================================== */
+
+.header {
+    background: #fff;
+    border-bottom: 1px solid #e5e5e5;
+    padding: 16px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+
+.logo {
+    font-size: 20px;
+    font-weight: 600;
+    color: #1a1a1a;
+    cursor: pointer;
+    letter-spacing: -0.5px;
+    text-decoration: none;
+}
+
+.nav {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.nav-link {
+    color: #4a4a4a;
+    text-decoration: none;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 6px;
+    transition: all 0.2s;
+}
+
+.nav-link:hover {
+    background: #f5f5f5;
+}
+
+.nav-link.primary {
+    background: #1a1a1a;
+    color: white;
+}
+
+.nav-link.primary:hover {
+    background: #000;
+}
+
+/* ===================================
+   HERO SECTION
+   =================================== */
+
+.hero {
+    background: linear-gradient(135deg, #1a1a1a 0%, #3a3a3a 100%);
+    color: white;
+    padding: 120px 40px 80px;
+    text-align: center;
+}
+
+.hero h1 {
+    font-size: 48px;
+    margin-bottom: 16px;
+    font-weight: 600;
+    letter-spacing: -1px;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.hero p {
+    font-size: 18px;
+    margin-bottom: 48px;
+    opacity: 0.85;
+    font-weight: 400;
+}
+
+/* ===================================
+   SEARCH BOX
+   =================================== */
+
+.search-box {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    max-width: 1000px;
+    margin: 0 auto;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+}
+
+.search-form {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 140px;
+    gap: 12px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    color: #6b6b6b;
+    font-size: 12px;
+    margin-bottom: 6px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.form-group input,
+.form-group select {
+    padding: 12px 14px;
+    border: 1px solid #e5e5e5;
+    border-radius: 6px;
+    font-size: 15px;
+    transition: all 0.2s;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #1a1a1a;
+}
+
+.btn-search {
+    background: #1a1a1a;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    align-self: flex-end;
+    padding: 12px;
+    transition: all 0.2s;
+}
+
+.btn-search:hover {
+    background: #000;
+}
+
+/* ===================================
+   CONTAINER
+   =================================== */
+
+.container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 80px 40px;
+}
+
+.section-title {
+    text-align: center;
+    font-size: 32px;
+    margin-bottom: 12px;
+    color: #1a1a1a;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+}
+
+.section-subtitle {
+    text-align: center;
+    font-size: 16px;
+    color: #6b6b6b;
+    margin-bottom: 56px;
+    font-weight: 400;
+}
+
+/* ===================================
+   HOW IT WORKS - STEPS
+   =================================== */
+
+.steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 48px;
+    margin-bottom: 80px;
+}
+
+.step {
+    text-align: center;
+    padding: 32px 24px;
+    background: #fafafa;
+    border-radius: 12px;
+    border: 1px solid #e5e5e5;
+    transition: all 0.2s;
+}
+
+.step:hover {
+    border-color: #1a1a1a;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+}
+
+.step-number {
+    width: 56px;
+    height: 56px;
+    background: #1a1a1a;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    font-weight: 600;
+    margin: 0 auto 20px;
+}
+
+.step h3 {
+    font-size: 20px;
+    margin-bottom: 12px;
+    color: #1a1a1a;
+    font-weight: 600;
+}
+
+.step p {
+    color: #6b6b6b;
+    line-height: 1.6;
+    font-size: 15px;
+}
+
+/* ===================================
+   POPULAR LOCATIONS
+   =================================== */
+
+.locations {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+    margin-bottom: 80px;
+}
+
+.location-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #e5e5e5;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.location-card:hover {
+    border-color: #1a1a1a;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.location-image {
+    height: 220px;
+    background: linear-gradient(135deg, #f8f8f8 0%, #e8e8e8 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #9b9b9b;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.location-info {
+    padding: 20px;
+}
+
+.location-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #1a1a1a;
+}
+
+.location-details {
+    font-size: 14px;
+    color: #6b6b6b;
+    margin-bottom: 12px;
+}
+
+.location-price {
+    font-size: 24px;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+.location-price span {
+    font-size: 14px;
+    font-weight: 400;
+    color: #6b6b6b;
+}
+
+/* ===================================
+   BENEFITS
+   =================================== */
+
+.benefits {
+    margin-bottom: 80px;
+}
+
+.benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 32px;
+}
+
+.benefit-item {
+    display: flex;
+    gap: 20px;
+    padding: 24px;
+    background: #fafafa;
+    border-radius: 12px;
+    border: 1px solid #e5e5e5;
+}
+
+.benefit-icon {
+    font-size: 36px;
+    flex-shrink: 0;
+}
+
+.benefit-content h3 {
+    font-size: 18px;
+    margin-bottom: 8px;
+    color: #1a1a1a;
+    font-weight: 600;
+}
+
+.benefit-content p {
+    font-size: 15px;
+    color: #6b6b6b;
+    line-height: 1.6;
+}
+
+/* ===================================
+   CTA SECTION
+   =================================== */
+
+.cta-section {
+    text-align: center;
+    padding: 60px;
+    background: linear-gradient(135deg, #1a1a1a 0%, #3a3a3a 100%);
+    border-radius: 12px;
+    color: white;
+}
+
+.cta-section h2 {
+    font-size: 32px;
+    margin-bottom: 16px;
+    font-weight: 600;
+}
+
+.cta-section p {
+    font-size: 16px;
+    opacity: 0.85;
+    margin-bottom: 32px;
+}
+
+.cta-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.btn-cta {
+    padding: 14px 32px;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+    text-decoration: none;
+}
+
+.btn-cta.primary {
+    background: white;
+    color: #1a1a1a;
+}
+
+.btn-cta.primary:hover {
+    background: #f5f5f5;
+}
+
+.btn-cta.secondary {
+    background: transparent;
+    color: white;
+    border: 2px solid white;
+}
+
+.btn-cta.secondary:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* ===================================
+   FOOTER
+   =================================== */
+
+.footer {
+    background: #1a1a1a;
+    color: white;
+    padding: 60px 40px 32px;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 48px;
+    max-width: 1280px;
+    margin: 0 auto 48px;
+}
+
+.footer-column h4 {
+    font-size: 16px;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.footer-column ul {
+    list-style: none;
+}
+
+.footer-column ul li {
+    margin-bottom: 12px;
+}
+
+.footer-column a {
+    color: #b0b0b0;
+    text-decoration: none;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+.footer-column a:hover {
+    color: white;
+}
+
+.footer-bottom {
+    text-align: center;
+    padding-top: 32px;
+    border-top: 1px solid #3a3a3a;
+    color: #b0b0b0;
+    font-size: 14px;
+}
+
+/* ===================================
+   RESPONSIVE
+   =================================== */
+
+@media (max-width: 768px) {
+    .search-form {
+        grid-template-columns: 1fr;
+    }
+    
+    .steps,
+    .locations,
+    .benefits-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .hero h1 {
+        font-size: 32px;
+    }
+    
+    .footer-content {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .cta-buttons {
+        flex-direction: column;
+    }
+    
+    .header {
+        padding: 16px 20px;
+    }
+    
+    .nav {
+        gap: 4px;
+    }
+    
+    .nav-link {
+        padding: 6px 12px;
+        font-size: 13px;
+    }
+}

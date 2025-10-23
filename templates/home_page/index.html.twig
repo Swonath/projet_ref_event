@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MallPlace - Louez votre emplacement éphémère</title>
+    
+    {# CSS de la homepage #}
+    <link rel="stylesheet" href="{{ asset('css/homepage.css') }}">
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="header">
+        <a href="{{ path('app_home') }}" class="logo">MallPlace</a>
+        <nav class="nav">
+            <a href="#comment-ca-marche" class="nav-link">Comment ça marche</a>
+            <a href="#emplacements" class="nav-link">Centres commerciaux</a>
+            <a href="{{ path('app_login') }}" class="nav-link">Connexion</a>
+            <a href="{{ path('app_register') }}" class="nav-link primary">Inscription</a>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Trouvez l'emplacement parfait pour votre activité éphémère</h1>
+        <p>La plateforme qui connecte centres commerciaux et entrepreneurs</p>
+        
+        <!-- Search Box -->
+        <div class="search-box">
+            <form class="search-form" action="#" method="get">
+                <div class="form-group">
+                    <label>Où</label>
+                    <input type="text" name="location" placeholder="Ville, code postal, centre commercial...">
+                </div>
+                <div class="form-group">
+                    <label>Du</label>
+                    <input type="date" name="date_debut">
+                </div>
+                <div class="form-group">
+                    <label>Au</label>
+                    <input type="date" name="date_fin">
+                </div>
+                <button type="submit" class="btn-search">Rechercher</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- How it works -->
+    <div class="container" id="comment-ca-marche">
+        <h2 class="section-title">Comment ça marche ?</h2>
+        <p class="section-subtitle">Réservez votre emplacement en 3 étapes simples</p>
+        
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <h3>Recherchez</h3>
+                <p>Parcourez des centaines d'emplacements disponibles dans les centres commerciaux près de chez vous</p>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <h3>Réservez</h3>
+                <p>Sélectionnez vos dates, consultez les tarifs et envoyez votre demande de réservation en quelques clics</p>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <h3>Installez-vous</h3>
+                <p>Une fois validé et payé, installez votre activité et développez votre business</p>
+            </div>
+        </div>
+
+        <!-- Popular Locations -->
+        <h2 class="section-title" id="emplacements">Emplacements populaires</h2>
+        <p class="section-subtitle">Découvrez nos meilleures offres du moment</p>
+        
+        <div class="locations">
+            <div class="location-card">
+                <div class="location-image">[Photo emplacement]</div>
+                <div class="location-info">
+                    <div class="location-title">Centre Atlantis</div>
+                    <div class="location-details">📍 Saint-Herblain • 25m² • Kiosque</div>
+                    <div class="location-price">150€ <span>/ jour</span></div>
+                </div>
+            </div>
+            
+            <div class="location-card">
+                <div class="location-image">[Photo emplacement]</div>
+                <div class="location-info">
+                    <div class="location-title">Beaulieu</div>
+                    <div class="location-details">📍 Nantes Centre • 15m² • Vitrine</div>
+                    <div class="location-price">120€ <span>/ jour</span></div>
+                </div>
+            </div>
+            
+            <div class="location-card">
+                <div class="location-image">[Photo emplacement]</div>
+                <div class="location-info">
+                    <div class="location-title">Carrefour Grand Var</div>
+                    <div class="location-details">📍 La Garde • 30m² • Îlot central</div>
+                    <div class="location-price">180€ <span>/ jour</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Benefits -->
+        <div class="benefits">
+            <h2 class="section-title">Pourquoi choisir notre plateforme ?</h2>
+            <p class="section-subtitle">Les avantages pour locataires et centres commerciaux</p>
+            
+            <div class="benefits-grid">
+                <div class="benefit-item">
+                    <div class="benefit-icon">⚡</div>
+                    <div class="benefit-content">
+                        <h3>Réservation instantanée</h3>
+                        <p>Réservez en ligne 24h/24, validation rapide, paiement sécurisé. Fini les échanges interminables par email.</p>
+                    </div>
+                </div>
+                
+                <div class="benefit-item">
+                    <div class="benefit-icon">🔒</div>
+                    <div class="benefit-content">
+                        <h3>Paiement sécurisé</h3>
+                        <p>Transactions protégées, fonds bloqués jusqu'à la fin de location. Garantie pour les deux parties.</p>
+                    </div>
+                </div>
+                
+                <div class="benefit-item">
+                    <div class="benefit-icon">📄</div>
+                    <div class="benefit-content">
+                        <h3>Documents automatiques</h3>
+                        <p>Devis, factures et contrats générés automatiquement. Tout est conforme et archivé.</p>
+                    </div>
+                </div>
+                
+                <div class="benefit-item">
+                    <div class="benefit-icon">⭐</div>
+                    <div class="benefit-content">
+                        <h3>Système d'avis</h3>
+                        <p>Notations et commentaires vérifiés pour faire le bon choix en toute confiance.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA Section -->
+        <div class="cta-section">
+            <h2>Vous êtes un centre commercial ?</h2>
+            <p>Rejoignez notre plateforme et louez vos emplacements disponibles en toute simplicité</p>
+            <div class="cta-buttons">
+                <a href="{{ path('app_register_centre') }}" class="btn-cta primary">Créer un compte centre</a>
+                <a href="#comment-ca-marche" class="btn-cta secondary">En savoir plus</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-column">
+                <h4>MallPlace</h4>
+                <ul>
+                    <li><a href="#">À propos</a></li>
+                    <li><a href="#">Notre mission</a></li>
+                    <li><a href="#">L'équipe</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h4>Pour les locataires</h4>
+                <ul>
+                    <li><a href="#">Comment réserver</a></li>
+                    <li><a href="#">Conseils</a></li>
+                    <li><a href="#">FAQ Locataires</a></li>
+                    <li><a href="#">Assurances</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h4>Pour les centres</h4>
+                <ul>
+                    <li><a href="#">Publier une annonce</a></li>
+                    <li><a href="#">Tarifs & commissions</a></li>
+                    <li><a href="#">FAQ Centres</a></li>
+                    <li><a href="#">Support technique</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h4>Légal</h4>
+                <ul>
+                    <li><a href="#">Mentions légales</a></li>
+                    <li><a href="#">CGU</a></li>
+                    <li><a href="#">CGV</a></li>
+                    <li><a href="#">Confidentialité</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>© 2025 MallPlace - Tous droits réservés</p>
+        </div>
+    </footer>
+
+</body>
+</html>
