@@ -180,9 +180,9 @@ class CentreCommercialRegistrationType extends AbstractType
             
             // === BOUTON DE SOUMISSION ===
             ->add('submit', SubmitType::class, [
-                'label' => 'Créer mon compte centre',
+                'label' => 'Créer mon compte',
                 'attr' => [
-                    'class' => 'btn btn-success btn-lg w-100'
+                    'class' => 'btn btn-primary btn-lg w-100'
                 ],
             ])
         ;

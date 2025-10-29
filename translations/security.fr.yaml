@@ -1,0 +1,31 @@
+# translations/security.fr.yaml
+# Traductions des messages de sécurité
+
+# Authentification
+"Invalid credentials.": "Email ou mot de passe incorrect"
+"Account is disabled.": "Votre compte est désactivé"
+"Account is locked.": "Votre compte est bloqué"
+"Too many failed login attempts, please try again later.": "Trop de tentatives de connexion échouées, veuillez réessayer plus tard"
+
+# Erreurs d'accès
+"Access Denied.": "Accès refusé"
+"You are not authorized to access this page.": "Vous n'êtes pas autorisé à accéder à cette page"
+"Authentication Required.": "Authentification requise"
+
+# Inscription
+"This email is already in use.": "Cet email est déjà utilisé"
+"Your account has been created successfully.": "Votre compte a été créé avec succès"
+"An error occurred during registration.": "Une erreur est survenue lors de l'inscription"
+
+# Connexion
+"Please sign in": "Veuillez vous connecter"
+"Sign in": "Se connecter"
+"Email": "Email"
+"Password": "Mot de passe"
+"Remember me": "Se souvenir de moi"
+"Forgot password?": "Mot de passe oublié ?"
+"Don't have an account?": "Pas encore de compte ?"
+"Create an account": "Créer un compte"
+
+# Déconnexion
+"You have been logged out.": "Vous avez été déconnecté"

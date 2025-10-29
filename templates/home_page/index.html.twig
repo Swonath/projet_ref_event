@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MallPlace - Louez votre emplacement éphémère</title>
+    <title>Références Evénements - Louez votre emplacement éphémère</title>
     
     {# CSS de la homepage #}
     <link rel="stylesheet" href="{{ asset('css/homepage.css') }}">
@@ -12,12 +12,25 @@
 
     <!-- Header -->
     <header class="header">
-        <a href="{{ path('app_home') }}" class="logo">MallPlace</a>
+        <a href="{{ path('app_home_page') }}" class="logo">Références Evénements</a>
         <nav class="nav">
             <a href="#comment-ca-marche" class="nav-link">Comment ça marche</a>
-            <a href="#emplacements" class="nav-link">Centres commerciaux</a>
-            <a href="{{ path('app_login') }}" class="nav-link">Connexion</a>
-            <a href="{{ path('app_register') }}" class="nav-link primary">Inscription</a>
+            <a href="#emplacements" class="nav-link">Emplacements populaires</a>
+            
+            {# MODIFICATION : Affichage conditionnel selon l'état de connexion #}
+            {% if app.user %}
+                {# Utilisateur connecté : afficher l'avatar et le lien vers le compte #}
+                <a href="{{ path('app_my_account') }}" class="user-menu">
+                    <div class="user-avatar">
+                        {{ app.user.nom|slice(0, 2)|upper }}
+                    </div>
+                    <span class="user-name">{{ app.user.nom }}</span>
+                </a>
+            {% else %}
+                {# Utilisateur non connecté : afficher Connexion et Inscription #}
+                <a href="{{ path('app_login') }}" class="nav-link">Connexion</a>
+                <a href="{{ path('app_register') }}" class="nav-link primary">Inscription</a>
+            {% endif %}
         </nav>
     </header>
 
@@ -60,59 +73,63 @@
             <div class="step">
                 <div class="step-number">2</div>
                 <h3>Réservez</h3>
-                <p>Sélectionnez vos dates, consultez les tarifs et envoyez votre demande de réservation en quelques clics</p>
+                <p>Choisissez vos dates, validez votre réservation et payez en ligne de manière sécurisée</p>
             </div>
             <div class="step">
                 <div class="step-number">3</div>
-                <h3>Installez-vous</h3>
-                <p>Une fois validé et payé, installez votre activité et développez votre business</p>
+                <h3>Vendez</h3>
+                <p>Installez-vous et développez votre activité dans les meilleurs centres commerciaux</p>
             </div>
         </div>
+    </div>
 
-        <!-- Popular Locations -->
-        <h2 class="section-title" id="emplacements">Emplacements populaires</h2>
-        <p class="section-subtitle">Découvrez nos meilleures offres du moment</p>
+    <!-- Popular Locations -->
+    <div class="container" id="emplacements">
+        <h2 class="section-title">Emplacements populaires</h2>
+        <p class="section-subtitle">Découvrez les centres commerciaux les plus demandés</p>
         
         <div class="locations">
             <div class="location-card">
-                <div class="location-image">[Photo emplacement]</div>
+                <div class="location-image">[Photo centre commercial]</div>
                 <div class="location-info">
-                    <div class="location-title">Centre Atlantis</div>
-                    <div class="location-details">📍 Saint-Herblain • 25m² • Kiosque</div>
-                    <div class="location-price">150€ <span>/ jour</span></div>
+                    <h3 class="location-title">Centre Atlantis</h3>
+                    <p class="location-details">📍 Saint-Herblain • 25 emplacements disponibles</p>
+                    <p class="location-price">150€ <span>/ jour</span></p>
                 </div>
             </div>
             
             <div class="location-card">
-                <div class="location-image">[Photo emplacement]</div>
+                <div class="location-image">[Photo centre commercial]</div>
                 <div class="location-info">
-                    <div class="location-title">Beaulieu</div>
-                    <div class="location-details">📍 Nantes Centre • 15m² • Vitrine</div>
-                    <div class="location-price">120€ <span>/ jour</span></div>
+                    <h3 class="location-title">Beaulieu</h3>
+                    <p class="location-details">📍 Nantes Centre • 18 emplacements disponibles</p>
+                    <p class="location-price">180€ <span>/ jour</span></p>
                 </div>
             </div>
             
             <div class="location-card">
-                <div class="location-image">[Photo emplacement]</div>
+                <div class="location-image">[Photo centre commercial]</div>
                 <div class="location-info">
-                    <div class="location-title">Carrefour Grand Var</div>
-                    <div class="location-details">📍 La Garde • 30m² • Îlot central</div>
-                    <div class="location-price">180€ <span>/ jour</span></div>
+                    <h3 class="location-title">Paridis</h3>
+                    <p class="location-details">📍 La Rochelle • 12 emplacements disponibles</p>
+                    <p class="location-price">120€ <span>/ jour</span></p>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Benefits -->
+    <!-- Benefits -->
+    <div class="container">
+        <h2 class="section-title">Pourquoi choisir Références Evénements ?</h2>
+        <p class="section-subtitle">Une solution complète pour vos locations éphémères</p>
+        
         <div class="benefits">
-            <h2 class="section-title">Pourquoi choisir notre plateforme ?</h2>
-            <p class="section-subtitle">Les avantages pour locataires et centres commerciaux</p>
-            
             <div class="benefits-grid">
                 <div class="benefit-item">
                     <div class="benefit-icon">⚡</div>
                     <div class="benefit-content">
                         <h3>Réservation instantanée</h3>
-                        <p>Réservez en ligne 24h/24, validation rapide, paiement sécurisé. Fini les échanges interminables par email.</p>
+                        <p>Réservez votre emplacement en quelques clics et recevez une confirmation immédiate</p>
                     </div>
                 </div>
                 
@@ -120,35 +137,44 @@
                     <div class="benefit-icon">🔒</div>
                     <div class="benefit-content">
                         <h3>Paiement sécurisé</h3>
-                        <p>Transactions protégées, fonds bloqués jusqu'à la fin de location. Garantie pour les deux parties.</p>
+                        <p>Transactions protégées et cryptées pour votre sécurité et votre tranquillité d'esprit</p>
                     </div>
                 </div>
                 
                 <div class="benefit-item">
-                    <div class="benefit-icon">📄</div>
+                    <div class="benefit-icon">📱</div>
                     <div class="benefit-content">
-                        <h3>Documents automatiques</h3>
-                        <p>Devis, factures et contrats générés automatiquement. Tout est conforme et archivé.</p>
+                        <h3>Gestion simplifiée</h3>
+                        <p>Suivez toutes vos réservations depuis votre tableau de bord personnel</p>
                     </div>
                 </div>
                 
                 <div class="benefit-item">
-                    <div class="benefit-icon">⭐</div>
+                    <div class="benefit-icon">💬</div>
                     <div class="benefit-content">
-                        <h3>Système d'avis</h3>
-                        <p>Notations et commentaires vérifiés pour faire le bon choix en toute confiance.</p>
+                        <h3>Support dédié</h3>
+                        <p>Une équipe disponible 7j/7 pour répondre à toutes vos questions</p>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- CTA Section -->
+    <!-- CTA Section -->
+    <div class="container">
         <div class="cta-section">
-            <h2>Vous êtes un centre commercial ?</h2>
-            <p>Rejoignez notre plateforme et louez vos emplacements disponibles en toute simplicité</p>
+            <h2>Prêt à développer votre activité ?</h2>
+            <p>Rejoignez des centaines d'entrepreneurs qui font confiance à Références Evénements</p>
             <div class="cta-buttons">
-                <a href="{{ path('app_register_centre') }}" class="btn-cta primary">Créer un compte centre</a>
-                <a href="#comment-ca-marche" class="btn-cta secondary">En savoir plus</a>
+                {% if app.user %}
+                    {# Si connecté, bouton vers la recherche #}
+                    <a href="#" class="btn-cta primary">Rechercher un emplacement</a>
+                    <a href="{{ path('app_my_account') }}" class="btn-cta secondary">Mon compte</a>
+                {% else %}
+                    {# Si non connecté, bouton vers l'inscription #}
+                    <a href="{{ path('app_register') }}" class="btn-cta primary">Créer un compte</a>
+                    <a href="#comment-ca-marche" class="btn-cta secondary">En savoir plus</a>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -157,12 +183,12 @@
     <footer class="footer">
         <div class="footer-content">
             <div class="footer-column">
-                <h4>MallPlace</h4>
+                <h4>À propos</h4>
                 <ul>
-                    <li><a href="#">À propos</a></li>
-                    <li><a href="#">Notre mission</a></li>
+                    <li><a href="#">Notre histoire</a></li>
                     <li><a href="#">L'équipe</a></li>
-                    <li><a href="#">Contact</a></li>
+                    <li><a href="#">Presse</a></li>
+                    <li><a href="#">Carrières</a></li>
                 </ul>
             </div>
             
@@ -170,9 +196,9 @@
                 <h4>Pour les locataires</h4>
                 <ul>
                     <li><a href="#">Comment réserver</a></li>
-                    <li><a href="#">Conseils</a></li>
+                    <li><a href="#">Tarifs</a></li>
                     <li><a href="#">FAQ Locataires</a></li>
-                    <li><a href="#">Assurances</a></li>
+                    <li><a href="#">Blog</a></li>
                 </ul>
             </div>
             
@@ -198,7 +224,7 @@
         </div>
         
         <div class="footer-bottom">
-            <p>© 2025 MallPlace - Tous droits réservés</p>
+            <p>© 2025 Références Evénements - Tous droits réservés</p>
         </div>
     </footer>
 

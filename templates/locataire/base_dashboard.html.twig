@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon espace - Références Événements{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
+{% endblock %}
+
+{% block body %}
+
+<!-- Header -->
+<header class="header">
+    <a href="{{ path('app_home_page') }}" class="logo">Références Événements</a>
+    <div class="header-right">
+        <a href="#" class="btn-search">🔍 Rechercher un emplacement</a>
+        <div class="user-menu">
+            <div class="user-avatar">
+                {{ app.user.nom|slice(0, 2)|upper }}
+            </div>
+            <span style="font-size: 14px; font-weight: 500;">{{ app.user.nom }}</span>
+        </div>
+    </div>
+</header>
+
+<!-- Main Layout -->
+<div class="main-layout">
+    
+    <!-- Sidebar -->
+    {% include 'partials/_sidebar_locataire.html.twig' %}
+    
+    <!-- Main Content -->
+    <div class="main-content">
+        {% block dashboard_content %}{% endblock %}
+    </div>
+</div>
+
+{% endblock %}

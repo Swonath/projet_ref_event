@@ -1,0 +1,120 @@
+{% extends 'locataire/base_dashboard.html.twig' %}
+
+{% block title %}Mon profil - Références Événements{% endblock %}
+
+{% block dashboard_content %}
+
+<div class="page-header">
+    <h1 class="page-title">Mon profil</h1>
+    <p class="page-subtitle">Gérez vos informations personnelles</p>
+</div>
+
+<form method="post" action="{{ path('locataire_profil_edit') }}" enctype="multipart/form-data">
+    
+    <div class="section">
+        <h2 class="section-title">Informations personnelles</h2>
+        
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label required">Prénom</label>
+                <input type="text" name="prenom" class="form-control" value="{{ app.user.prenom }}" required>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label required">Nom</label>
+                <input type="text" name="nom" class="form-control" value="{{ app.user.nom }}" required>
+            </div>
+        </div>
+        
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label required">Email</label>
+                <input type="email" name="email" class="form-control" value="{{ app.user.email }}" required>
+                <small class="form-text">Cet email est utilisé pour vous connecter</small>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label required">Téléphone</label>
+                <input type="tel" name="telephone" class="form-control" value="{{ app.user.telephone }}" required>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label class="form-label">Adresse</label>
+            <input type="text" name="adresse" class="form-control" value="{{ app.user.adresse ?? '' }}" placeholder="Numéro et nom de rue">
+        </div>
+        
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label">Code postal</label>
+                <input type="text" name="codePostal" class="form-control" value="{{ app.user.codePostal ?? '' }}" placeholder="44000">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Ville</label>
+                <input type="text" name="ville" class="form-control" value="{{ app.user.ville ?? '' }}" placeholder="Nantes">
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">Informations professionnelles</h2>
+        
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label">Nom de l'entreprise</label>
+                <input type="text" name="entreprise" class="form-control" value="{{ app.user.entreprise ?? '' }}" placeholder="Mon Entreprise">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">SIRET</label>
+                <input type="text" name="siret" class="form-control" value="{{ app.user.siret ?? '' }}" placeholder="123 456 789 00012">
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label class="form-label">Type d'activité</label>
+            <select name="typeActivite" class="form-control">
+                <option value="">Sélectionnez votre activité</option>
+                <option value="vente" {% if app.user.typeActivite == 'vente' %}selected{% endif %}>Vente de produits</option>
+                <option value="restauration" {% if app.user.typeActivite == 'restauration' %}selected{% endif %}>Restauration</option>
+                <option value="services" {% if app.user.typeActivite == 'services' %}selected{% endif %}>Services</option>
+                <option value="animation" {% if app.user.typeActivite == 'animation' %}selected{% endif %}>Animation / Événementiel</option>
+                <option value="autre" {% if app.user.typeActivite == 'autre' %}selected{% endif %}>Autre</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label class="form-label">Description de votre activité</label>
+            <textarea name="description" class="form-control" rows="4" placeholder="Décrivez brièvement votre activité...">{{ app.user.description ?? '' }}</textarea>
+            <small class="form-text">Cette description sera visible par les centres commerciaux</small>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">Sécurité</h2>
+        
+        <div class="form-group">
+            <label class="form-label">Nouveau mot de passe</label>
+            <input type="password" name="nouveau_mot_de_passe" class="form-control" placeholder="Laissez vide pour ne pas changer">
+            <small class="form-text">Minimum 8 caractères</small>
+        </div>
+        
+        <div class="form-group">
+            <label class="form-label">Confirmer le mot de passe</label>
+            <input type="password" name="confirmer_mot_de_passe" class="form-control" placeholder="Confirmez le nouveau mot de passe">
+        </div>
+    </div>
+
+    <div class="form-actions">
+        <button type="submit" class="btn-primary">
+            Enregistrer les modifications
+        </button>
+        <a href="{{ path('locataire_dashboard') }}" class="btn-secondary">
+            Annuler
+        </a>
+    </div>
+
+</form>
+
+{% endblock %}

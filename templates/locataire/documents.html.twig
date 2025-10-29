@@ -1,0 +1,105 @@
+{% extends 'locataire/base_dashboard.html.twig' %}
+
+{% block title %}Mes documents - Références Événements{% endblock %}
+
+{% block dashboard_content %}
+
+<div class="page-header">
+    <h1 class="page-title">Mes documents</h1>
+    <p class="page-subtitle">{{ documents|length }} document{% if documents|length > 1 %}s{% endif %}</p>
+</div>
+
+<div class="info-box">
+    ℹ️ <strong>Tous vos documents sont disponibles ici.</strong>
+    Factures, devis et contrats liés à vos réservations. Vous pouvez les télécharger à tout moment.
+</div>
+
+<div class="filters">
+    <span class="filter-label">Filtrer par :</span>
+    <select class="filter-select">
+        <option>Tous les types</option>
+        <option>Factures</option>
+        <option>Devis</option>
+        <option>Contrats</option>
+    </select>
+    <select class="filter-select">
+        <option>Toutes les dates</option>
+        <option>2025</option>
+        <option>2024</option>
+    </select>
+    <select class="filter-select">
+        <option>Tous les centres</option>
+        <option>Centre Atlantis</option>
+        <option>Paridis</option>
+        <option>Beaulieu</option>
+    </select>
+</div>
+
+<div class="tabs">
+    <button class="tab active">Tous ({{ documents|length }})</button>
+    <button class="tab">Factures (0)</button>
+    <button class="tab">Devis (0)</button>
+    <button class="tab">Contrats (0)</button>
+</div>
+
+{% if documents is empty %}
+    <div class="empty-state">
+        <div class="empty-icon">📄</div>
+        <div class="empty-title">Aucun document</div>
+        <div class="empty-text">
+            Vous n'avez pas encore de documents.<br>
+            Vos factures, devis et contrats apparaîtront ici après vos réservations.
+        </div>
+    </div>
+{% else %}
+    <div class="section">
+        <div class="section-header">
+            <h2 class="section-title">Tous mes documents</h2>
+            <button class="btn-secondary">
+                📥 Tout télécharger
+            </button>
+        </div>
+
+        <div class="documents-list">
+            {% for document in documents %}
+                <div class="document-card">
+                    <div class="document-icon {{ document.type|lower }}">
+                        {% if document.type == 'facture' %}
+                            📄
+                        {% elseif document.type == 'devis' %}
+                            📋
+                        {% elseif document.type == 'contrat' %}
+                            📜
+                        {% else %}
+                            📎
+                        {% endif %}
+                    </div>
+                    
+                    <div class="document-info">
+                        <div class="document-title">{{ document.nom }}</div>
+                        <div class="document-meta">
+                            {{ document.reservation.emplacement.centreCommercial.nom }} •
+                            {{ document.dateCreation|date('d/m/Y') }} •
+                            {{ document.taille }} Ko
+                        </div>
+                        <div class="document-tags">
+                            <span class="document-tag">{{ document.type|capitalize }}</span>
+                            <span class="document-tag">{{ document.emplacement.nom }}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="document-actions">
+                        <button class="btn-icon" title="Télécharger">
+                            📥
+                        </button>
+                        <button class="btn-icon" title="Prévisualiser">
+                            👁️
+                        </button>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}
+
+{% endblock %}

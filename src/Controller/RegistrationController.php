@@ -43,10 +43,21 @@ class RegistrationController extends AbstractController
         // 3. TRAITER LA SOUMISSION DU FORMULAIRE
         $form->handleRequest($request);
         
-        // 4. VÉRIFIER SI LE FORMULAIRE EST SOUMIS ET VALIDE
-        if ($form->isSubmitted() && $form->isValid()) {
-            // À ce stade, $locataire contient déjà toutes les données du formulaire
-            // sauf le mot de passe (qui est dans 'plainPassword')
+        // 4. VÉRIFIER SI LE FORMULAIRE EST SOUMIS
+        if ($form->isSubmitted()) {
+            
+            // 4a. SI LE FORMULAIRE N'EST PAS VALIDE, AFFICHER LES ERREURS
+            if (!$form->isValid()) {
+                // Récupérer toutes les erreurs
+                foreach ($form->getErrors(true) as $error) {
+                    $this->addFlash('error', $error->getMessage());
+                }
+                
+                // Réafficher le formulaire avec les erreurs
+                return $this->render('registration/locataire.html.twig', [
+                    'registrationForm' => $form->createView(),
+                ]);
+            }
             
             // 5. VÉRIFIER SI L'EMAIL EXISTE DÉJÀ
             $existingUser = $entityManager->getRepository(Locataire::class)
@@ -54,14 +65,13 @@ class RegistrationController extends AbstractController
             
             if ($existingUser) {
                 $this->addFlash('error', 'Cet email est déjà utilisé.');
-                return $this->redirectToRoute('app_register_locataire');
+                return $this->render('registration/locataire.html.twig', [
+                    'registrationForm' => $form->createView(),
+                ]);
             }
             
             // 6. CHIFFRER LE MOT DE PASSE
-            // Récupérer le mot de passe en clair depuis le formulaire
             $plainPassword = $form->get('plainPassword')->getData();
-            
-            // Le chiffrer
             $hashedPassword = $passwordHasher->hashPassword($locataire, $plainPassword);
             $locataire->setPassword($hashedPassword);
             
@@ -69,15 +79,21 @@ class RegistrationController extends AbstractController
             $locataire->setStatutCompte('actif');
             
             // 8. SAUVEGARDER EN BASE DE DONNÉES
-            $entityManager->persist($locataire);
-            $entityManager->flush();
-            
-            // 9. MESSAGE DE CONFIRMATION ET REDIRECTION
-            $this->addFlash('success', 'Votre compte a été créé avec succès ! Vous pouvez maintenant vous connecter.');
-            return $this->redirectToRoute('app_login');
+            try {
+                $entityManager->persist($locataire);
+                $entityManager->flush();
+                
+                // 9. MESSAGE DE CONFIRMATION ET REDIRECTION
+                $this->addFlash('success', 'Votre compte a été créé avec succès ! Vous pouvez maintenant vous connecter.');
+                return $this->redirectToRoute('app_login');
+                
+            } catch (\Exception $e) {
+                // En cas d'erreur lors de la sauvegarde
+                $this->addFlash('error', 'Une erreur est survenue lors de la création du compte : ' . $e->getMessage());
+            }
         }
         
-        // 10. AFFICHER LE FORMULAIRE (première visite ou formulaire invalide)
+        // 10. AFFICHER LE FORMULAIRE (première visite)
         return $this->render('registration/locataire.html.twig', [
             'registrationForm' => $form->createView(),
         ]);
@@ -102,15 +118,29 @@ class RegistrationController extends AbstractController
         // 3. TRAITER LA SOUMISSION DU FORMULAIRE
         $form->handleRequest($request);
         
-        // 4. VÉRIFIER SI LE FORMULAIRE EST SOUMIS ET VALIDE
-        if ($form->isSubmitted() && $form->isValid()) {
+        // 4. VÉRIFIER SI LE FORMULAIRE EST SOUMIS
+        if ($form->isSubmitted()) {
+            
+            // 4a. SI LE FORMULAIRE N'EST PAS VALIDE, AFFICHER LES ERREURS
+            if (!$form->isValid()) {
+                foreach ($form->getErrors(true) as $error) {
+                    $this->addFlash('error', $error->getMessage());
+                }
+                
+                return $this->render('registration/centre.html.twig', [
+                    'registrationForm' => $form->createView(),
+                ]);
+            }
+            
             // 5. VÉRIFIER SI L'EMAIL EXISTE DÉJÀ
             $existingUser = $entityManager->getRepository(CentreCommercial::class)
                 ->findOneBy(['email' => $centre->getEmail()]);
             
             if ($existingUser) {
                 $this->addFlash('error', 'Cet email est déjà utilisé.');
-                return $this->redirectToRoute('app_register_centre');
+                return $this->render('registration/centre.html.twig', [
+                    'registrationForm' => $form->createView(),
+                ]);
             }
             
             // 6. CHIFFRER LE MOT DE PASSE
@@ -122,12 +152,17 @@ class RegistrationController extends AbstractController
             $centre->setStatutCompte('en_attente');
             
             // 8. SAUVEGARDER EN BASE DE DONNÉES
-            $entityManager->persist($centre);
-            $entityManager->flush();
-            
-            // 9. MESSAGE DE CONFIRMATION ET REDIRECTION
-            $this->addFlash('success', 'Votre demande d\'inscription a été envoyée. Un administrateur doit valider votre compte avant que vous puissiez vous connecter.');
-            return $this->redirectToRoute('app_login');
+            try {
+                $entityManager->persist($centre);
+                $entityManager->flush();
+                
+                // 9. MESSAGE DE CONFIRMATION ET REDIRECTION
+                $this->addFlash('success', 'Votre demande d\'inscription a été envoyée. Un administrateur doit valider votre compte avant que vous puissiez vous connecter.');
+                return $this->redirectToRoute('app_login');
+                
+            } catch (\Exception $e) {
+                $this->addFlash('error', 'Une erreur est survenue lors de la création du compte : ' . $e->getMessage());
+            }
         }
         
         // 10. AFFICHER LE FORMULAIRE

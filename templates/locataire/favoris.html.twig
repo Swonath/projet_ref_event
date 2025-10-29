@@ -1,0 +1,66 @@
+{% extends 'locataire/base_dashboard.html.twig' %}
+
+{% block title %}Mes favoris - Références Événements{% endblock %}
+
+{% block dashboard_content %}
+
+<div class="page-header">
+    <h1 class="page-title">Mes favoris</h1>
+    <p class="page-subtitle">{{ favoris|length }} emplacement{% if favoris|length > 1 %}s{% endif %} sauvegardé{% if favoris|length > 1 %}s{% endif %}</p>
+</div>
+
+{% if favoris is empty %}
+    <div class="empty-state">
+        <div class="empty-icon">❤️</div>
+        <div class="empty-title">Aucun favori</div>
+        <div class="empty-text">
+            Vous n'avez pas encore ajouté d'emplacement à vos favoris.<br>
+            Cliquez sur le cœur ❤️ lors de votre recherche pour sauvegarder vos emplacements préférés.
+        </div>
+        <a href="{{ path('app_home_page') }}" class="btn-primary">
+            Rechercher un emplacement
+        </a>
+    </div>
+{% else %}
+    <div class="favoris-grid">
+        {% for favori in favoris %}
+            <div class="favori-card">
+                <div class="favori-image">
+                    {% if favori.emplacement.photos|length > 0 %}
+                        <img src="{{ asset('uploads/photos/' ~ favori.emplacement.photos[0].chemin) }}" 
+                             alt="{{ favori.emplacement.nom }}">
+                    {% else %}
+                        📷 Photo non disponible
+                    {% endif %}
+                    <button class="btn-favorite active" title="Retirer des favoris">
+                        ❤️
+                    </button>
+                </div>
+
+                <div class="favori-content">
+                    <h3 class="favori-title">{{ favori.emplacement.nom }}</h3>
+                    
+                    <div class="favori-info">
+                        <div class="favori-location">
+                            📍 {{ favori.emplacement.centreCommercial.nom }}
+                        </div>
+                        <div class="favori-surface">
+                            📏 {{ favori.emplacement.surface }} m²
+                        </div>
+                    </div>
+
+                    <div class="favori-footer">
+                        <div class="favori-price">
+                            {{ favori.emplacement.prixJour }}€ <span>/ jour</span>
+                        </div>
+                        <a href="#" class="btn-secondary btn-small">
+                            Réserver
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,116 @@
+{% extends 'locataire/base_dashboard.html.twig' %}
+
+{% block dashboard_content %}
+
+<div class="page-header">
+    <h1 class="page-title">Bonjour {{ locataire.nom }} 👋</h1>
+    <p class="page-subtitle">Voici un aperçu de votre activité</p>
+</div>
+
+<!-- Stats Cards -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon">📅</div>
+        <div class="stat-value">{{ stats.reservations_actives }}</div>
+        <div class="stat-label">Réservations actives</div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-icon">💬</div>
+        <div class="stat-value">{{ stats.messages_non_lus }}</div>
+        <div class="stat-label">Messages non lus</div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-icon">❤️</div>
+        <div class="stat-value">{{ stats.favoris }}</div>
+        <div class="stat-label">Emplacements favoris</div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-icon">💰</div>
+        <div class="stat-value">{{ stats.depenses_mois }}€</div>
+        <div class="stat-label">Dépenses ce mois</div>
+    </div>
+</div>
+
+<!-- Réservations en cours -->
+<div class="section">
+    <div class="section-header">
+        <h2 class="section-title">Mes réservations en cours</h2>
+        <a href="{{ path('locataire_reservations') }}" class="btn-link">Voir tout →</a>
+    </div>
+    
+    <div class="tabs">
+        <button class="tab active">En cours ({{ reservations|length }})</button>
+        <button class="tab">À venir (1)</button>
+        <button class="tab">Passées (3)</button>
+    </div>
+    
+    {% if reservations is empty %}
+        <div class="empty-state">
+            <div class="empty-icon">📅</div>
+            <div class="empty-title">Aucune réservation en cours</div>
+            <div class="empty-text">Vous n'avez pas encore de réservation active</div>
+            <a href="#" class="btn-primary">Rechercher un emplacement</a>
+        </div>
+    {% else %}
+        {% for reservation in reservations %}
+        <div class="reservation-card">
+            <div class="reservation-image">[Photo emplacement]</div>
+            
+            <div class="reservation-info">
+                <h3>{{ reservation.emplacement }}</h3>
+                <div class="reservation-details">
+                    📍 {{ reservation.ville }} • {{ reservation.type }} • {{ reservation.surface }}
+                </div>
+                <div class="reservation-details">
+                    📅 Du {{ reservation.date_debut|date('d/m/Y') }} au {{ reservation.date_fin|date('d/m/Y') }}
+                </div>
+                <span class="reservation-status status-{{ reservation.statut == 'En cours' ? 'confirmed' : 'pending' }}">
+                    {{ reservation.statut }}
+                </span>
+            </div>
+            
+            <div class="reservation-actions">
+                <div class="reservation-price">{{ reservation.prix_total }}€</div>
+                <a href="#" class="btn-small btn-primary-small">Voir détails</a>
+                <a href="#" class="btn-small btn-secondary-small">Contacter</a>
+            </div>
+        </div>
+        {% endfor %}
+    {% endif %}
+</div>
+
+<!-- Messages récents -->
+<div class="section">
+    <div class="section-header">
+        <h2 class="section-title">Messages récents</h2>
+        <a href="#" class="btn-link">Voir tout →</a>
+    </div>
+    
+    {% if messages is empty %}
+        <div class="empty-state">
+            <div class="empty-icon">💬</div>
+            <div class="empty-title">Aucun message</div>
+            <div class="empty-text">Vous n'avez pas encore de messages</div>
+        </div>
+    {% else %}
+        {% for message in messages %}
+        <div class="reservation-card" style="grid-template-columns: 1fr auto;">
+            <div class="reservation-info">
+                <h3>{{ message.expediteur }}</h3>
+                <div class="reservation-details">{{ message.contenu }}</div>
+                <div class="reservation-details">
+                    🕐 {{ message.date|date('d/m/Y à H:i') }}
+                </div>
+            </div>
+            <div class="reservation-actions">
+                <a href="#" class="btn-small btn-primary-small">Répondre</a>
+            </div>
+        </div>
+        {% endfor %}
+    {% endif %}
+</div>
+
+{% endblock %}

@@ -1,7 +1,7 @@
 {% extends 'registration_base.html.twig' %}
 
 {% block registration_form %}
-{{ form_start(registrationForm, {'attr': {'novalidate': 'novalidate'}}) }}
+{{ form_start(registrationForm) }}
 
     {# Section : Informations de connexion #}
     <div class="form-section">
@@ -74,15 +74,10 @@
             </div>
         </div>
     </div>
+    
 
-    {# Bouton de soumission #}
-    <button type="submit" class="btn-primary">
-        Créer mon compte
-    </button>
-
-    <div class="info-box">
+{{ form_end(registrationForm) }}
+<div class="info-box">
         Vous avez déjà un compte ? <a href="{{ path('app_login') }}">Se connecter</a>
     </div>
-
-{{ form_end(registrationForm, {'render_rest': false}) }}
 {% endblock %}

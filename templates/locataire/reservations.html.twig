@@ -1,0 +1,90 @@
+{% extends 'locataire/base_dashboard.html.twig' %}
+
+{% block title %}Mes réservations - Références Événements{% endblock %}
+
+{% block dashboard_content %}
+
+<div class="page-header">
+    <h1 class="page-title">Mes réservations</h1>
+    <p class="page-subtitle">{{ reservations|length }} réservation{% if reservations|length > 1 %}s{% endif %} au total</p>
+</div>
+
+<div class="filters">
+    <a href="{{ path('locataire_reservations', {filtre: 'toutes'}) }}" 
+       class="filter-btn {% if filtre_actif == 'toutes' %}active{% endif %}">
+        Toutes
+    </a>
+    <a href="{{ path('locataire_reservations', {filtre: 'en_cours'}) }}" 
+       class="filter-btn {% if filtre_actif == 'en_cours' %}active{% endif %}">
+        En cours
+    </a>
+    <a href="{{ path('locataire_reservations', {filtre: 'a_venir'}) }}" 
+       class="filter-btn {% if filtre_actif == 'a_venir' %}active{% endif %}">
+        À venir
+    </a>
+    <a href="{{ path('locataire_reservations', {filtre: 'passees'}) }}" 
+       class="filter-btn {% if filtre_actif == 'passees' %}active{% endif %}">
+        Passées
+    </a>
+</div>
+
+{% if reservations is empty %}
+    <div class="empty-state">
+        <div class="empty-icon">📅</div>
+        <div class="empty-title">Aucune réservation</div>
+        <div class="empty-text">
+            Vous n'avez pas encore de réservation{% if filtre_actif != 'toutes' %} {{ filtre_actif }}{% endif %}.
+        </div>
+        <a href="{{ path('app_home_page') }}" class="btn-primary">
+            Rechercher un emplacement
+        </a>
+    </div>
+{% else %}
+    <div class="reservations-grid">
+        {% for reservation in reservations %}
+            <div class="reservation-card">
+                <div class="reservation-image">
+                    {% if reservation.emplacement.photos|length > 0 %}
+                        <img src="{{ asset('uploads/photos/' ~ reservation.emplacement.photos[0].chemin) }}" 
+                             alt="{{ reservation.emplacement.nom }}">
+                    {% else %}
+                        📷 Photo non disponible
+                    {% endif %}
+                </div>
+
+                <div class="reservation-content">
+                    <div class="reservation-header">
+                        <h3 class="reservation-title">{{ reservation.emplacement.nom }}</h3>
+                        <span class="reservation-status status-{{ reservation.statut|lower|replace({' ': '-'}) }}">
+                            {{ reservation.statut }}
+                        </span>
+                    </div>
+
+                    <div class="reservation-info">
+                        <div class="reservation-location">
+                            📍 {{ reservation.emplacement.centreCommercial.nom }}
+                        </div>
+                        <div class="reservation-dates">
+                            📅 Du {{ reservation.dateDebut|date('d/m/Y') }} au {{ reservation.dateFin|date('d/m/Y') }}
+                        </div>
+                        <div class="reservation-surface">
+                            📏 {{ reservation.emplacement.surface }} m²
+                        </div>
+                    </div>
+
+                    <div class="reservation-footer">
+                        <div class="reservation-price">
+                            {{ reservation.montantTotal }}€
+                        </div>
+                        <a href="{{ path('locataire_reservation_detail', {id: reservation.id}) }}" 
+                           class="btn-secondary btn-small">
+                            Voir détails
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+{% endblock %}

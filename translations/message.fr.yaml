@@ -1,0 +1,64 @@
+# translations/messages.fr.yaml
+# Traductions des messages généraux de l'application
+
+# Messages de succès
+account_created: "Votre compte a été créé avec succès !"
+account_updated: "Votre profil a été mis à jour avec succès"
+reservation_created: "Votre réservation a été créée avec succès"
+message_sent: "Votre message a été envoyé"
+
+# Messages d'erreur
+error_generic: "Une erreur est survenue, veuillez réessayer"
+error_email_exists: "Cet email est déjà utilisé"
+error_invalid_email: "L'adresse email n'est pas valide"
+error_password_too_short: "Le mot de passe doit contenir au moins 8 caractères"
+error_required_field: "Ce champ est obligatoire"
+error_invalid_phone: "Le format du numéro de téléphone n'est pas valide"
+error_invalid_postal_code: "Le code postal doit contenir 5 chiffres"
+
+# Formulaires
+form:
+    email: "Adresse email"
+    password: "Mot de passe"
+    confirm_password: "Confirmer le mot de passe"
+    nom: "Nom"
+    prenom: "Prénom"
+    telephone: "Téléphone"
+    siret: "SIRET"
+    type_activite: "Type d'activité"
+    adresse_facturation: "Adresse de facturation"
+    code_postal: "Code postal"
+    ville: "Ville"
+    submit: "Valider"
+    cancel: "Annuler"
+    save: "Enregistrer"
+    
+# Boutons
+button:
+    create_account: "Créer mon compte"
+    sign_in: "Se connecter"
+    sign_out: "Déconnexion"
+    search: "Rechercher"
+    reserve: "Réserver"
+    send_message: "Envoyer le message"
+    upload: "Télécharger un fichier"
+    back: "Retour"
+    
+# Navigation
+nav:
+    dashboard: "Tableau de bord"
+    reservations: "Mes réservations"
+    favorites: "Mes favoris"
+    messages: "Messages"
+    documents: "Mes documents"
+    profile: "Mon profil"
+    settings: "Paramètres"
+    
+# Statuts
+status:
+    active: "Actif"
+    inactive: "Inactif"
+    pending: "En attente"
+    confirmed: "Confirmé"
+    cancelled: "Annulé"
+    completed: "Terminé"
