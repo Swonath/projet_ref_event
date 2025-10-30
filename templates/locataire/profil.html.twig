@@ -14,12 +14,7 @@
     <div class="section">
         <h2 class="section-title">Informations personnelles</h2>
         
-        <div class="form-row">
-            <div class="form-group">
-                <label class="form-label required">Prénom</label>
-                <input type="text" name="prenom" class="form-control" value="{{ app.user.prenom }}" required>
-            </div>
-            
+        <div class="form-row">            
             <div class="form-group">
                 <label class="form-label required">Nom</label>
                 <input type="text" name="nom" class="form-control" value="{{ app.user.nom }}" required>
@@ -41,7 +36,7 @@
         
         <div class="form-group">
             <label class="form-label">Adresse</label>
-            <input type="text" name="adresse" class="form-control" value="{{ app.user.adresse ?? '' }}" placeholder="Numéro et nom de rue">
+            <input type="text" name="adresse" class="form-control" value="{{ app.user.adresseFacturation ?? '' }}" placeholder="Numéro et nom de rue">
         </div>
         
         <div class="form-row">
@@ -62,32 +57,14 @@
         
         <div class="form-row">
             <div class="form-group">
-                <label class="form-label">Nom de l'entreprise</label>
-                <input type="text" name="entreprise" class="form-control" value="{{ app.user.entreprise ?? '' }}" placeholder="Mon Entreprise">
-            </div>
-            
-            <div class="form-group">
                 <label class="form-label">SIRET</label>
                 <input type="text" name="siret" class="form-control" value="{{ app.user.siret ?? '' }}" placeholder="123 456 789 00012">
             </div>
-        </div>
-        
-        <div class="form-group">
-            <label class="form-label">Type d'activité</label>
-            <select name="typeActivite" class="form-control">
-                <option value="">Sélectionnez votre activité</option>
-                <option value="vente" {% if app.user.typeActivite == 'vente' %}selected{% endif %}>Vente de produits</option>
-                <option value="restauration" {% if app.user.typeActivite == 'restauration' %}selected{% endif %}>Restauration</option>
-                <option value="services" {% if app.user.typeActivite == 'services' %}selected{% endif %}>Services</option>
-                <option value="animation" {% if app.user.typeActivite == 'animation' %}selected{% endif %}>Animation / Événementiel</option>
-                <option value="autre" {% if app.user.typeActivite == 'autre' %}selected{% endif %}>Autre</option>
-            </select>
-        </div>
-        
-        <div class="form-group">
-            <label class="form-label">Description de votre activité</label>
-            <textarea name="description" class="form-control" rows="4" placeholder="Décrivez brièvement votre activité...">{{ app.user.description ?? '' }}</textarea>
-            <small class="form-text">Cette description sera visible par les centres commerciaux</small>
+
+            <div class="form-group">
+                <label class="form-label">Type d'activité</label>
+                <input type="text" name="siret" class="form-control" value="{{ app.user.typeActivite ?? '' }}" placeholder="123 456 789 00012">
+            </div>
         </div>
     </div>
 

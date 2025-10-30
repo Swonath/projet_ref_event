@@ -217,26 +217,19 @@ class DashboardController extends AbstractController
         $locataire = $this->getUser();
         
         // Récupérer les données du formulaire
-        $locataire->setPrenom($request->request->get('prenom'));
         $locataire->setNom($request->request->get('nom'));
         $locataire->setEmail($request->request->get('email'));
         $locataire->setTelephone($request->request->get('telephone'));
-        $locataire->setAdresse($request->request->get('adresse'));
+        $locataire->setAdresseFacturation($request->request->get('adresse'));
         $locataire->setCodePostal($request->request->get('codePostal'));
         $locataire->setVille($request->request->get('ville'));
         
         // Informations professionnelles (si elles existent dans ton entité)
-        if (method_exists($locataire, 'setEntreprise')) {
-            $locataire->setEntreprise($request->request->get('entreprise'));
-        }
         if (method_exists($locataire, 'setSiret')) {
             $locataire->setSiret($request->request->get('siret'));
         }
         if (method_exists($locataire, 'setTypeActivite')) {
             $locataire->setTypeActivite($request->request->get('typeActivite'));
-        }
-        if (method_exists($locataire, 'setDescription')) {
-            $locataire->setDescription($request->request->get('description'));
         }
         
         // Changer le mot de passe si un nouveau est fourni
