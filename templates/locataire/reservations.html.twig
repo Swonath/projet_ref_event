@@ -4,87 +4,78 @@
 
 {% block dashboard_content %}
 
+<div class="section">
 <div class="page-header">
     <h1 class="page-title">Mes réservations</h1>
-    <p class="page-subtitle">{{ reservations|length }} réservation{% if reservations|length > 1 %}s{% endif %} au total</p>
+    <p class="page-subtitle">{{ reservations|length }} réservation{% if reservations|length > 1 %}s{% endif %} 
+    {% if filtre_actif != 'toutes' %}{{ filtre_actif|replace({'_': ' '}) }}{% endif %}</p>
 </div>
 
-<div class="filters">
-    <a href="{{ path('locataire_reservations', {filtre: 'toutes'}) }}" 
-       class="filter-btn {% if filtre_actif == 'toutes' %}active{% endif %}">
-        Toutes
-    </a>
-    <a href="{{ path('locataire_reservations', {filtre: 'en_cours'}) }}" 
-       class="filter-btn {% if filtre_actif == 'en_cours' %}active{% endif %}">
-        En cours
-    </a>
-    <a href="{{ path('locataire_reservations', {filtre: 'a_venir'}) }}" 
-       class="filter-btn {% if filtre_actif == 'a_venir' %}active{% endif %}">
-        À venir
-    </a>
-    <a href="{{ path('locataire_reservations', {filtre: 'passees'}) }}" 
-       class="filter-btn {% if filtre_actif == 'passees' %}active{% endif %}">
-        Passées
-    </a>
-</div>
+    {# Section 2 : Filtres par statut (générés dynamiquement depuis l'enum) #}
+    <div class="filters-group">
+        <span class="filters-label">Par statut :</span>
+        <div class="filters">
+            <a href="{{ path('locataire_reservations', {filtre: 'toutes'}) }}" 
+               class="filter-btn {% if filtre_actif == 'toutes' %}active{% endif %}">
+                Toutes ({{ stats.total_reservations }})
+            </a>
+            {% for statut in statuts %}
+                {% set statutValue = statut.value %}
+                {% set countKey = 'statut_' ~ statutValue %}
+                <a href="{{ path('locataire_reservations', {filtre: statutValue}) }}" 
+                   class="filter-btn filter-btn-status status-{{ statut.cssClass }} {% if filtre_actif == statutValue %}active{% endif %}">
+                    {{ statut.icone }} {{ statut.libelle }} ({{ stats[countKey]|default(0) }})
+                </a>
+            {% endfor %}
+        </div>
+    </div>
 
-{% if reservations is empty %}
+    {% if reservations is empty %}
     <div class="empty-state">
         <div class="empty-icon">📅</div>
-        <div class="empty-title">Aucune réservation</div>
-        <div class="empty-text">
-            Vous n'avez pas encore de réservation{% if filtre_actif != 'toutes' %} {{ filtre_actif }}{% endif %}.
-        </div>
-        <a href="{{ path('app_home_page') }}" class="btn-primary">
-            Rechercher un emplacement
-        </a>
+        <div class="empty-title">Aucune réservation active</div>
+        <div class="empty-text">Vous n'avez pas de réservation en cours actuellement</div>
+        <a href="{{ path('app_home_page') }}" class="btn-primary">Rechercher un emplacement</a>
     </div>
 {% else %}
-    <div class="reservations-grid">
-        {% for reservation in reservations %}
-            <div class="reservation-card">
-                <div class="reservation-image">
-                    {% if reservation.emplacement.photos|length > 0 %}
-                        <img src="{{ asset('uploads/photos/' ~ reservation.emplacement.photos[0].chemin) }}" 
-                             alt="{{ reservation.emplacement.nom }}">
-                    {% else %}
-                        📷 Photo non disponible
-                    {% endif %}
+    {% for reservation in reservations %}
+    <div class="reservation-card">
+        <div class="reservation-image">
+            {% if reservation.emplacement.photos|length > 0 %}
+                <img src="{{ asset('uploads/photos/' ~ reservation.emplacement.photos[0].cheminFichier) }}" 
+                     alt="{{ reservation.emplacement.titreAnnonce }}">
+            {% else %}
+                <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; background:#f5f5f5; color:#999;">
+                    📷
                 </div>
-
-                <div class="reservation-content">
-                    <div class="reservation-header">
-                        <h3 class="reservation-title">{{ reservation.emplacement.nom }}</h3>
-                        <span class="reservation-status status-{{ reservation.statut|lower|replace({' ': '-'}) }}">
-                            {{ reservation.statut }}
-                        </span>
-                    </div>
-
-                    <div class="reservation-info">
-                        <div class="reservation-location">
-                            📍 {{ reservation.emplacement.centreCommercial.nom }}
-                        </div>
-                        <div class="reservation-dates">
-                            📅 Du {{ reservation.dateDebut|date('d/m/Y') }} au {{ reservation.dateFin|date('d/m/Y') }}
-                        </div>
-                        <div class="reservation-surface">
-                            📏 {{ reservation.emplacement.surface }} m²
-                        </div>
-                    </div>
-
-                    <div class="reservation-footer">
-                        <div class="reservation-price">
-                            {{ reservation.montantTotal }}€
-                        </div>
-                        <a href="{{ path('locataire_reservation_detail', {id: reservation.id}) }}" 
-                           class="btn-secondary btn-small">
-                            Voir détails
-                        </a>
-                    </div>
-                </div>
+            {% endif %}
+        </div>
+        
+        <div class="reservation-info">
+            <h3>{{ reservation.emplacement.titreAnnonce }}</h3>
+            <div class="reservation-details">
+                📍 {{ reservation.emplacement.centreCommercial.nomCentre }} • 
+                {{ reservation.emplacement.typeEmplacement }} • 
+                {{ reservation.emplacement.surface }} m²
             </div>
-        {% endfor %}
+            <div class="reservation-details">
+                📅 Du {{ reservation.dateDebut|date('d/m/Y') }} au {{ reservation.dateFin|date('d/m/Y') }}
+            </div>
+            {# ✅ Badge de statut avec enum #}
+            <span class="reservation-status status-{{ reservation.statutCssClass }}">
+                {{ reservation.statut.icone }} {{ reservation.statutLibelle }}
+            </span>
+        </div>
+        
+        <div class="reservation-actions">
+            <div class="reservation-price">{{ reservation.montantTotal }}€</div>
+            <a href="{{ path('locataire_reservation_detail', {id: reservation.id}) }}" 
+               class="btn-small btn-primary-small">Voir détails</a>
+            <a href="#" class="btn-small btn-secondary-small">Contacter</a>
+        </div>
     </div>
+    {% endfor %}
 {% endif %}
+    </div>
 
 {% endblock %}

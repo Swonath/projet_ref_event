@@ -15,6 +15,7 @@ use App\Entity\PeriodeIndisponibilite;
 use App\Entity\Conversation;
 use App\Entity\Message;
 use App\Entity\Parametre;
+use App\Enum\StatutReservation;  // ✅ AJOUT : Importer l'enum
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -441,7 +442,7 @@ class AppFixtures extends Fixture
         $manager->persist($periode2);
 
         // ========================================
-        // 7. CRÉER LES RÉSERVATIONS
+        // 7. CRÉER LES RÉSERVATIONS - CORRECTION ICI ✅
         // ========================================
         $reservations = [];
 
@@ -453,7 +454,7 @@ class AppFixtures extends Fixture
         $reservation1->setMontantCommission('95.00');
         $reservation1->setMontantTotal('1045.00');
         $reservation1->setCautionVersee('500.00');
-        $reservation1->setStatut('terminee');
+        $reservation1->setStatut(StatutReservation::TERMINEE);  // ✅ Utiliser l'enum
         $reservation1->setDateDemande(new \DateTime('-50 days'));
         $reservation1->setDateValidation(new \DateTime('-48 days'));
         $reservation1->setDatePaiement(new \DateTime('-47 days'));
@@ -470,7 +471,7 @@ class AppFixtures extends Fixture
         $reservation2->setMontantCommission('18.00');
         $reservation2->setMontantTotal('198.00');
         $reservation2->setCautionVersee('500.00');
-        $reservation2->setStatut('en_cours');
+        $reservation2->setStatut(StatutReservation::EN_COURS);  // ✅ Utiliser l'enum
         $reservation2->setDateDemande(new \DateTime('-10 days'));
         $reservation2->setDateValidation(new \DateTime('-8 days'));
         $reservation2->setDatePaiement(new \DateTime('-7 days'));
@@ -487,7 +488,7 @@ class AppFixtures extends Fixture
         $reservation3->setMontantCommission('480.00');
         $reservation3->setMontantTotal('5280.00');
         $reservation3->setCautionVersee('1000.00');
-        $reservation3->setStatut('en_attente');
+        $reservation3->setStatut(StatutReservation::EN_ATTENTE);  // ✅ Utiliser l'enum
         $reservation3->setDateDemande(new \DateTime('-2 days'));
         $reservation3->setLocataire($locataire3);
         $reservation3->setEmplacement($emplacement3);
@@ -502,7 +503,7 @@ class AppFixtures extends Fixture
         $reservation4->setMontantCommission('200.00');
         $reservation4->setMontantTotal('2200.00');
         $reservation4->setCautionVersee('1500.00');
-        $reservation4->setStatut('validee');
+        $reservation4->setStatut(StatutReservation::VALIDEE);  // ✅ Utiliser l'enum
         $reservation4->setDateDemande(new \DateTime('-5 days'));
         $reservation4->setDateValidation(new \DateTime('-3 days'));
         $reservation4->setLocataire($locataire2);
@@ -517,7 +518,7 @@ class AppFixtures extends Fixture
         $reservation5->setMontantLocation('800.00');
         $reservation5->setMontantCommission('80.00');
         $reservation5->setMontantTotal('880.00');
-        $reservation5->setStatut('refusee');
+        $reservation5->setStatut(StatutReservation::REFUSEE);  // ✅ Utiliser l'enum
         $reservation5->setDateDemande(new \DateTime('-4 days'));
         $reservation5->setDateValidation(new \DateTime('-2 days'));
         $reservation5->setMotifRefus('Dates indisponibles en raison d\'un événement planifié');
@@ -533,7 +534,7 @@ class AppFixtures extends Fixture
         $reservation6->setMontantLocation('1200.00');
         $reservation6->setMontantCommission('120.00');
         $reservation6->setMontantTotal('1320.00');
-        $reservation6->setStatut('annulee');
+        $reservation6->setStatut(StatutReservation::ANNULEE);  // ✅ Utiliser l'enum
         $reservation6->setDateDemande(new \DateTime('-15 days'));
         $reservation6->setDateValidation(new \DateTime('-13 days'));
         $reservation6->setDatePaiement(new \DateTime('-12 days'));
@@ -544,7 +545,8 @@ class AppFixtures extends Fixture
         $manager->persist($reservation6);
         $reservations[] = $reservation6;
 
-        // Réservation 7 - Confirmée (payée, à venir)
+        // Réservation 7 - Validée (payée, à venir)
+        // Note: J'ai changé 'confirmee' en 'validee' car c'est le statut qui existe dans l'enum
         $reservation7 = new Reservation();
         $reservation7->setDateDebut(new \DateTime('+40 days'));
         $reservation7->setDateFin(new \DateTime('+46 days'));
@@ -552,7 +554,7 @@ class AppFixtures extends Fixture
         $reservation7->setMontantCommission('160.00');
         $reservation7->setMontantTotal('1760.00');
         $reservation7->setCautionVersee('1000.00');
-        $reservation7->setStatut('confirmee');
+        $reservation7->setStatut(StatutReservation::VALIDEE);  // ✅ Utiliser l'enum
         $reservation7->setDateDemande(new \DateTime('-8 days'));
         $reservation7->setDateValidation(new \DateTime('-6 days'));
         $reservation7->setDatePaiement(new \DateTime('-5 days'));

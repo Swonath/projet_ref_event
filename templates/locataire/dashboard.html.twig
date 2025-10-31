@@ -1,5 +1,7 @@
 {% extends 'locataire/base_dashboard.html.twig' %}
 
+{% block title %}Tableau de bord - Locataire{% endblock %}
+
 {% block dashboard_content %}
 
 <div class="page-header">
@@ -37,44 +39,70 @@
 <!-- Réservations en cours -->
 <div class="section">
     <div class="section-header">
-        <h2 class="section-title">Mes réservations en cours</h2>
+        <h2 class="section-title">Mes réservations</h2>
         <a href="{{ path('locataire_reservations') }}" class="btn-link">Voir tout →</a>
     </div>
-    
-    <div class="tabs">
-        <button class="tab active">En cours ({{ reservations|length }})</button>
-        <button class="tab">À venir (1)</button>
-        <button class="tab">Passées (3)</button>
-    </div>
+
+        {# Section 2 : Filtres par statut (générés dynamiquement depuis l'enum) #}
+        <div class="filters-group">
+            <span class="filters-label">Par statut :</span>
+            <div class="filters">
+                <a href="{{ path('locataire_reservations', {filtre: 'toutes'}) }}" 
+               class="filter-btn active">
+                Toutes ({{ stats.total_reservations }})
+            </a>
+                {% for statut in statuts %}
+                    {% set statutValue = statut.value %}
+                    {% set countKey = 'statut_' ~ statutValue %}
+                    <a href="{{ path('locataire_reservations', {filtre: statutValue}) }}" 
+                       class="filter-btn filter-btn-status status-{{ statut.cssClass }}">
+                        {{ statut.icone }} {{ statut.libelle }} ({{ stats[countKey]|default(0) }})
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
     
     {% if reservations is empty %}
         <div class="empty-state">
             <div class="empty-icon">📅</div>
-            <div class="empty-title">Aucune réservation en cours</div>
-            <div class="empty-text">Vous n'avez pas encore de réservation active</div>
-            <a href="#" class="btn-primary">Rechercher un emplacement</a>
+            <div class="empty-title">Aucune réservation active</div>
+            <div class="empty-text">Vous n'avez pas de réservation en cours actuellement</div>
+            <a href="{{ path('app_home_page') }}" class="btn-primary">Rechercher un emplacement</a>
         </div>
     {% else %}
         {% for reservation in reservations %}
         <div class="reservation-card">
-            <div class="reservation-image">[Photo emplacement]</div>
+            <div class="reservation-image">
+                {% if reservation.emplacement.photos|length > 0 %}
+                    <img src="{{ asset('uploads/photos/' ~ reservation.emplacement.photos[0].cheminFichier) }}" 
+                         alt="{{ reservation.emplacement.titreAnnonce }}">
+                {% else %}
+                    <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; background:#f5f5f5; color:#999;">
+                        📷
+                    </div>
+                {% endif %}
+            </div>
             
             <div class="reservation-info">
-                <h3>{{ reservation.emplacement }}</h3>
+                <h3>{{ reservation.emplacement.titreAnnonce }}</h3>
                 <div class="reservation-details">
-                    📍 {{ reservation.ville }} • {{ reservation.type }} • {{ reservation.surface }}
+                    📍 {{ reservation.emplacement.centreCommercial.nomCentre }} • 
+                    {{ reservation.emplacement.typeEmplacement }} • 
+                    {{ reservation.emplacement.surface }} m²
                 </div>
                 <div class="reservation-details">
-                    📅 Du {{ reservation.date_debut|date('d/m/Y') }} au {{ reservation.date_fin|date('d/m/Y') }}
+                    📅 Du {{ reservation.dateDebut|date('d/m/Y') }} au {{ reservation.dateFin|date('d/m/Y') }}
                 </div>
-                <span class="reservation-status status-{{ reservation.statut == 'En cours' ? 'confirmed' : 'pending' }}">
-                    {{ reservation.statut }}
+                {# ✅ Badge de statut avec enum #}
+                <span class="reservation-status status-{{ reservation.statutCssClass }}">
+                    {{ reservation.statut.icone }} {{ reservation.statutLibelle }}
                 </span>
             </div>
             
             <div class="reservation-actions">
-                <div class="reservation-price">{{ reservation.prix_total }}€</div>
-                <a href="#" class="btn-small btn-primary-small">Voir détails</a>
+                <div class="reservation-price">{{ reservation.montantTotal }}€</div>
+                <a href="{{ path('locataire_reservation_detail', {id: reservation.id}) }}" 
+                   class="btn-small btn-primary-small">Voir détails</a>
                 <a href="#" class="btn-small btn-secondary-small">Contacter</a>
             </div>
         </div>
@@ -86,7 +114,7 @@
 <div class="section">
     <div class="section-header">
         <h2 class="section-title">Messages récents</h2>
-        <a href="#" class="btn-link">Voir tout →</a>
+        <a href="{{ path('locataire_messages') }}" class="btn-link">Voir tout →</a>
     </div>
     
     {% if messages is empty %}

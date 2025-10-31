@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\ReservationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use App\Enum\StatutReservation;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -34,8 +35,8 @@ class Reservation
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2, nullable: true)]
     private ?string $cautionVersee = null;
 
-    #[ORM\Column(length: 30)]
-    private ?string $statut = null;
+    #[ORM\Column(type: 'string', enumType: StatutReservation::class)]
+    private ?StatutReservation $statut = null;
 
     #[ORM\Column]
     private ?\DateTime $dateDemande = null;
@@ -161,15 +162,14 @@ class Reservation
         return $this;
     }
 
-    public function getStatut(): ?string
+    public function getStatut(): ?StatutReservation
     {
         return $this->statut;
     }
-
-    public function setStatut(string $statut): static
+    
+    public function setStatut(StatutReservation $statut): static
     {
         $this->statut = $statut;
-
         return $this;
     }
 
@@ -340,4 +340,16 @@ class Reservation
 
         return $this;
     }
+
+    public function getStatutLibelle(): string
+    {
+        return $this->statut?->getLibelle() ?? 'Inconnu';
+    }
+
+    public function getStatutCssClass(): string
+    {
+        return $this->statut?->getCssClass() ?? '';
+    }
 }
+
+

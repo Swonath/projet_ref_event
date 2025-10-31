@@ -3,6 +3,7 @@
 namespace App\Controller\Locataire;
 
 use App\Entity\Locataire;
+use App\Enum\StatutReservation;
 use App\Repository\ReservationRepository;
 use App\Repository\EmplacementRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,73 +22,34 @@ class DashboardController extends AbstractController
      * Page principale du dashboard locataire
      */
     #[Route('', name: 'dashboard')]
-    public function index(): Response
+    public function index(ReservationRepository $reservationRepo): Response
     {
         /** @var Locataire $locataire */
         $locataire = $this->getUser();
         
-        // TODO: Récupérer les vraies données depuis la base
-        // Pour l'instant, on utilise des données de test
+        // ✅ MODIFICATION : Afficher TOUTES les réservations (pas seulement les actives)
+        $reservations = $reservationRepo->findBy(
+            ['locataire' => $locataire],
+            ['dateDebut' => 'DESC'], // Triées par date de début (plus récentes en premier)
+            10  // Limiter à 10 réservations pour ne pas surcharger le dashboard
+        );
         
-        $stats = [
-            'reservations_actives' => 2,
-            'messages_non_lus' => 5,
-            'favoris' => 8,
-            'depenses_mois' => 1850,
-        ];
+        // Calculer tous les compteurs
+        $stats = $this->calculateStats($reservationRepo, $locataire);
         
-        // Réservations en cours (données de test)
-        $reservations = [
-            [
-                'id' => 1,
-                'emplacement' => 'Centre Atlantis',
-                'ville' => 'Saint-Herblain',
-                'type' => 'Kiosque',
-                'surface' => '25m²',
-                'date_debut' => new \DateTime('2025-11-01'),
-                'date_fin' => new \DateTime('2025-11-15'),
-                'statut' => 'En cours',
-                'prix_total' => 2250,
-            ],
-            [
-                'id' => 2,
-                'emplacement' => 'Beaulieu',
-                'ville' => 'Nantes Centre',
-                'type' => 'Vitrine',
-                'surface' => '15m²',
-                'date_debut' => new \DateTime('2025-12-01'),
-                'date_fin' => new \DateTime('2025-12-24'),
-                'statut' => 'À venir',
-                'prix_total' => 2880,
-            ],
-        ];
-        
-        // Messages récents (données de test)
-        $messages = [
-            [
-                'expediteur' => 'Centre Atlantis',
-                'contenu' => 'Votre demande de réservation a été validée',
-                'date' => new \DateTime('-2 hours'),
-                'lu' => false,
-            ],
-            [
-                'expediteur' => 'Beaulieu',
-                'contenu' => 'Documents à fournir pour finaliser votre réservation',
-                'date' => new \DateTime('-1 day'),
-                'lu' => false,
-            ],
-        ];
+        $messages = [];
         
         return $this->render('locataire/dashboard.html.twig', [
             'locataire' => $locataire,
             'stats' => $stats,
             'reservations' => $reservations,
             'messages' => $messages,
+            'statuts' => StatutReservation::cases(),
         ]);
     }
     
     /**
-     * Page "Mes réservations"
+     * Page "Mes réservations" avec filtres par statut ET période
      */
     #[Route('/reservations', name: 'reservations')]
     public function reservations(
@@ -97,47 +59,193 @@ class DashboardController extends AbstractController
         /** @var Locataire $locataire */
         $locataire = $this->getUser();
         
-        // Récupérer le filtre depuis l'URL
+        // Récupérer le filtre depuis l'URL (par défaut : toutes)
         $filtre = $request->query->get('filtre', 'toutes');
         
-        // TODO: Récupérer les vraies réservations depuis la base de données
-        // Pour l'instant, on retourne un tableau vide
-        $reservations = [];
+        $now = new \DateTime();
         
-        // Une fois que tu auras des données en base, remplace par :
-        /*
+        // ✅ Construire la requête selon le filtre
+        $qb = $reservationRepo->createQueryBuilder('r')
+            ->where('r.locataire = :locataire')
+            ->setParameter('locataire', $locataire);
+        
+        // Filtres par STATUT (depuis l'enum)
         switch ($filtre) {
+            case 'en_attente':
+                $qb->andWhere('r.statut = :statut')
+                   ->setParameter('statut', StatutReservation::EN_ATTENTE)
+                   ->orderBy('r.dateDemande', 'DESC');
+                break;
+                
+            case 'validee':
+                $qb->andWhere('r.statut = :statut')
+                   ->setParameter('statut', StatutReservation::VALIDEE)
+                   ->orderBy('r.dateDebut', 'ASC');
+                break;
+                
             case 'en_cours':
-                $reservations = $reservationRepo->findBy(
-                    ['locataire' => $locataire, 'statut' => 'en_cours'],
-                    ['dateDebut' => 'DESC']
-                );
+                // En cours = statut EN_COURS et dates actives
+                $qb->andWhere('r.statut = :statut')
+                   ->andWhere('r.dateDebut <= :now')
+                   ->andWhere('r.dateFin >= :now')
+                   ->setParameter('statut', StatutReservation::EN_COURS)
+                   ->setParameter('now', $now)
+                   ->orderBy('r.dateFin', 'ASC');
                 break;
+                
+            case 'terminee':
+                $qb->andWhere('r.statut = :statut')
+                   ->setParameter('statut', StatutReservation::TERMINEE)
+                   ->orderBy('r.dateFin', 'DESC');
+                break;
+                
+            case 'refusee':
+                $qb->andWhere('r.statut = :statut')
+                   ->setParameter('statut', StatutReservation::REFUSEE)
+                   ->orderBy('r.dateDemande', 'DESC');
+                break;
+                
+            case 'annulee':
+                $qb->andWhere('r.statut = :statut')
+                   ->setParameter('statut', StatutReservation::ANNULEE)
+                   ->orderBy('r.dateAnnulation', 'DESC');
+                break;
+            
+            // Filtres TEMPORELS (qui tiennent compte du statut)
+            case 'actives':
+                // Réservations en cours (dates actives + statuts actifs)
+                $qb->andWhere('r.dateDebut <= :now')
+                   ->andWhere('r.dateFin >= :now')
+                   ->andWhere('r.statut IN (:statuts_actifs)')
+                   ->setParameter('now', $now)
+                   ->setParameter('statuts_actifs', [
+                       StatutReservation::VALIDEE,
+                       StatutReservation::EN_COURS,
+                   ])
+                   ->orderBy('r.dateFin', 'ASC');
+                break;
+                
             case 'a_venir':
-                $reservations = $reservationRepo->findBy(
-                    ['locataire' => $locataire, 'statut' => 'confirmee'],
-                    ['dateDebut' => 'ASC']
-                );
+                // Réservations futures (dateDebut dans le futur + pas annulées/refusées)
+                $qb->andWhere('r.dateDebut > :now')
+                   ->andWhere('r.statut NOT IN (:statuts_exclus)')
+                   ->setParameter('now', $now)
+                   ->setParameter('statuts_exclus', [
+                       StatutReservation::REFUSEE,
+                       StatutReservation::ANNULEE,
+                   ])
+                   ->orderBy('r.dateDebut', 'ASC');
                 break;
+                
             case 'passees':
-                $reservations = $reservationRepo->findBy(
-                    ['locataire' => $locataire, 'statut' => 'terminee'],
-                    ['dateFin' => 'DESC']
-                );
+                // Réservations passées (dateFin dans le passé + statut terminée)
+                $qb->andWhere('r.dateFin < :now')
+                   ->andWhere('r.statut = :statut')
+                   ->setParameter('now', $now)
+                   ->setParameter('statut', StatutReservation::TERMINEE)
+                   ->orderBy('r.dateFin', 'DESC');
                 break;
-            default:
-                $reservations = $reservationRepo->findBy(
-                    ['locataire' => $locataire],
-                    ['dateDebut' => 'DESC']
-                );
+                
+            default: // 'toutes'
+                // Toutes les réservations, triées par date de début décroissante
+                $qb->orderBy('r.dateDebut', 'DESC');
+                break;
         }
-        */
+        
+        $reservations = $qb->getQuery()->getResult();
+        
+        // Calculer les stats pour afficher les compteurs
+        $stats = $this->calculateStats($reservationRepo, $locataire);
         
         return $this->render('locataire/reservations.html.twig', [
             'locataire' => $locataire,
             'reservations' => $reservations,
             'filtre_actif' => $filtre,
+            'stats' => $stats,
+            'statuts' => StatutReservation::cases(),
         ]);
+    }
+    
+    /**
+     * Calcule les statistiques pour le dashboard et les filtres
+     */
+    private function calculateStats(ReservationRepository $reservationRepo, Locataire $locataire): array
+    {
+        $now = new \DateTime();
+        $firstDayOfMonth = new \DateTime('first day of this month 00:00:00');
+        $lastDayOfMonth = new \DateTime('last day of this month 23:59:59');
+        
+        // Total de toutes les réservations
+        $totalReservations = $reservationRepo->count(['locataire' => $locataire]);
+        
+        // Compteurs par STATUT
+        $stats = [
+            'total_reservations' => $totalReservations,
+        ];
+        
+        // Compter pour chaque statut
+        foreach (StatutReservation::cases() as $statut) {
+            $count = $reservationRepo->count([
+                'locataire' => $locataire,
+                'statut' => $statut
+            ]);
+            $stats['statut_' . $statut->value] = $count;
+        }
+        
+        // Réservations actives (en cours avec dates valides)
+        $stats['reservations_actives'] = $reservationRepo->createQueryBuilder('r')
+            ->select('COUNT(r.id)')
+            ->where('r.locataire = :locataire')
+            ->andWhere('r.dateDebut <= :now')
+            ->andWhere('r.dateFin >= :now')
+            ->andWhere('r.statut IN (:statuts_actifs)')
+            ->setParameter('locataire', $locataire)
+            ->setParameter('now', $now)
+            ->setParameter('statuts_actifs', [
+                StatutReservation::VALIDEE,
+                StatutReservation::EN_COURS,
+            ])
+            ->getQuery()
+            ->getSingleScalarResult();
+        
+        // Réservations à venir (futures + pas annulées/refusées)
+        $stats['reservations_a_venir'] = $reservationRepo->createQueryBuilder('r')
+            ->select('COUNT(r.id)')
+            ->where('r.locataire = :locataire')
+            ->andWhere('r.dateDebut > :now')
+            ->andWhere('r.statut NOT IN (:statuts_exclus)')
+            ->setParameter('locataire', $locataire)
+            ->setParameter('now', $now)
+            ->setParameter('statuts_exclus', [
+                StatutReservation::REFUSEE,
+                StatutReservation::ANNULEE,
+            ])
+            ->getQuery()
+            ->getSingleScalarResult();
+        
+        // Réservations passées (terminées)
+        $stats['reservations_passees'] = $reservationRepo->count([
+            'locataire' => $locataire,
+            'statut' => StatutReservation::TERMINEE
+        ]);
+        
+        // Dépenses du mois en cours
+        $depensesMois = $reservationRepo->createQueryBuilder('r')
+            ->select('COALESCE(SUM(r.montantTotal), 0)')
+            ->where('r.locataire = :locataire')
+            ->andWhere('r.dateDebut >= :firstDay')
+            ->andWhere('r.dateDebut <= :lastDay')
+            ->setParameter('locataire', $locataire)
+            ->setParameter('firstDay', $firstDayOfMonth)
+            ->setParameter('lastDay', $lastDayOfMonth)
+            ->getQuery()
+            ->getSingleScalarResult();
+        
+        $stats['messages_non_lus'] = 0;
+        $stats['favoris'] = 0;
+        $stats['depenses_mois'] = round($depensesMois, 2);
+        
+        return $stats;
     }
     
     /**
@@ -153,7 +261,6 @@ class DashboardController extends AbstractController
         
         $reservation = $reservationRepo->find($id);
         
-        // Vérifier que la réservation existe et appartient au locataire
         if (!$reservation || $reservation->getLocataire() !== $locataire) {
             throw $this->createNotFoundException('Réservation non trouvée');
         }
@@ -172,17 +279,7 @@ class DashboardController extends AbstractController
         /** @var Locataire $locataire */
         $locataire = $this->getUser();
         
-        // TODO: Récupérer les vrais favoris depuis la base
-        // Pour l'instant, on retourne un tableau vide
         $favoris = [];
-        
-        // Une fois que tu auras créé la table Favori, remplace par :
-        /*
-        $favoris = $entityManager->getRepository(Favori::class)->findBy(
-            ['locataire' => $locataire],
-            ['dateAjout' => 'DESC']
-        );
-        */
         
         return $this->render('locataire/favoris.html.twig', [
             'locataire' => $locataire,
@@ -205,7 +302,7 @@ class DashboardController extends AbstractController
     }
     
     /**
-     * Modifier le profil (ROUTE AJOUTÉE)
+     * Modifier le profil
      */
     #[Route('/profil/modifier', name: 'profil_edit', methods: ['POST'])]
     public function profilEdit(
@@ -216,7 +313,6 @@ class DashboardController extends AbstractController
         /** @var Locataire $locataire */
         $locataire = $this->getUser();
         
-        // Récupérer les données du formulaire
         $locataire->setNom($request->request->get('nom'));
         $locataire->setEmail($request->request->get('email'));
         $locataire->setTelephone($request->request->get('telephone'));
@@ -224,7 +320,6 @@ class DashboardController extends AbstractController
         $locataire->setCodePostal($request->request->get('codePostal'));
         $locataire->setVille($request->request->get('ville'));
         
-        // Informations professionnelles (si elles existent dans ton entité)
         if (method_exists($locataire, 'setSiret')) {
             $locataire->setSiret($request->request->get('siret'));
         }
@@ -232,29 +327,24 @@ class DashboardController extends AbstractController
             $locataire->setTypeActivite($request->request->get('typeActivite'));
         }
         
-        // Changer le mot de passe si un nouveau est fourni
         $nouveauMotDePasse = $request->request->get('nouveau_mot_de_passe');
         $confirmerMotDePasse = $request->request->get('confirmer_mot_de_passe');
         
         if (!empty($nouveauMotDePasse)) {
-            // Vérifier que les deux mots de passe correspondent
             if ($nouveauMotDePasse !== $confirmerMotDePasse) {
                 $this->addFlash('error', 'Les mots de passe ne correspondent pas.');
                 return $this->redirectToRoute('locataire_profil');
             }
             
-            // Vérifier la longueur minimale
             if (strlen($nouveauMotDePasse) < 8) {
                 $this->addFlash('error', 'Le mot de passe doit contenir au moins 8 caractères.');
                 return $this->redirectToRoute('locataire_profil');
             }
             
-            // Hasher et définir le nouveau mot de passe
             $hashedPassword = $passwordHasher->hashPassword($locataire, $nouveauMotDePasse);
             $locataire->setPassword($hashedPassword);
         }
         
-        // Sauvegarder les modifications
         try {
             $entityManager->flush();
             $this->addFlash('success', 'Profil modifié avec succès !');
@@ -274,7 +364,6 @@ class DashboardController extends AbstractController
         /** @var Locataire $locataire */
         $locataire = $this->getUser();
         
-        // TODO: Récupérer tous les documents liés aux réservations
         $documents = [];
         
         return $this->render('locataire/documents.html.twig', [
@@ -292,7 +381,6 @@ class DashboardController extends AbstractController
         /** @var Locataire $locataire */
         $locataire = $this->getUser();
         
-        // TODO: Implémenter la messagerie
         $conversations = [];
         
         return $this->render('locataire/messages.html.twig', [
