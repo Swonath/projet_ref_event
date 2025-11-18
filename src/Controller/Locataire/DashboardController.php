@@ -6,6 +6,7 @@ use App\Entity\Locataire;
 use App\Enum\StatutReservation;
 use App\Repository\ReservationRepository;
 use App\Repository\EmplacementRepository;
+use App\Repository\FavoriRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,20 +23,22 @@ class DashboardController extends AbstractController
      * Page principale du dashboard locataire
      */
     #[Route('', name: 'dashboard')]
-    public function index(ReservationRepository $reservationRepo): Response
-    {
+    public function index(
+        ReservationRepository $reservationRepo,
+        FavoriRepository $favoriRepo
+    ): Response {
         /** @var Locataire $locataire */
         $locataire = $this->getUser();
         
-        // ✅ MODIFICATION : Afficher TOUTES les réservations (pas seulement les actives)
+        // Afficher TOUTES les réservations (maximum 10)
         $reservations = $reservationRepo->findBy(
             ['locataire' => $locataire],
-            ['dateDebut' => 'DESC'], // Triées par date de début (plus récentes en premier)
-            10  // Limiter à 10 réservations pour ne pas surcharger le dashboard
+            ['dateDebut' => 'DESC'],
+            10
         );
         
-        // Calculer tous les compteurs
-        $stats = $this->calculateStats($reservationRepo, $locataire);
+        // Calculer tous les compteurs (avec favoris)
+        $stats = $this->calculateStats($reservationRepo, $favoriRepo, $locataire);
         
         $messages = [];
         
@@ -54,22 +57,20 @@ class DashboardController extends AbstractController
     #[Route('/reservations', name: 'reservations')]
     public function reservations(
         Request $request,
-        ReservationRepository $reservationRepo
+        ReservationRepository $reservationRepo,
+        FavoriRepository $favoriRepo
     ): Response {
         /** @var Locataire $locataire */
         $locataire = $this->getUser();
         
-        // Récupérer le filtre depuis l'URL (par défaut : toutes)
         $filtre = $request->query->get('filtre', 'toutes');
         
         $now = new \DateTime();
         
-        // ✅ Construire la requête selon le filtre
         $qb = $reservationRepo->createQueryBuilder('r')
             ->where('r.locataire = :locataire')
             ->setParameter('locataire', $locataire);
         
-        // Filtres par STATUT (depuis l'enum)
         switch ($filtre) {
             case 'en_attente':
                 $qb->andWhere('r.statut = :statut')
@@ -84,7 +85,6 @@ class DashboardController extends AbstractController
                 break;
                 
             case 'en_cours':
-                // En cours = statut EN_COURS et dates actives
                 $qb->andWhere('r.statut = :statut')
                    ->andWhere('r.dateDebut <= :now')
                    ->andWhere('r.dateFin >= :now')
@@ -111,9 +111,7 @@ class DashboardController extends AbstractController
                    ->orderBy('r.dateAnnulation', 'DESC');
                 break;
             
-            // Filtres TEMPORELS (qui tiennent compte du statut)
             case 'actives':
-                // Réservations en cours (dates actives + statuts actifs)
                 $qb->andWhere('r.dateDebut <= :now')
                    ->andWhere('r.dateFin >= :now')
                    ->andWhere('r.statut IN (:statuts_actifs)')
@@ -126,7 +124,6 @@ class DashboardController extends AbstractController
                 break;
                 
             case 'a_venir':
-                // Réservations futures (dateDebut dans le futur + pas annulées/refusées)
                 $qb->andWhere('r.dateDebut > :now')
                    ->andWhere('r.statut NOT IN (:statuts_exclus)')
                    ->setParameter('now', $now)
@@ -138,7 +135,6 @@ class DashboardController extends AbstractController
                 break;
                 
             case 'passees':
-                // Réservations passées (dateFin dans le passé + statut terminée)
                 $qb->andWhere('r.dateFin < :now')
                    ->andWhere('r.statut = :statut')
                    ->setParameter('now', $now)
@@ -146,16 +142,14 @@ class DashboardController extends AbstractController
                    ->orderBy('r.dateFin', 'DESC');
                 break;
                 
-            default: // 'toutes'
-                // Toutes les réservations, triées par date de début décroissante
+            default:
                 $qb->orderBy('r.dateDebut', 'DESC');
                 break;
         }
         
         $reservations = $qb->getQuery()->getResult();
         
-        // Calculer les stats pour afficher les compteurs
-        $stats = $this->calculateStats($reservationRepo, $locataire);
+        $stats = $this->calculateStats($reservationRepo, $favoriRepo, $locataire);
         
         return $this->render('locataire/reservations.html.twig', [
             'locataire' => $locataire,
@@ -169,16 +163,17 @@ class DashboardController extends AbstractController
     /**
      * Calcule les statistiques pour le dashboard et les filtres
      */
-    private function calculateStats(ReservationRepository $reservationRepo, Locataire $locataire): array
-    {
+    private function calculateStats(
+        ReservationRepository $reservationRepo,
+        FavoriRepository $favoriRepo,
+        Locataire $locataire
+    ): array {
         $now = new \DateTime();
         $firstDayOfMonth = new \DateTime('first day of this month 00:00:00');
         $lastDayOfMonth = new \DateTime('last day of this month 23:59:59');
         
-        // Total de toutes les réservations
         $totalReservations = $reservationRepo->count(['locataire' => $locataire]);
         
-        // Compteurs par STATUT
         $stats = [
             'total_reservations' => $totalReservations,
         ];
@@ -242,7 +237,10 @@ class DashboardController extends AbstractController
             ->getSingleScalarResult();
         
         $stats['messages_non_lus'] = 0;
-        $stats['favoris'] = 0;
+        
+        // ✅ COMPTER LES VRAIS FAVORIS
+        $stats['favoris'] = $favoriRepo->countByLocataire($locataire);
+        
         $stats['depenses_mois'] = round($depensesMois, 2);
         
         return $stats;
@@ -267,23 +265,6 @@ class DashboardController extends AbstractController
         
         return $this->render('locataire/reservation_detail.html.twig', [
             'reservation' => $reservation,
-        ]);
-    }
-    
-    /**
-     * Page "Mes favoris"
-     */
-    #[Route('/favoris', name: 'favoris')]
-    public function favoris(EmplacementRepository $emplacementRepo): Response
-    {
-        /** @var Locataire $locataire */
-        $locataire = $this->getUser();
-        
-        $favoris = [];
-        
-        return $this->render('locataire/favoris.html.twig', [
-            'locataire' => $locataire,
-            'favoris' => $favoris,
         ]);
     }
     

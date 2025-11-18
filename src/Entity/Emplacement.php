@@ -86,11 +86,18 @@ class Emplacement
     #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'emplacement')]
     private Collection $reservations;
 
+    /**
+     * @var Collection<int, Favori>
+     */
+    #[ORM\OneToMany(targetEntity: Favori::class, mappedBy: 'emplacement', orphanRemoval: true)]
+    private Collection $favoris;
+
     public function __construct()
     {
         $this->photos = new ArrayCollection();
         $this->periodesIndisponibilite = new ArrayCollection();
         $this->reservations = new ArrayCollection();
+        $this->favoris = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -386,6 +393,36 @@ class Emplacement
             // set the owning side to null (unless already changed)
             if ($reservation->getEmplacement() === $this) {
                 $reservation->setEmplacement(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Favori>
+     */
+    public function getFavoris(): Collection
+    {
+        return $this->favoris;
+    }
+
+    public function addFavori(Favori $favori): static
+    {
+        if (!$this->favoris->contains($favori)) {
+            $this->favoris->add($favori);
+            $favori->setEmplacement($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFavori(Favori $favori): static
+    {
+        if ($this->favoris->removeElement($favori)) {
+            // set the owning side to null (unless already changed)
+            if ($favori->getEmplacement() === $this) {
+                $favori->setEmplacement(null);
             }
         }
 

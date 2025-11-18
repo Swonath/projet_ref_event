@@ -51,10 +51,17 @@ class Locataire extends User
     #[ORM\OneToMany(targetEntity: Conversation::class, mappedBy: 'locataire')]
     private Collection $conversations;
 
+    /**
+     * @var Collection<int, Favori>
+     */
+    #[ORM\OneToMany(targetEntity: Favori::class, mappedBy: 'locataire', orphanRemoval: true)]
+    private Collection $favoris;
+
     public function __construct()
     {
         $this->reservations = new ArrayCollection();
         $this->conversations = new ArrayCollection();
+        $this->favoris = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -231,6 +238,36 @@ class Locataire extends User
             // set the owning side to null (unless already changed)
             if ($conversation->getLocataire() === $this) {
                 $conversation->setLocataire(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Favori>
+     */
+    public function getFavoris(): Collection
+    {
+        return $this->favoris;
+    }
+
+    public function addFavori(Favori $favori): static
+    {
+        if (!$this->favoris->contains($favori)) {
+            $this->favoris->add($favori);
+            $favori->setLocataire($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFavori(Favori $favori): static
+    {
+        if ($this->favoris->removeElement($favori)) {
+            // set the owning side to null (unless already changed)
+            if ($favori->getLocataire() === $this) {
+                $favori->setLocataire(null);
             }
         }
 
