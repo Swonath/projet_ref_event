@@ -1,0 +1,81 @@
+{% extends 'locataire/base_dashboard.html.twig' %}
+
+{% block title %}Mes messages - Locataire{% endblock %}
+
+{% block dashboard_content %}
+
+<div class="page-header">
+    <h1 class="page-title">Mes messages 💬</h1>
+    <p class="page-subtitle">
+        {% if totalNonLus > 0 %}
+            Vous avez {{ totalNonLus }} message{% if totalNonLus > 1 %}s{% endif %} non lu{% if totalNonLus > 1 %}s{% endif %}
+        {% else %}
+            Tous vos messages sont à jour
+        {% endif %}
+    </p>
+</div>
+
+<div class="section">
+    {% if conversations is empty %}
+        <div class="empty-state">
+            <div class="empty-icon">💬</div>
+            <div class="empty-title">Aucune conversation</div>
+            <div class="empty-text">Vous n'avez pas encore de conversations avec les centres commerciaux</div>
+            <a href="{{ path('app_home_page') }}" class="btn-primary">Rechercher un emplacement</a>
+        </div>
+    {% else %}
+        <div class="conversations-list">
+            {% for conversation in conversations %}
+                {% set unreadCount = messagesNonLus[conversation.id] %}
+                <a href="{{ path('locataire_messages_show', {id: conversation.id}) }}" 
+                   class="conversation-card {% if unreadCount > 0 %}conversation-unread{% endif %}">
+                    
+                    <!-- Avatar du centre commercial -->
+                    <div class="conversation-avatar">
+                        {{ conversation.centreCommercial.nomCentre|slice(0, 2)|upper }}
+                    </div>
+                    
+                    <!-- Informations de la conversation -->
+                    <div class="conversation-info">
+                        <div class="conversation-header">
+                            <h3 class="conversation-name">{{ conversation.centreCommercial.nomCentre }}</h3>
+                            <span class="conversation-date">
+                                {% if conversation.dernierMessageDate %}
+                                    {{ conversation.dernierMessageDate|date('d/m/Y H:i') }}
+                                {% endif %}
+                            </span>
+                        </div>
+                        
+                        <div class="conversation-subject">
+                            {% if conversation.sujet %}
+                                {{ conversation.sujet }}
+                            {% elseif conversation.reservation %}
+                                Réservation : {{ conversation.reservation.emplacement.titreAnnonce }}
+                            {% else %}
+                                Conversation
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Aperçu du dernier message -->
+                        {% set lastMessage = conversation.messages|last %}
+                        {% if lastMessage %}
+                            <div class="conversation-preview">
+                                {% if lastMessage.typeExpediteur == 'locataire' %}
+                                    <strong>Vous :</strong>
+                                {% endif %}
+                                {{ lastMessage.contenu|slice(0, 80) }}{% if lastMessage.contenu|length > 80 %}...{% endif %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Badge de messages non lus -->
+                    {% if unreadCount > 0 %}
+                        <div class="conversation-badge">{{ unreadCount }}</div>
+                    {% endif %}
+                </a>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+
+{% endblock %}

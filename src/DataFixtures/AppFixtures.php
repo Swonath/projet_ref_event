@@ -13,10 +13,10 @@ use App\Entity\Avis;
 use App\Entity\Photo;
 use App\Entity\PeriodeIndisponibilite;
 use App\Entity\Conversation;
+use App\Entity\Favori;
 use App\Entity\Message;
 use App\Entity\Parametre;
-use App\Entity\Favori;
-use App\Enum\StatutReservation;  // âœ… AJOUT : Importer l'enum
+use App\Enum\StatutReservation;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -856,12 +856,12 @@ class AppFixtures extends Fixture
         $manager->persist($avis3);
 
         // ========================================
-        // 12. CRÉER LES CONVERSATIONS ET MESSAGES
+        // 11. CRÉER LES CONVERSATIONS ET MESSAGES
         // ========================================
         
         // Conversation 1 - Entre locataire 1 et centre 1
         $conversation1 = new Conversation();
-        $conversation1->setSujet('Question sur Ã©quipements stand central');
+        $conversation1->setSujet('Question sur équipements stand central');
         $conversation1->setDateCreation(new \DateTime('-52 days'));
         $conversation1->setDernierMessageDate(new \DateTime('-49 days'));
         $conversation1->setEstArchivee(false);
@@ -872,7 +872,7 @@ class AppFixtures extends Fixture
 
         // Messages de la conversation 1
         $message1 = new Message();
-        $message1->setContenu('Bonjour, je souhaiterais savoir si le stand dispose d\'assez de prises Ã©lectriques pour mon matÃ©riel de prÃ©sentation ?');
+        $message1->setContenu('Bonjour, je souhaiterais savoir si le stand dispose d\'assez de prises électriques pour mon matériel de présentation ?');
         $message1->setDateEnvoi(new \DateTime('-52 days'));
         $message1->setEstLu(true);
         $message1->setDateLecture(new \DateTime('-52 days'));
@@ -881,7 +881,7 @@ class AppFixtures extends Fixture
         $manager->persist($message1);
 
         $message2 = new Message();
-        $message2->setContenu('Bonjour Sophie, le stand dispose de 2 prises classiques et 1 prise triphasÃ©e. Si vous avez besoin de plus, nous pouvons installer une multiprise. Combien de prises vous faut-il ?');
+        $message2->setContenu('Bonjour Sophie, le stand dispose de 2 prises classiques et 1 prise triphasée. Si vous avez besoin de plus, nous pouvons installer une multiprise. Combien de prises vous faut-il ?');
         $message2->setDateEnvoi(new \DateTime('-51 days'));
         $message2->setEstLu(true);
         $message2->setDateLecture(new \DateTime('-51 days'));
@@ -890,7 +890,7 @@ class AppFixtures extends Fixture
         $manager->persist($message2);
 
         $message3 = new Message();
-        $message3->setContenu('Parfait, 3 prises suffiront largement. Merci pour votre rÃ©activitÃ© !');
+        $message3->setContenu('Parfait, 3 prises suffiront largement. Merci pour votre réactivité !');
         $message3->setDateEnvoi(new \DateTime('-49 days'));
         $message3->setEstLu(true);
         $message3->setDateLecture(new \DateTime('-49 days'));
@@ -900,9 +900,9 @@ class AppFixtures extends Fixture
 
         // Conversation 2 - Entre locataire 3 et centre 1
         $conversation2 = new Conversation();
-        $conversation2->setSujet('Demande d\'informations boutique 30mÂ²');
+        $conversation2->setSujet('Demande d\'informations boutique 30m²');
         $conversation2->setDateCreation(new \DateTime('-3 days'));
-        $conversation2->setDernierMessageDate(new \DateTime('-1 day'));
+        $conversation2->setDernierMessageDate(new \DateTime('-2 hours'));
         $conversation2->setEstArchivee(false);
         $conversation2->setLocataire($locataire3);
         $conversation2->setCentreCommercial($centre1);
@@ -910,7 +910,7 @@ class AppFixtures extends Fixture
         $manager->persist($conversation2);
 
         $message4 = new Message();
-        $message4->setContenu('Bonjour, je suis intÃ©ressÃ©e par votre boutique de 30mÂ². Serait-il possible de la visiter avant de confirmer ma rÃ©servation ?');
+        $message4->setContenu('Bonjour, je suis intéressée par votre boutique de 30m². Serait-il possible de la visiter avant de confirmer ma réservation ?');
         $message4->setDateEnvoi(new \DateTime('-3 days'));
         $message4->setEstLu(true);
         $message4->setDateLecture(new \DateTime('-3 days'));
@@ -919,7 +919,7 @@ class AppFixtures extends Fixture
         $manager->persist($message4);
 
         $message5 = new Message();
-        $message5->setContenu('Bonjour, bien sÃ»r ! Nous pouvons organiser une visite. Seriez-vous disponible cette semaine ? Nous proposons des crÃ©neaux mardi et jeudi entre 10h et 16h.');
+        $message5->setContenu('Bonjour, bien sûr ! Nous pouvons organiser une visite. Seriez-vous disponible cette semaine ? Nous proposons des créneaux mardi et jeudi entre 10h et 16h.');
         $message5->setDateEnvoi(new \DateTime('-2 days'));
         $message5->setEstLu(true);
         $message5->setDateLecture(new \DateTime('-2 days'));
@@ -930,14 +930,24 @@ class AppFixtures extends Fixture
         $message6 = new Message();
         $message6->setContenu('Jeudi 14h serait parfait pour moi. Merci !');
         $message6->setDateEnvoi(new \DateTime('-1 day'));
-        $message6->setEstLu(false);
+        $message6->setEstLu(true);
+        $message6->setDateLecture(new \DateTime('-1 day'));
         $message6->setTypeExpediteur('locataire');
         $message6->setConversation($conversation2);
         $manager->persist($message6);
 
-        // Conversation 3 - Question gÃ©nÃ©rale (sans rÃ©servation)
+        // ⭐ MESSAGE NON LU du centre
+        $message6b = new Message();
+        $message6b->setContenu('Parfait ! Jeudi 14h c\'est noté. Rendez-vous à l\'accueil principal, demandez Caroline qui vous accompagnera pour la visite. N\'hésitez pas si vous avez des questions !');
+        $message6b->setDateEnvoi(new \DateTime('-2 hours'));
+        $message6b->setEstLu(false);
+        $message6b->setTypeExpediteur('centre');
+        $message6b->setConversation($conversation2);
+        $manager->persist($message6b);
+
+        // Conversation 3 - Question générale (sans réservation)
         $conversation3 = new Conversation();
-        $conversation3->setSujet('Renseignement sur les modalitÃ©s de location');
+        $conversation3->setSujet('Renseignement sur les modalités de location');
         $conversation3->setDateCreation(new \DateTime('-7 days'));
         $conversation3->setDernierMessageDate(new \DateTime('-6 days'));
         $conversation3->setEstArchivee(false);
@@ -946,7 +956,7 @@ class AppFixtures extends Fixture
         $manager->persist($conversation3);
 
         $message7 = new Message();
-        $message7->setContenu('Bonjour, quelles sont les modalitÃ©s de paiement ? Faut-il payer l\'intÃ©gralitÃ© Ã  la rÃ©servation ?');
+        $message7->setContenu('Bonjour, quelles sont les modalités de paiement ? Faut-il payer l\'intégralité à la réservation ?');
         $message7->setDateEnvoi(new \DateTime('-7 days'));
         $message7->setEstLu(true);
         $message7->setDateLecture(new \DateTime('-7 days'));
@@ -955,7 +965,7 @@ class AppFixtures extends Fixture
         $manager->persist($message7);
 
         $message8 = new Message();
-        $message8->setContenu('Bonjour Pierre, le paiement se fait en ligne une fois votre rÃ©servation validÃ©e par nos Ã©quipes. La caution est dÃ©bitÃ©e sÃ©parÃ©ment et vous sera restituÃ©e dans les 7 jours suivant la fin de la location si tout est conforme.');
+        $message8->setContenu('Bonjour Pierre, le paiement se fait en ligne une fois votre réservation validée par nos équipes. La caution est débitée séparément et vous sera restituée dans les 7 jours suivant la fin de la location si tout est conforme.');
         $message8->setDateEnvoi(new \DateTime('-6 days'));
         $message8->setEstLu(true);
         $message8->setDateLecture(new \DateTime('-6 days'));
@@ -963,28 +973,235 @@ class AppFixtures extends Fixture
         $message8->setConversation($conversation3);
         $manager->persist($message8);
 
+        // ==========================================
+        // CONVERSATION 4 - Conversation très active (historique complet)
+        // Entre TechStore et Les Quatre Temps - Suivi événement tech
+        // ==========================================
+        $conversation4 = new Conversation();
+        $conversation4->setSujet('Lancement produit tech - Suivi projet');
+        $conversation4->setDateCreation(new \DateTime('-20 days'));
+        $conversation4->setDernierMessageDate(new \DateTime('-1 hour'));
+        $conversation4->setEstArchivee(false);
+        $conversation4->setLocataire($locataire2);
+        $conversation4->setCentreCommercial($centre2);
+        $conversation4->setReservation($reservation4);
+        $manager->persist($conversation4);
+
+        // Échange 1 : Demande initiale
+        $msg4_1 = new Message();
+        $msg4_1->setContenu('Bonjour, nous préparons le lancement d\'un nouveau produit tech et votre corner premium nous intéresse beaucoup. Pouvez-vous nous en dire plus sur les possibilités d\'aménagement ?');
+        $msg4_1->setDateEnvoi(new \DateTime('-20 days'));
+        $msg4_1->setEstLu(true);
+        $msg4_1->setDateLecture(new \DateTime('-20 days'));
+        $msg4_1->setTypeExpediteur('locataire');
+        $msg4_1->setConversation($conversation4);
+        $manager->persist($msg4_1);
+
+        $msg4_2 = new Message();
+        $msg4_2->setContenu('Bonjour ! Le corner est entièrement modulable. Vous pouvez installer vos propres écrans, présentoirs et signalétique. Nous avons plusieurs prises électriques et une connexion internet haut débit. Souhaitez-vous organiser une visite ?');
+        $msg4_2->setDateEnvoi(new \DateTime('-19 days'));
+        $msg4_2->setEstLu(true);
+        $msg4_2->setDateLecture(new \DateTime('-19 days'));
+        $msg4_2->setTypeExpediteur('centre');
+        $msg4_2->setConversation($conversation4);
+        $manager->persist($msg4_2);
+
+        // Échange 2 : Organisation visite
+        $msg4_3 = new Message();
+        $msg4_3->setContenu('Oui avec plaisir ! Seriez-vous disponible demain matin vers 10h ?');
+        $msg4_3->setDateEnvoi(new \DateTime('-18 days'));
+        $msg4_3->setEstLu(true);
+        $msg4_3->setDateLecture(new \DateTime('-18 days'));
+        $msg4_3->setTypeExpediteur('locataire');
+        $msg4_3->setConversation($conversation4);
+        $manager->persist($msg4_3);
+
+        $msg4_4 = new Message();
+        $msg4_4->setContenu('Parfait ! Demain 10h. Rendez-vous à l\'accueil, demandez Thomas de l\'équipe location.');
+        $msg4_4->setDateEnvoi(new \DateTime('-18 days'));
+        $msg4_4->setEstLu(true);
+        $msg4_4->setDateLecture(new \DateTime('-18 days'));
+        $msg4_4->setTypeExpediteur('centre');
+        $msg4_4->setConversation($conversation4);
+        $manager->persist($msg4_4);
+
+        // Échange 3 : Après la visite
+        $msg4_5 = new Message();
+        $msg4_5->setContenu('Merci pour la visite ! L\'emplacement est parfait. Nous souhaitons réserver pour la période indiquée. Comment procède-t-on ?');
+        $msg4_5->setDateEnvoi(new \DateTime('-17 days'));
+        $msg4_5->setEstLu(true);
+        $msg4_5->setDateLecture(new \DateTime('-17 days'));
+        $msg4_5->setTypeExpediteur('locataire');
+        $msg4_5->setConversation($conversation4);
+        $manager->persist($msg4_5);
+
+        $msg4_6 = new Message();
+        $msg4_6->setContenu('Excellent ! Je vous envoie le lien de réservation par email. Une fois votre demande validée (sous 48h), vous recevrez le contrat et pourrez procéder au paiement en ligne.');
+        $msg4_6->setDateEnvoi(new \DateTime('-17 days'));
+        $msg4_6->setEstLu(true);
+        $msg4_6->setDateLecture(new \DateTime('-17 days'));
+        $msg4_6->setTypeExpediteur('centre');
+        $msg4_6->setConversation($conversation4);
+        $manager->persist($msg4_6);
+
+        // Échange 4 : Installation
+        $msg4_7 = new Message();
+        $msg4_7->setContenu('Bonjour, notre réservation démarre bientôt. Pouvons-nous accéder au corner 2 jours avant pour l\'installation du matériel ?');
+        $msg4_7->setDateEnvoi(new \DateTime('-8 days'));
+        $msg4_7->setEstLu(true);
+        $msg4_7->setDateLecture(new \DateTime('-8 days'));
+        $msg4_7->setTypeExpediteur('locataire');
+        $msg4_7->setConversation($conversation4);
+        $manager->persist($msg4_7);
+
+        $msg4_8 = new Message();
+        $msg4_8->setContenu('Oui bien sûr ! Vous pouvez accéder à partir d\'après-demain. Prévenez-nous juste la veille pour que la sécurité soit informée.');
+        $msg4_8->setDateEnvoi(new \DateTime('-7 days'));
+        $msg4_8->setEstLu(true);
+        $msg4_8->setDateLecture(new \DateTime('-7 days'));
+        $msg4_8->setTypeExpediteur('centre');
+        $msg4_8->setConversation($conversation4);
+        $manager->persist($msg4_8);
+
+        // Échange 5 : Pendant l'événement
+        $msg4_9 = new Message();
+        $msg4_9->setContenu('L\'installation s\'est très bien passée ! Par contre, nous aurions besoin d\'une prise supplémentaire pour nos écrans de démonstration. Est-ce possible ?');
+        $msg4_9->setDateEnvoi(new \DateTime('-3 days'));
+        $msg4_9->setEstLu(true);
+        $msg4_9->setDateLecture(new \DateTime('-3 days'));
+        $msg4_9->setTypeExpediteur('locataire');
+        $msg4_9->setConversation($conversation4);
+        $manager->persist($msg4_9);
+
+        $msg4_10 = new Message();
+        $msg4_10->setContenu('Pas de souci ! Je demande à la maintenance de passer installer une multiprise supplémentaire cet après-midi. Vous serez opérationnels demain matin.');
+        $msg4_10->setDateEnvoi(new \DateTime('-3 days'));
+        $msg4_10->setEstLu(true);
+        $msg4_10->setDateLecture(new \DateTime('-3 days'));
+        $msg4_10->setTypeExpediteur('centre');
+        $msg4_10->setConversation($conversation4);
+        $manager->persist($msg4_10);
+
+        // Échange 6 : Retour positif
+        $msg4_11 = new Message();
+        $msg4_11->setContenu('Merci beaucoup ! L\'événement se passe très bien, nous avons beaucoup de visiteurs. Excellente collaboration !');
+        $msg4_11->setDateEnvoi(new \DateTime('-2 days'));
+        $msg4_11->setEstLu(true);
+        $msg4_11->setDateLecture(new \DateTime('-2 days'));
+        $msg4_11->setTypeExpediteur('locataire');
+        $msg4_11->setConversation($conversation4);
+        $manager->persist($msg4_11);
+
+        // ⭐ MESSAGE NON LU RÉCENT du centre
+        $msg4_12 = new Message();
+        $msg4_12->setContenu('Ravi de l\'apprendre ! 🎉 N\'hésitez pas si vous avez besoin de quoi que ce soit. Au fait, nous organisons un marché de Noël en décembre, seriez-vous intéressés pour un autre stand ?');
+        $msg4_12->setDateEnvoi(new \DateTime('-1 hour'));
+        $msg4_12->setEstLu(false);
+        $msg4_12->setTypeExpediteur('centre');
+        $msg4_12->setConversation($conversation4);
+        $manager->persist($msg4_12);
+
+        // ==========================================
+        // CONVERSATION 5 - Conversation archivée (pour tester le filtre)
+        // Entre Sophie Martin et Les Quatre Temps
+        // ==========================================
+        $conversation5 = new Conversation();
+        $conversation5->setSujet('Demande de renseignements - Espace animation');
+        $conversation5->setDateCreation(new \DateTime('-30 days'));
+        $conversation5->setDernierMessageDate(new \DateTime('-28 days'));
+        $conversation5->setEstArchivee(true);
+        $conversation5->setLocataire($locataire1);
+        $conversation5->setCentreCommercial($centre2);
+        $manager->persist($conversation5);
+
+        $msg5_1 = new Message();
+        $msg5_1->setContenu('Bonjour, je m\'intéresse à vos espaces animation. Quel est le tarif pour une semaine ?');
+        $msg5_1->setDateEnvoi(new \DateTime('-30 days'));
+        $msg5_1->setEstLu(true);
+        $msg5_1->setDateLecture(new \DateTime('-30 days'));
+        $msg5_1->setTypeExpediteur('locataire');
+        $msg5_1->setConversation($conversation5);
+        $manager->persist($msg5_1);
+
+        $msg5_2 = new Message();
+        $msg5_2->setContenu('Bonjour Sophie ! Nos espaces animation varient entre 350€ et 450€ par jour selon l\'emplacement. Pour 7 jours, nous proposons un tarif dégressif. Je peux vous proposer une remise de 15%.');
+        $msg5_2->setDateEnvoi(new \DateTime('-29 days'));
+        $msg5_2->setEstLu(true);
+        $msg5_2->setDateLecture(new \DateTime('-29 days'));
+        $msg5_2->setTypeExpediteur('centre');
+        $msg5_2->setConversation($conversation5);
+        $manager->persist($msg5_2);
+
+        $msg5_3 = new Message();
+        $msg5_3->setContenu('Merci pour votre réponse. Le budget est un peu élevé pour mon projet actuel. Je reviendrai vers vous plus tard !');
+        $msg5_3->setDateEnvoi(new \DateTime('-28 days'));
+        $msg5_3->setEstLu(true);
+        $msg5_3->setDateLecture(new \DateTime('-28 days'));
+        $msg5_3->setTypeExpediteur('locataire');
+        $msg5_3->setConversation($conversation5);
+        $manager->persist($msg5_3);
+
+        // ==========================================
+        // CONVERSATION 6 - Conversation très récente (ce matin)
+        // Entre Sophie Martin et Belle Épine - Question sur nouveau projet
+        // ==========================================
+        $conversation6 = new Conversation();
+        $conversation6->setSujet('Nouveau projet - Collection printemps');
+        $conversation6->setDateCreation(new \DateTime('-3 hours'));
+        $conversation6->setDernierMessageDate(new \DateTime('-30 minutes'));
+        $conversation6->setEstArchivee(false);
+        $conversation6->setLocataire($locataire1);
+        $conversation6->setCentreCommercial($centre1);
+        $manager->persist($conversation6);
+
+        $msg6_1 = new Message();
+        $msg6_1->setContenu('Bonjour ! Je prépare une nouvelle collection printemps et j\'aimerais réserver à nouveau le stand central. Est-il disponible fin mars ?');
+        $msg6_1->setDateEnvoi(new \DateTime('-3 hours'));
+        $msg6_1->setEstLu(true);
+        $msg6_1->setDateLecture(new \DateTime('-2 hours'));
+        $msg6_1->setTypeExpediteur('locataire');
+        $msg6_1->setConversation($conversation6);
+        $manager->persist($msg6_1);
+
+        // ⭐ DEUX MESSAGES NON LUS du centre
+        $msg6_2 = new Message();
+        $msg6_2->setContenu('Bonjour Sophie ! Ravie de vous revoir 😊 Le stand central est effectivement disponible fin mars. Quelles dates exactes vous intéressent ?');
+        $msg6_2->setDateEnvoi(new \DateTime('-1 hour'));
+        $msg6_2->setEstLu(false);
+        $msg6_2->setTypeExpediteur('centre');
+        $msg6_2->setConversation($conversation6);
+        $manager->persist($msg6_2);
+
+        $msg6_3 = new Message();
+        $msg6_3->setContenu('PS : Comme vous êtes une cliente fidèle, je peux vous proposer une réduction de 10% sur le tarif journalier pour cette nouvelle réservation ! 🎁');
+        $msg6_3->setDateEnvoi(new \DateTime('-30 minutes'));
+        $msg6_3->setEstLu(false);
+        $msg6_3->setTypeExpediteur('centre');
+        $msg6_3->setConversation($conversation6);
+        $manager->persist($msg6_3);
+
         // ========================================
-        // 13. CRÉER LES PARAMÈTRES SYSTÃˆME
+        // 12. CRÉER LES PARAMÈTRES SYSTÈME
         // ========================================
         
         $parametre1 = new Parametre();
         $parametre1->setNomParametre('taux_commission');
         $parametre1->setValeur('10');
-        $parametre1->setDescription('Taux de commission en pourcentage appliquÃ© sur chaque location');
+        $parametre1->setDescription('Taux de commission en pourcentage appliqué sur chaque location');
         $parametre1->setDateModification(new \DateTime('-90 days'));
         $manager->persist($parametre1);
 
         $parametre2 = new Parametre();
         $parametre2->setNomParametre('delai_annulation_gratuite');
         $parametre2->setValeur('7');
-        $parametre2->setDescription('Nombre de jours avant le dÃ©but de la location pour annulation gratuite');
+        $parametre2->setDescription('Nombre de jours avant le début de la location pour annulation gratuite');
         $parametre2->setDateModification(new \DateTime('-90 days'));
         $manager->persist($parametre2);
 
         $parametre3 = new Parametre();
         $parametre3->setNomParametre('delai_validation_reservation');
         $parametre3->setValeur('48');
-        $parametre3->setDescription('DÃ©lai en heures pour que le centre valide une demande de rÃ©servation');
+        $parametre3->setDescription('Délai en heures pour que le centre valide une demande de réservation');
         $parametre3->setDateModification(new \DateTime('-90 days'));
         $manager->persist($parametre3);
 
@@ -998,12 +1215,12 @@ class AppFixtures extends Fixture
         $parametre5 = new Parametre();
         $parametre5->setNomParametre('duree_affichage_avis');
         $parametre5->setValeur('365');
-        $parametre5->setDescription('DurÃ©e en jours pendant laquelle les avis restent visibles');
+        $parametre5->setDescription('Durée en jours pendant laquelle les avis restent visibles');
         $parametre5->setDateModification(new \DateTime('-90 days'));
         $manager->persist($parametre5);
 
         // ========================================
-        // SAUVEGARDER TOUTES LES DONNÃ‰ES
+        // SAUVEGARDER TOUTES LES DONNÉES
         // ========================================
         $manager->flush();
     }

@@ -17,13 +17,13 @@
                 </a>
             </li>
             <li>
-                <a href="{{ path('locataire_favoris_index') }}" class="sidebar-item {{ app.request.attributes.get('_route') == 'locataire_favoris' ? 'active' : '' }}">
+                <a href="{{ path('locataire_favoris') }}" class="sidebar-item {{ app.request.attributes.get('_route') == 'locataire_favoris' ? 'active' : '' }}">
                     <span class="sidebar-icon">❤️</span>
                     <span>Mes favoris</span>
                 </a>
             </li>
             <li>
-                <a href="#" class="sidebar-item">
+                <a href="{{ path('locataire_messages_index') }}" class="sidebar-item {{ app.request.attributes.get('_route') starts with 'locataire_messages' ? 'active' : '' }}">
                     <span class="sidebar-icon">💬</span>
                     <span>Messages</span>
                 </a>
@@ -41,7 +41,7 @@
         <div class="sidebar-title">Compte</div>
         <ul class="sidebar-menu">
             <li>
-                <a href="{{ path('locataire_profil') }}" class="sidebar-item {{ app.request.attributes.get('_route') == 'locataire_profil' ? 'active' : '' }}">
+                <a href="{{ path('locataire_profil_') }}" class="sidebar-item {{ app.request.attributes.get('_route') == 'locataire_profil' ? 'active' : '' }}">
                     <span class="sidebar-icon">👤</span>
                     <span>Mon profil</span>
                 </a>

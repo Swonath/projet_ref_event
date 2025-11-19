@@ -48,9 +48,12 @@ class RegistrationController extends AbstractController
             
             // 4a. SI LE FORMULAIRE N'EST PAS VALIDE, AFFICHER LES ERREURS
             if (!$form->isValid()) {
-                // Récupérer toutes les erreurs
-                foreach ($form->getErrors(true) as $error) {
-                    $this->addFlash('error', $error->getMessage());
+                // Récupérer et afficher toutes les erreurs
+                foreach ($form->all() as $field) {
+                    foreach ($field->getErrors() as $error) {
+                        /** @var \Symfony\Component\Form\FormError $error */
+                        $this->addFlash('error', $error->getMessage());
+                    }
                 }
                 
                 // Réafficher le formulaire avec les erreurs
@@ -123,8 +126,12 @@ class RegistrationController extends AbstractController
             
             // 4a. SI LE FORMULAIRE N'EST PAS VALIDE, AFFICHER LES ERREURS
             if (!$form->isValid()) {
-                foreach ($form->getErrors(true) as $error) {
-                    $this->addFlash('error', $error->getMessage());
+                // Récupérer et afficher toutes les erreurs
+                foreach ($form->all() as $field) {
+                    foreach ($field->getErrors() as $error) {
+                        /** @var \Symfony\Component\Form\FormError $error */
+                        $this->addFlash('error', $error->getMessage());
+                    }
                 }
                 
                 return $this->render('registration/centre.html.twig', [

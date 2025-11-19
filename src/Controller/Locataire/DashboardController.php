@@ -147,12 +147,7 @@ class DashboardController extends AbstractController
                 break;
         }
         
-        // Limiter à 12 résultats
-        $reservations = $qb->setMaxResults(12)->getQuery()->getResult();
-        
-        // Compter le total de réservations pour ce filtre
-        $qbCount = clone $qb;
-        $totalReservations = (int) $qbCount->select('COUNT(r.id)')->setMaxResults(null)->getQuery()->getSingleScalarResult();
+        $reservations = $qb->getQuery()->getResult();
         
         $stats = $this->calculateStats($reservationRepo, $favoriRepo, $locataire);
         
@@ -162,113 +157,7 @@ class DashboardController extends AbstractController
             'filtre_actif' => $filtre,
             'stats' => $stats,
             'statuts' => StatutReservation::cases(),
-            'totalReservations' => $totalReservations,
         ]);
-    }
-    
-    /**
-     * Charger plus de réservations (AJAX)
-     */
-    #[Route('/reservations/charger-plus', name: 'reservations_charger_plus', methods: ['GET'])]
-    public function reservationsChargerPlus(
-        Request $request,
-        ReservationRepository $reservationRepo
-    ): Response {
-        /** @var Locataire $locataire */
-        $locataire = $this->getUser();
-        
-        $offset = $request->query->get('offset', 0);
-        $filtre = $request->query->get('filtre', 'toutes');
-        
-        $now = new \DateTime();
-        
-        $qb = $reservationRepo->createQueryBuilder('r')
-            ->where('r.locataire = :locataire')
-            ->setParameter('locataire', $locataire);
-        
-        // Appliquer le même filtre que dans la méthode reservations
-        switch ($filtre) {
-            case 'en_attente':
-                $qb->andWhere('r.statut = :statut')
-                   ->setParameter('statut', StatutReservation::EN_ATTENTE)
-                   ->orderBy('r.dateDemande', 'DESC');
-                break;
-            case 'validee':
-                $qb->andWhere('r.statut = :statut')
-                   ->setParameter('statut', StatutReservation::VALIDEE)
-                   ->orderBy('r.dateDebut', 'ASC');
-                break;
-            case 'en_cours':
-                $qb->andWhere('r.statut = :statut')
-                   ->andWhere('r.dateDebut <= :now')
-                   ->andWhere('r.dateFin >= :now')
-                   ->setParameter('statut', StatutReservation::EN_COURS)
-                   ->setParameter('now', $now)
-                   ->orderBy('r.dateFin', 'ASC');
-                break;
-            case 'terminee':
-                $qb->andWhere('r.statut = :statut')
-                   ->setParameter('statut', StatutReservation::TERMINEE)
-                   ->orderBy('r.dateFin', 'DESC');
-                break;
-            case 'refusee':
-                $qb->andWhere('r.statut = :statut')
-                   ->setParameter('statut', StatutReservation::REFUSEE)
-                   ->orderBy('r.dateDemande', 'DESC');
-                break;
-            case 'annulee':
-                $qb->andWhere('r.statut = :statut')
-                   ->setParameter('statut', StatutReservation::ANNULEE)
-                   ->orderBy('r.dateAnnulation', 'DESC');
-                break;
-            case 'actives':
-                $qb->andWhere('r.dateDebut <= :now')
-                   ->andWhere('r.dateFin >= :now')
-                   ->andWhere('r.statut IN (:statuts_actifs)')
-                   ->setParameter('now', $now)
-                   ->setParameter('statuts_actifs', [
-                       StatutReservation::VALIDEE,
-                       StatutReservation::EN_COURS,
-                   ])
-                   ->orderBy('r.dateFin', 'ASC');
-                break;
-            case 'a_venir':
-                $qb->andWhere('r.dateDebut > :now')
-                   ->andWhere('r.statut NOT IN (:statuts_exclus)')
-                   ->setParameter('now', $now)
-                   ->setParameter('statuts_exclus', [
-                       StatutReservation::REFUSEE,
-                       StatutReservation::ANNULEE,
-                   ])
-                   ->orderBy('r.dateDebut', 'ASC');
-                break;
-            case 'passees':
-                $qb->andWhere('r.dateFin < :now')
-                   ->andWhere('r.statut = :statut')
-                   ->setParameter('now', $now)
-                   ->setParameter('statut', StatutReservation::TERMINEE)
-                   ->orderBy('r.dateFin', 'DESC');
-                break;
-            default:
-                $qb->orderBy('r.dateDebut', 'DESC');
-                break;
-        }
-        
-        $reservations = $qb->setFirstResult($offset)
-            ->setMaxResults(12)
-            ->getQuery()
-            ->getResult();
-        
-        // Générer le HTML
-        $html = $this->renderView('locataire/_reservation_cards.html.twig', [
-            'reservations' => $reservations,
-        ]);
-        
-        return new Response(json_encode([
-            'success' => true,
-            'html' => $html,
-            'hasMore' => count($reservations) === 12
-        ]), 200, ['Content-Type' => 'application/json']);
     }
     
     /**
@@ -465,18 +354,12 @@ class DashboardController extends AbstractController
     }
     
     /**
-     * Page "Messages"
+     * Page "Messages" - Redirige vers le contrôleur de messagerie
      */
     #[Route('/messages', name: 'messages')]
     public function messages(): Response
     {
-        /** @var Locataire $locataire */
-        $locataire = $this->getUser();
-        
-        $conversations = [];
-        
-        return $this->render('locataire/messages.html.twig', [
-            'conversations' => $conversations,
-        ]);
+        // Rediriger vers le nouveau contrôleur de messagerie
+        return $this->redirectToRoute('locataire_messages_index');
     }
 }
