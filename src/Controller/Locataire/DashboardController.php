@@ -30,7 +30,7 @@ class DashboardController extends AbstractController
         /** @var Locataire $locataire */
         $locataire = $this->getUser();
         
-        // Afficher TOUTES les réservations (maximum 10)
+        // Afficher TOUTES les rÃ©servations (maximum 10)
         $reservations = $reservationRepo->findBy(
             ['locataire' => $locataire],
             ['dateDebut' => 'DESC'],
@@ -52,7 +52,7 @@ class DashboardController extends AbstractController
     }
     
     /**
-     * Page "Mes réservations" avec filtres par statut ET période
+     * Page "Mes rÃ©servations" avec filtres par statut ET pÃ©riode
      */
     #[Route('/reservations', name: 'reservations')]
     public function reservations(
@@ -147,7 +147,12 @@ class DashboardController extends AbstractController
                 break;
         }
         
-        $reservations = $qb->getQuery()->getResult();
+        // Limiter à 12 résultats
+        $reservations = $qb->setMaxResults(12)->getQuery()->getResult();
+        
+        // Compter le total de réservations pour ce filtre
+        $qbCount = clone $qb;
+        $totalReservations = (int) $qbCount->select('COUNT(r.id)')->setMaxResults(null)->getQuery()->getSingleScalarResult();
         
         $stats = $this->calculateStats($reservationRepo, $favoriRepo, $locataire);
         
@@ -157,7 +162,113 @@ class DashboardController extends AbstractController
             'filtre_actif' => $filtre,
             'stats' => $stats,
             'statuts' => StatutReservation::cases(),
+            'totalReservations' => $totalReservations,
         ]);
+    }
+    
+    /**
+     * Charger plus de réservations (AJAX)
+     */
+    #[Route('/reservations/charger-plus', name: 'reservations_charger_plus', methods: ['GET'])]
+    public function reservationsChargerPlus(
+        Request $request,
+        ReservationRepository $reservationRepo
+    ): Response {
+        /** @var Locataire $locataire */
+        $locataire = $this->getUser();
+        
+        $offset = $request->query->get('offset', 0);
+        $filtre = $request->query->get('filtre', 'toutes');
+        
+        $now = new \DateTime();
+        
+        $qb = $reservationRepo->createQueryBuilder('r')
+            ->where('r.locataire = :locataire')
+            ->setParameter('locataire', $locataire);
+        
+        // Appliquer le même filtre que dans la méthode reservations
+        switch ($filtre) {
+            case 'en_attente':
+                $qb->andWhere('r.statut = :statut')
+                   ->setParameter('statut', StatutReservation::EN_ATTENTE)
+                   ->orderBy('r.dateDemande', 'DESC');
+                break;
+            case 'validee':
+                $qb->andWhere('r.statut = :statut')
+                   ->setParameter('statut', StatutReservation::VALIDEE)
+                   ->orderBy('r.dateDebut', 'ASC');
+                break;
+            case 'en_cours':
+                $qb->andWhere('r.statut = :statut')
+                   ->andWhere('r.dateDebut <= :now')
+                   ->andWhere('r.dateFin >= :now')
+                   ->setParameter('statut', StatutReservation::EN_COURS)
+                   ->setParameter('now', $now)
+                   ->orderBy('r.dateFin', 'ASC');
+                break;
+            case 'terminee':
+                $qb->andWhere('r.statut = :statut')
+                   ->setParameter('statut', StatutReservation::TERMINEE)
+                   ->orderBy('r.dateFin', 'DESC');
+                break;
+            case 'refusee':
+                $qb->andWhere('r.statut = :statut')
+                   ->setParameter('statut', StatutReservation::REFUSEE)
+                   ->orderBy('r.dateDemande', 'DESC');
+                break;
+            case 'annulee':
+                $qb->andWhere('r.statut = :statut')
+                   ->setParameter('statut', StatutReservation::ANNULEE)
+                   ->orderBy('r.dateAnnulation', 'DESC');
+                break;
+            case 'actives':
+                $qb->andWhere('r.dateDebut <= :now')
+                   ->andWhere('r.dateFin >= :now')
+                   ->andWhere('r.statut IN (:statuts_actifs)')
+                   ->setParameter('now', $now)
+                   ->setParameter('statuts_actifs', [
+                       StatutReservation::VALIDEE,
+                       StatutReservation::EN_COURS,
+                   ])
+                   ->orderBy('r.dateFin', 'ASC');
+                break;
+            case 'a_venir':
+                $qb->andWhere('r.dateDebut > :now')
+                   ->andWhere('r.statut NOT IN (:statuts_exclus)')
+                   ->setParameter('now', $now)
+                   ->setParameter('statuts_exclus', [
+                       StatutReservation::REFUSEE,
+                       StatutReservation::ANNULEE,
+                   ])
+                   ->orderBy('r.dateDebut', 'ASC');
+                break;
+            case 'passees':
+                $qb->andWhere('r.dateFin < :now')
+                   ->andWhere('r.statut = :statut')
+                   ->setParameter('now', $now)
+                   ->setParameter('statut', StatutReservation::TERMINEE)
+                   ->orderBy('r.dateFin', 'DESC');
+                break;
+            default:
+                $qb->orderBy('r.dateDebut', 'DESC');
+                break;
+        }
+        
+        $reservations = $qb->setFirstResult($offset)
+            ->setMaxResults(12)
+            ->getQuery()
+            ->getResult();
+        
+        // Générer le HTML
+        $html = $this->renderView('locataire/_reservation_cards.html.twig', [
+            'reservations' => $reservations,
+        ]);
+        
+        return new Response(json_encode([
+            'success' => true,
+            'html' => $html,
+            'hasMore' => count($reservations) === 12
+        ]), 200, ['Content-Type' => 'application/json']);
     }
     
     /**
@@ -187,7 +298,7 @@ class DashboardController extends AbstractController
             $stats['statut_' . $statut->value] = $count;
         }
         
-        // Réservations actives (en cours avec dates valides)
+        // RÃ©servations actives (en cours avec dates valides)
         $stats['reservations_actives'] = $reservationRepo->createQueryBuilder('r')
             ->select('COUNT(r.id)')
             ->where('r.locataire = :locataire')
@@ -203,7 +314,7 @@ class DashboardController extends AbstractController
             ->getQuery()
             ->getSingleScalarResult();
         
-        // Réservations à venir (futures + pas annulées/refusées)
+        // RÃ©servations Ã  venir (futures + pas annulÃ©es/refusÃ©es)
         $stats['reservations_a_venir'] = $reservationRepo->createQueryBuilder('r')
             ->select('COUNT(r.id)')
             ->where('r.locataire = :locataire')
@@ -218,13 +329,13 @@ class DashboardController extends AbstractController
             ->getQuery()
             ->getSingleScalarResult();
         
-        // Réservations passées (terminées)
+        // RÃ©servations passÃ©es (terminÃ©es)
         $stats['reservations_passees'] = $reservationRepo->count([
             'locataire' => $locataire,
             'statut' => StatutReservation::TERMINEE
         ]);
         
-        // Dépenses du mois en cours
+        // DÃ©penses du mois en cours
         $depensesMois = $reservationRepo->createQueryBuilder('r')
             ->select('COALESCE(SUM(r.montantTotal), 0)')
             ->where('r.locataire = :locataire')
@@ -238,7 +349,7 @@ class DashboardController extends AbstractController
         
         $stats['messages_non_lus'] = 0;
         
-        // ✅ COMPTER LES VRAIS FAVORIS
+        // âœ… COMPTER LES VRAIS FAVORIS
         $stats['favoris'] = $favoriRepo->countByLocataire($locataire);
         
         $stats['depenses_mois'] = round($depensesMois, 2);
@@ -247,7 +358,7 @@ class DashboardController extends AbstractController
     }
     
     /**
-     * Détail d'une réservation
+     * DÃ©tail d'une rÃ©servation
      */
     #[Route('/reservations/{id}', name: 'reservation_detail')]
     public function reservationDetail(
@@ -260,7 +371,7 @@ class DashboardController extends AbstractController
         $reservation = $reservationRepo->find($id);
         
         if (!$reservation || $reservation->getLocataire() !== $locataire) {
-            throw $this->createNotFoundException('Réservation non trouvée');
+            throw $this->createNotFoundException('RÃ©servation non trouvÃ©e');
         }
         
         return $this->render('locataire/reservation_detail.html.twig', [
@@ -318,7 +429,7 @@ class DashboardController extends AbstractController
             }
             
             if (strlen($nouveauMotDePasse) < 8) {
-                $this->addFlash('error', 'Le mot de passe doit contenir au moins 8 caractères.');
+                $this->addFlash('error', 'Le mot de passe doit contenir au moins 8 caractÃ¨res.');
                 return $this->redirectToRoute('locataire_profil');
             }
             
@@ -328,7 +439,7 @@ class DashboardController extends AbstractController
         
         try {
             $entityManager->flush();
-            $this->addFlash('success', 'Profil modifié avec succès !');
+            $this->addFlash('success', 'Profil modifiÃ© avec succÃ¨s !');
         } catch (\Exception $e) {
             $this->addFlash('error', 'Une erreur est survenue lors de la modification du profil.');
         }

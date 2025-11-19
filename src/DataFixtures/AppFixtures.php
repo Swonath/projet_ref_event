@@ -15,7 +15,8 @@ use App\Entity\PeriodeIndisponibilite;
 use App\Entity\Conversation;
 use App\Entity\Message;
 use App\Entity\Parametre;
-use App\Enum\StatutReservation;  // ✅ AJOUT : Importer l'enum
+use App\Entity\Favori;
+use App\Enum\StatutReservation;  // âœ… AJOUT : Importer l'enum
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -32,7 +33,7 @@ class AppFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         // ========================================
-        // 1. CRÉER L'ADMINISTRATEUR
+        // 1. CRÃ‰ER L'ADMINISTRATEUR
         // ========================================
         $admin = new Administrateur();
         $admin->setNom('Audet');
@@ -43,13 +44,13 @@ class AppFixtures extends Fixture
         $manager->persist($admin);
 
         // ========================================
-        // 2. CRÉER LES CENTRES COMMERCIAUX
+        // 2. CRÃ‰ER LES CENTRES COMMERCIAUX
         // ========================================
         $centres = [];
 
-        // Centre 1 - Validé
+        // Centre 1 - ValidÃ©
         $centre1 = new CentreCommercial();
-        $centre1->setNomCentre('Carrefour Belle Épine');
+        $centre1->setNomCentre('Carrefour Belle Ã‰pine');
         $centre1->setEmail('contact@belleepine.fr');
         $centre1->setPassword($this->passwordHasher->hashPassword($centre1, 'centre123'));
         $centre1->setSiret('12345678901234');
@@ -65,18 +66,18 @@ class AppFixtures extends Fixture
         $manager->persist($centre1);
         $centres[] = $centre1;
 
-        // Centre 2 - Validé
+        // Centre 2 - ValidÃ©
         $centre2 = new CentreCommercial();
         $centre2->setNomCentre('Les Quatre Temps');
         $centre2->setEmail('contact@4temps.fr');
         $centre2->setPassword($this->passwordHasher->hashPassword($centre2, 'centre123'));
         $centre2->setSiret('98765432109876');
         $centre2->setNumeroTva('FR98765432109');
-        $centre2->setAdresse('15 Parvis de la Défense');
+        $centre2->setAdresse('15 Parvis de la DÃ©fense');
         $centre2->setCodePostal('92092');
-        $centre2->setVille('Paris La Défense');
+        $centre2->setVille('Paris La DÃ©fense');
         $centre2->setTelephone('0141020000');
-        $centre2->setDescription('Centre commercial emblématique de la Défense, cœur du quartier d\'affaires');
+        $centre2->setDescription('Centre commercial emblÃ©matique de la DÃ©fense, cÅ“ur du quartier d\'affaires');
         $centre2->setIban('FR7698765432109876543210987');
         $centre2->setStatutCompte('actif');
         $centre2->setAdminValidateur($admin);
@@ -89,7 +90,7 @@ class AppFixtures extends Fixture
         $centre3->setEmail('contact@so-ouest.com');
         $centre3->setPassword($this->passwordHasher->hashPassword($centre3, 'centre123'));
         $centre3->setSiret('11223344556677');
-        $centre3->setAdresse('15 Rue du Dôme');
+        $centre3->setAdresse('15 Rue du DÃ´me');
         $centre3->setCodePostal('92100');
         $centre3->setVille('Boulogne-Billancourt');
         $centre3->setTelephone('0155200000');
@@ -99,7 +100,7 @@ class AppFixtures extends Fixture
         $centres[] = $centre3;
 
         // ========================================
-        // 3. CRÉER LES LOCATAIRES
+        // 3. CRÃ‰ER LES LOCATAIRES
         // ========================================
         $locataires = [];
 
@@ -123,8 +124,8 @@ class AppFixtures extends Fixture
         $locataire2->setEmail('contact@techstore.fr');
         $locataire2->setPassword($this->passwordHasher->hashPassword($locataire2, 'locataire123'));
         $locataire2->setSiret('55566677788899');
-        $locataire2->setTypeActivite('Électronique et informatique');
-        $locataire2->setAdresseFacturation('45 Avenue des Champs-Élysées');
+        $locataire2->setTypeActivite('Ã‰lectronique et informatique');
+        $locataire2->setAdresseFacturation('45 Avenue des Champs-Ã‰lysÃ©es');
         $locataire2->setCodePostal('75008');
         $locataire2->setVille('Paris');
         $locataire2->setTelephone('0145678901');
@@ -157,7 +158,7 @@ class AppFixtures extends Fixture
         $locataire4->setVille('Boulogne-Billancourt');
         $locataire4->setTelephone('0623456789');
         $locataire4->setStatutCompte('actif');
-        $locataire4->setTypeActivite('Mode - Vêtements vintage');
+        $locataire4->setTypeActivite('Mode - VÃªtements vintage');
         $manager->persist($locataire4);
         $locataires[] = $locataire4;
 
@@ -177,18 +178,18 @@ class AppFixtures extends Fixture
         $locataires[] = $locataire5;
 
         // ========================================
-        // 4. CRÉER LES EMPLACEMENTS
+        // 4. CRÃ‰ER LES EMPLACEMENTS
         // ========================================
         $emplacements = [];
 
         // Emplacement 1 - Centre 1
         $emplacement1 = new Emplacement();
-        $emplacement1->setTitreAnnonce('Stand central idéal pour pop-up store');
-        $emplacement1->setDescription('Emplacement stratégique en plein cœur du centre, forte affluence toute la journée. Parfait pour lancement de produit ou vente événementielle.');
+        $emplacement1->setTitreAnnonce('Stand central idÃ©al pour pop-up store');
+        $emplacement1->setDescription('Emplacement stratÃ©gique en plein cÅ“ur du centre, forte affluence toute la journÃ©e. Parfait pour lancement de produit ou vente Ã©vÃ©nementielle.');
         $emplacement1->setSurface('15.50');
         $emplacement1->setLocalisationPrecise('Niveau 0 - Galerie principale, face aux escalators');
         $emplacement1->setTypeEmplacement('stand');
-        $emplacement1->setEquipements('Électricité, éclairage LED, comptoir modulable');
+        $emplacement1->setEquipements('Ã‰lectricitÃ©, Ã©clairage LED, comptoir modulable');
         $emplacement1->setTarifJour('180.00');
         $emplacement1->setTarifSemaine('950.00');
         $emplacement1->setTarifMois('3200.00');
@@ -206,11 +207,11 @@ class AppFixtures extends Fixture
         // Emplacement 2 - Centre 1
         $emplacement2 = new Emplacement();
         $emplacement2->setTitreAnnonce('Kiosque lumineux - Zone restauration');
-        $emplacement2->setDescription('Petit kiosque idéal pour vente de boissons, snacks ou accessoires. Situé dans la zone de restauration avec fort passage.');
+        $emplacement2->setDescription('Petit kiosque idÃ©al pour vente de boissons, snacks ou accessoires. SituÃ© dans la zone de restauration avec fort passage.');
         $emplacement2->setSurface('8.00');
-        $emplacement2->setLocalisationPrecise('Niveau 1 - Food court, entrée principale');
+        $emplacement2->setLocalisationPrecise('Niveau 1 - Food court, entrÃ©e principale');
         $emplacement2->setTypeEmplacement('kiosque');
-        $emplacement2->setEquipements('Point d\'eau, électricité, vitrine réfrigérée possible');
+        $emplacement2->setEquipements('Point d\'eau, Ã©lectricitÃ©, vitrine rÃ©frigÃ©rÃ©e possible');
         $emplacement2->setTarifJour('120.00');
         $emplacement2->setTarifSemaine('650.00');
         $emplacement2->setTarifMois('2200.00');
@@ -226,12 +227,12 @@ class AppFixtures extends Fixture
 
         // Emplacement 3 - Centre 1
         $emplacement3 = new Emplacement();
-        $emplacement3->setTitreAnnonce('Boutique éphémère 30m² - Galerie mode');
-        $emplacement3->setDescription('Véritable boutique avec vitrine sur rue, système de fermeture sécurisé. Proche des enseignes de mode reconnues.');
+        $emplacement3->setTitreAnnonce('Boutique Ã©phÃ©mÃ¨re 30mÂ² - Galerie mode');
+        $emplacement3->setDescription('VÃ©ritable boutique avec vitrine sur rue, systÃ¨me de fermeture sÃ©curisÃ©. Proche des enseignes de mode reconnues.');
         $emplacement3->setSurface('30.00');
         $emplacement3->setLocalisationPrecise('Niveau 2 - Galerie mode, entre Zara et H&M');
         $emplacement3->setTypeEmplacement('boutique');
-        $emplacement3->setEquipements('Vitrine, rideau métallique, éclairage, cabine d\'essayage, stockage arrière');
+        $emplacement3->setEquipements('Vitrine, rideau mÃ©tallique, Ã©clairage, cabine d\'essayage, stockage arriÃ¨re');
         $emplacement3->setTarifJour('250.00');
         $emplacement3->setTarifSemaine('1400.00');
         $emplacement3->setTarifMois('4800.00');
@@ -247,12 +248,12 @@ class AppFixtures extends Fixture
 
         // Emplacement 4 - Centre 2
         $emplacement4 = new Emplacement();
-        $emplacement4->setTitreAnnonce('Corner premium - Hall d\'entrée');
-        $emplacement4->setDescription('Emplacement d\'exception dans le hall principal. Visibilité maximale, idéal pour marques premium ou lancement produit.');
+        $emplacement4->setTitreAnnonce('Corner premium - Hall d\'entrÃ©e');
+        $emplacement4->setDescription('Emplacement d\'exception dans le hall principal. VisibilitÃ© maximale, idÃ©al pour marques premium ou lancement produit.');
         $emplacement4->setSurface('20.00');
-        $emplacement4->setLocalisationPrecise('Niveau 0 - Hall principal, entrée métro');
+        $emplacement4->setLocalisationPrecise('Niveau 0 - Hall principal, entrÃ©e mÃ©tro');
         $emplacement4->setTypeEmplacement('corner');
-        $emplacement4->setEquipements('Électricité triple phase, éclairage design, mobilier haut de gamme fourni');
+        $emplacement4->setEquipements('Ã‰lectricitÃ© triple phase, Ã©clairage design, mobilier haut de gamme fourni');
         $emplacement4->setTarifJour('350.00');
         $emplacement4->setTarifSemaine('2000.00');
         $emplacement4->setTarifMois('7000.00');
@@ -269,11 +270,11 @@ class AppFixtures extends Fixture
         // Emplacement 5 - Centre 2
         $emplacement5 = new Emplacement();
         $emplacement5->setTitreAnnonce('Stand modulable - Zone loisirs');
-        $emplacement5->setDescription('Stand adaptable selon vos besoins, proche du cinéma et de l\'espace enfants. Clientèle familiale.');
+        $emplacement5->setDescription('Stand adaptable selon vos besoins, proche du cinÃ©ma et de l\'espace enfants. ClientÃ¨le familiale.');
         $emplacement5->setSurface('12.00');
-        $emplacement5->setLocalisationPrecise('Niveau 3 - Galerie loisirs, face au cinéma');
+        $emplacement5->setLocalisationPrecise('Niveau 3 - Galerie loisirs, face au cinÃ©ma');
         $emplacement5->setTypeEmplacement('stand');
-        $emplacement5->setEquipements('Électricité, tables pliantes, chaises disponibles');
+        $emplacement5->setEquipements('Ã‰lectricitÃ©, tables pliantes, chaises disponibles');
         $emplacement5->setTarifJour('150.00');
         $emplacement5->setTarifSemaine('800.00');
         $emplacement5->setTarifMois('2800.00');
@@ -289,12 +290,12 @@ class AppFixtures extends Fixture
 
         // Emplacement 6 - Centre 2 (temporairement indisponible)
         $emplacement6 = new Emplacement();
-        $emplacement6->setTitreAnnonce('Boutique 25m² - Secteur beauté');
-        $emplacement6->setDescription('Boutique avec vitrine, idéale pour cosmétiques, parfumerie ou accessoires beauté. Clientèle féminine ciblée.');
+        $emplacement6->setTitreAnnonce('Boutique 25mÂ² - Secteur beautÃ©');
+        $emplacement6->setDescription('Boutique avec vitrine, idÃ©ale pour cosmÃ©tiques, parfumerie ou accessoires beautÃ©. ClientÃ¨le fÃ©minine ciblÃ©e.');
         $emplacement6->setSurface('25.00');
-        $emplacement6->setLocalisationPrecise('Niveau 1 - Galerie beauté, près de Sephora');
+        $emplacement6->setLocalisationPrecise('Niveau 1 - Galerie beautÃ©, prÃ¨s de Sephora');
         $emplacement6->setTypeEmplacement('boutique');
-        $emplacement6->setEquipements('Vitrine, miroirs, éclairage adapté beauté, point d\'eau');
+        $emplacement6->setEquipements('Vitrine, miroirs, Ã©clairage adaptÃ© beautÃ©, point d\'eau');
         $emplacement6->setTarifJour('220.00');
         $emplacement6->setTarifSemaine('1200.00');
         $emplacement6->setTarifMois('4200.00');
@@ -311,11 +312,11 @@ class AppFixtures extends Fixture
         // Emplacement 7 - Centre 3
         $emplacement7 = new Emplacement();
         $emplacement7->setTitreAnnonce('Kiosque d\'angle - Passage central');
-        $emplacement7->setDescription('Petit emplacement stratégique à l\'angle de deux galeries. Parfait pour vente de petits articles.');
+        $emplacement7->setDescription('Petit emplacement stratÃ©gique Ã  l\'angle de deux galeries. Parfait pour vente de petits articles.');
         $emplacement7->setSurface('6.00');
         $emplacement7->setLocalisationPrecise('Niveau 0 - Intersection galerie A et B');
         $emplacement7->setTypeEmplacement('kiosque');
-        $emplacement7->setEquipements('Électricité, comptoir fixe');
+        $emplacement7->setEquipements('Ã‰lectricitÃ©, comptoir fixe');
         $emplacement7->setTarifJour('90.00');
         $emplacement7->setTarifSemaine('500.00');
         $emplacement7->setTarifMois('1700.00');
@@ -329,14 +330,14 @@ class AppFixtures extends Fixture
         $manager->persist($emplacement7);
         $emplacements[] = $emplacement7;
 
-        // Emplacement 8 - Centre 1 (archivé)
+        // Emplacement 8 - Centre 1 (archivÃ©)
         $emplacement8 = new Emplacement();
-        $emplacement8->setTitreAnnonce('Stand temporaire - Fêtes de fin d\'année');
-        $emplacement8->setDescription('Stand saisonnier pour les fêtes. Location courte durée uniquement.');
+        $emplacement8->setTitreAnnonce('Stand temporaire - FÃªtes de fin d\'annÃ©e');
+        $emplacement8->setDescription('Stand saisonnier pour les fÃªtes. Location courte durÃ©e uniquement.');
         $emplacement8->setSurface('10.00');
-        $emplacement8->setLocalisationPrecise('Niveau 0 - Près du sapin de Noël');
+        $emplacement8->setLocalisationPrecise('Niveau 0 - PrÃ¨s du sapin de NoÃ«l');
         $emplacement8->setTypeEmplacement('stand');
-        $emplacement8->setEquipements('Électricité, décoration fournie');
+        $emplacement8->setEquipements('Ã‰lectricitÃ©, dÃ©coration fournie');
         $emplacement8->setTarifJour('200.00');
         $emplacement8->setTarifSemaine('1100.00');
         $emplacement8->setCaution('400.00');
@@ -351,12 +352,12 @@ class AppFixtures extends Fixture
 
         // Emplacement 9 - Centre 2
         $emplacement9 = new Emplacement();
-        $emplacement9->setTitreAnnonce('Espace dégustation - Zone alimentaire');
-        $emplacement9->setDescription('Espace équipé pour démonstrations culinaires et dégustations. Normes alimentaires respectées.');
+        $emplacement9->setTitreAnnonce('Espace dÃ©gustation - Zone alimentaire');
+        $emplacement9->setDescription('Espace Ã©quipÃ© pour dÃ©monstrations culinaires et dÃ©gustations. Normes alimentaires respectÃ©es.');
         $emplacement9->setSurface('18.00');
-        $emplacement9->setLocalisationPrecise('Niveau 1 - Marché gourmand');
+        $emplacement9->setLocalisationPrecise('Niveau 1 - MarchÃ© gourmand');
         $emplacement9->setTypeEmplacement('corner');
-        $emplacement9->setEquipements('Point d\'eau, électricité, plan de travail inox, réfrigération');
+        $emplacement9->setEquipements('Point d\'eau, Ã©lectricitÃ©, plan de travail inox, rÃ©frigÃ©ration');
         $emplacement9->setTarifJour('280.00');
         $emplacement9->setTarifSemaine('1600.00');
         $emplacement9->setTarifMois('5500.00');
@@ -372,12 +373,12 @@ class AppFixtures extends Fixture
 
         // Emplacement 10 - Centre 1
         $emplacement10 = new Emplacement();
-        $emplacement10->setTitreAnnonce('Mini-boutique 15m² - Galerie sport');
-        $emplacement10->setDescription('Petit espace commercial dans la galerie dédiée au sport et loisirs actifs.');
+        $emplacement10->setTitreAnnonce('Mini-boutique 15mÂ² - Galerie sport');
+        $emplacement10->setDescription('Petit espace commercial dans la galerie dÃ©diÃ©e au sport et loisirs actifs.');
         $emplacement10->setSurface('15.00');
-        $emplacement10->setLocalisationPrecise('Niveau 2 - Galerie sport, près de Decathlon');
+        $emplacement10->setLocalisationPrecise('Niveau 2 - Galerie sport, prÃ¨s de Decathlon');
         $emplacement10->setTypeEmplacement('boutique');
-        $emplacement10->setEquipements('Vitrine, étagères murales, éclairage, rideau de fer');
+        $emplacement10->setEquipements('Vitrine, Ã©tagÃ¨res murales, Ã©clairage, rideau de fer');
         $emplacement10->setTarifJour('170.00');
         $emplacement10->setTarifSemaine('950.00');
         $emplacement10->setTarifMois('3300.00');
@@ -392,13 +393,88 @@ class AppFixtures extends Fixture
         $emplacements[] = $emplacement10;
 
         // ========================================
-        // 5. CRÉER DES PHOTOS POUR LES EMPLACEMENTS
+        // Ajouter 12 emplacements supplémentaires (emplacements 11 à 22)
+        // ========================================
+        
+        $typesEmplacement = ['stand', 'kiosque', 'boutique', 'corner'];
+        $centresDisponibles = [$centre1, $centre2];
+        
+        for ($i = 11; $i <= 22; $i++) {
+            $emplacement = new Emplacement();
+            $type = $typesEmplacement[array_rand($typesEmplacement)];
+            
+            $emplacement->setTitreAnnonce("Emplacement #{$i} - " . ucfirst($type) . " moderne");
+            $emplacement->setDescription("Espace commercial idéal pour votre activité. Très bien situé avec un bon passage.");
+            $emplacement->setSurface(number_format(rand(8, 40), 2, '.', ''));
+            $emplacement->setLocalisationPrecise("Niveau " . rand(0, 2) . " - Galerie principale");
+            $emplacement->setTypeEmplacement($type);
+            $emplacement->setEquipements('Électricité, éclairage, comptoir');
+            $emplacement->setTarifJour(number_format(rand(100, 300), 2, '.', ''));
+            $emplacement->setTarifSemaine(number_format(rand(600, 1800), 2, '.', ''));
+            $emplacement->setTarifMois(number_format(rand(2000, 6000), 2, '.', ''));
+            $emplacement->setCaution(number_format(rand(300, 1000), 2, '.', ''));
+            $emplacement->setDureeMinLocation(rand(1, 14));
+            $emplacement->setDureeMaxLocation(rand(60, 365));
+            $emplacement->setStatutAnnonce('publiee');
+            $emplacement->setDateCreation(new \DateTime('-' . rand(5, 60) . ' days'));
+            $emplacement->setNombreVues(rand(50, 300));
+            $emplacement->setCentreCommercial($centresDisponibles[array_rand($centresDisponibles)]);
+            
+            $manager->persist($emplacement);
+            $emplacements[] = $emplacement;
+            
+            // Stocker dans des variables pour les utiliser plus tard
+            ${'emplacement' . $i} = $emplacement;
+        }
+
+        // ========================================
+        // 5. CRÉER LES FAVORIS
+        // ========================================
+        
+        // 20 Favoris pour Sophie Martin (locataire1)
+        // Utiliser les 22 emplacements disponibles (emplacement1 à emplacement22)
+        
+        $emplacementsPourFavoris = [
+            $emplacement1, $emplacement2, $emplacement3, $emplacement4, 
+            $emplacement5, $emplacement6, $emplacement9, $emplacement10,
+            $emplacement11, $emplacement12, $emplacement13, $emplacement14,
+            $emplacement15, $emplacement16, $emplacement17, $emplacement18,
+            $emplacement19, $emplacement20, $emplacement21, $emplacement22
+        ];
+        
+        // Créer 20 favoris (1 par emplacement, sans doublon)
+        for ($i = 0; $i < 20; $i++) {
+            $favori = new Favori();
+            $favori->setLocataire($locataire1); // Sophie Martin
+            $favori->setEmplacement($emplacementsPourFavoris[$i]);
+            
+            // Date d'ajout variable (étalée sur les 80 derniers jours)
+            $joursAgo = 80 - ($i * 4);
+            $dateAjout = new \DateTimeImmutable("-$joursAgo days");
+            $favori->setDateAjout($dateAjout);
+            
+            $manager->persist($favori);
+        }
+        
+        // Ajouter quelques favoris pour d'autres locataires
+        $favoriLocataire2 = new Favori();
+        $favoriLocataire2->setLocataire($locataire2);
+        $favoriLocataire2->setEmplacement($emplacement21);
+        $manager->persist($favoriLocataire2);
+        
+        $favoriLocataire3 = new Favori();
+        $favoriLocataire3->setLocataire($locataire3);
+        $favoriLocataire3->setEmplacement($emplacement22);
+        $manager->persist($favoriLocataire3);
+
+        // ========================================
+        // 6. CRÉER DES PHOTOS POUR LES EMPLACEMENTS
         // ========================================
         
         // Photos pour emplacement 1
         $photo1 = new Photo();
         $photo1->setCheminFichier('/uploads/emplacements/emplacement1_vue1.jpg');
-        $photo1->setLegende('Vue générale du stand');
+        $photo1->setLegende('Vue gÃ©nÃ©rale du stand');
         $photo1->setOrdreAffichage(1);
         $photo1->setDateUpload(new \DateTime('-60 days'));
         $photo1->setEmplacement($emplacement1);
@@ -406,7 +482,7 @@ class AppFixtures extends Fixture
 
         $photo2 = new Photo();
         $photo2->setCheminFichier('/uploads/emplacements/emplacement1_vue2.jpg');
-        $photo2->setLegende('Vue depuis l\'entrée principale');
+        $photo2->setLegende('Vue depuis l\'entrÃ©e principale');
         $photo2->setOrdreAffichage(2);
         $photo2->setDateUpload(new \DateTime('-60 days'));
         $photo2->setEmplacement($emplacement1);
@@ -422,31 +498,31 @@ class AppFixtures extends Fixture
         $manager->persist($photo3);
 
         // ========================================
-        // 6. CRÉER DES PÉRIODES D'INDISPONIBILITÉ
+        // 7. CRÉER DES PÉRIODES D'INDISPONIBILITÃ‰
         // ========================================
         
-        // Indisponibilité pour emplacement 6 (travaux)
+        // IndisponibilitÃ© pour emplacement 6 (travaux)
         $periode1 = new PeriodeIndisponibilite();
         $periode1->setDateDebut(new \DateTime('+5 days'));
         $periode1->setDateFin(new \DateTime('+12 days'));
-        $periode1->setMotif('Travaux de rénovation de la galerie');
+        $periode1->setMotif('Travaux de rÃ©novation de la galerie');
         $periode1->setEmplacement($emplacement6);
         $manager->persist($periode1);
 
-        // Indisponibilité pour emplacement 1 (événement privé)
+        // IndisponibilitÃ© pour emplacement 1 (Ã©vÃ©nement privÃ©)
         $periode2 = new PeriodeIndisponibilite();
         $periode2->setDateDebut(new \DateTime('+30 days'));
         $periode2->setDateFin(new \DateTime('+33 days'));
-        $periode2->setMotif('Événement privé du centre commercial');
+        $periode2->setMotif('Ã‰vÃ©nement privÃ© du centre commercial');
         $periode2->setEmplacement($emplacement1);
         $manager->persist($periode2);
 
         // ========================================
-        // 7. CRÉER LES RÉSERVATIONS - CORRECTION ICI ✅
+        // 8. CRÉER LES RÉSERVATIONS - CORRECTION ICI âœ…
         // ========================================
         $reservations = [];
 
-        // Réservation 1 - Terminée avec avis
+        // RÃ©servation 1 - TerminÃ©e avec avis
         $reservation1 = new Reservation();
         $reservation1->setDateDebut(new \DateTime('-45 days'));
         $reservation1->setDateFin(new \DateTime('-38 days'));
@@ -454,7 +530,7 @@ class AppFixtures extends Fixture
         $reservation1->setMontantCommission('95.00');
         $reservation1->setMontantTotal('1045.00');
         $reservation1->setCautionVersee('500.00');
-        $reservation1->setStatut(StatutReservation::TERMINEE);  // ✅ Utiliser l'enum
+        $reservation1->setStatut(StatutReservation::TERMINEE);  // âœ… Utiliser l'enum
         $reservation1->setDateDemande(new \DateTime('-50 days'));
         $reservation1->setDateValidation(new \DateTime('-48 days'));
         $reservation1->setDatePaiement(new \DateTime('-47 days'));
@@ -463,7 +539,7 @@ class AppFixtures extends Fixture
         $manager->persist($reservation1);
         $reservations[] = $reservation1;
 
-        // Réservation 2 - En cours
+        // RÃ©servation 2 - En cours
         $reservation2 = new Reservation();
         $reservation2->setDateDebut(new \DateTime('-3 days'));
         $reservation2->setDateFin(new \DateTime('+4 days'));
@@ -471,7 +547,7 @@ class AppFixtures extends Fixture
         $reservation2->setMontantCommission('18.00');
         $reservation2->setMontantTotal('198.00');
         $reservation2->setCautionVersee('500.00');
-        $reservation2->setStatut(StatutReservation::EN_COURS);  // ✅ Utiliser l'enum
+        $reservation2->setStatut(StatutReservation::EN_COURS);  // âœ… Utiliser l'enum
         $reservation2->setDateDemande(new \DateTime('-10 days'));
         $reservation2->setDateValidation(new \DateTime('-8 days'));
         $reservation2->setDatePaiement(new \DateTime('-7 days'));
@@ -480,7 +556,7 @@ class AppFixtures extends Fixture
         $manager->persist($reservation2);
         $reservations[] = $reservation2;
 
-        // Réservation 3 - En attente de validation
+        // RÃ©servation 3 - En attente de validation
         $reservation3 = new Reservation();
         $reservation3->setDateDebut(new \DateTime('+15 days'));
         $reservation3->setDateFin(new \DateTime('+44 days'));
@@ -488,14 +564,14 @@ class AppFixtures extends Fixture
         $reservation3->setMontantCommission('480.00');
         $reservation3->setMontantTotal('5280.00');
         $reservation3->setCautionVersee('1000.00');
-        $reservation3->setStatut(StatutReservation::EN_ATTENTE);  // ✅ Utiliser l'enum
+        $reservation3->setStatut(StatutReservation::EN_ATTENTE);  // âœ… Utiliser l'enum
         $reservation3->setDateDemande(new \DateTime('-2 days'));
         $reservation3->setLocataire($locataire3);
         $reservation3->setEmplacement($emplacement3);
         $manager->persist($reservation3);
         $reservations[] = $reservation3;
 
-        // Réservation 4 - Validée, en attente de paiement
+        // RÃ©servation 4 - ValidÃ©e, en attente de paiement
         $reservation4 = new Reservation();
         $reservation4->setDateDebut(new \DateTime('+20 days'));
         $reservation4->setDateFin(new \DateTime('+26 days'));
@@ -503,7 +579,7 @@ class AppFixtures extends Fixture
         $reservation4->setMontantCommission('200.00');
         $reservation4->setMontantTotal('2200.00');
         $reservation4->setCautionVersee('1500.00');
-        $reservation4->setStatut(StatutReservation::VALIDEE);  // ✅ Utiliser l'enum
+        $reservation4->setStatut(StatutReservation::VALIDEE);  // âœ… Utiliser l'enum
         $reservation4->setDateDemande(new \DateTime('-5 days'));
         $reservation4->setDateValidation(new \DateTime('-3 days'));
         $reservation4->setLocataire($locataire2);
@@ -511,30 +587,30 @@ class AppFixtures extends Fixture
         $manager->persist($reservation4);
         $reservations[] = $reservation4;
 
-        // Réservation 5 - Refusée
+        // RÃ©servation 5 - RefusÃ©e
         $reservation5 = new Reservation();
         $reservation5->setDateDebut(new \DateTime('+10 days'));
         $reservation5->setDateFin(new \DateTime('+17 days'));
         $reservation5->setMontantLocation('800.00');
         $reservation5->setMontantCommission('80.00');
         $reservation5->setMontantTotal('880.00');
-        $reservation5->setStatut(StatutReservation::REFUSEE);  // ✅ Utiliser l'enum
+        $reservation5->setStatut(StatutReservation::REFUSEE);  // âœ… Utiliser l'enum
         $reservation5->setDateDemande(new \DateTime('-4 days'));
         $reservation5->setDateValidation(new \DateTime('-2 days'));
-        $reservation5->setMotifRefus('Dates indisponibles en raison d\'un événement planifié');
+        $reservation5->setMotifRefus('Dates indisponibles en raison d\'un Ã©vÃ©nement planifiÃ©');
         $reservation5->setLocataire($locataire4);
         $reservation5->setEmplacement($emplacement5);
         $manager->persist($reservation5);
         $reservations[] = $reservation5;
 
-        // Réservation 6 - Annulée par le locataire
+        // RÃ©servation 6 - AnnulÃ©e par le locataire
         $reservation6 = new Reservation();
         $reservation6->setDateDebut(new \DateTime('+25 days'));
         $reservation6->setDateFin(new \DateTime('+32 days'));
         $reservation6->setMontantLocation('1200.00');
         $reservation6->setMontantCommission('120.00');
         $reservation6->setMontantTotal('1320.00');
-        $reservation6->setStatut(StatutReservation::ANNULEE);  // ✅ Utiliser l'enum
+        $reservation6->setStatut(StatutReservation::ANNULEE);  // âœ… Utiliser l'enum
         $reservation6->setDateDemande(new \DateTime('-15 days'));
         $reservation6->setDateValidation(new \DateTime('-13 days'));
         $reservation6->setDatePaiement(new \DateTime('-12 days'));
@@ -545,8 +621,8 @@ class AppFixtures extends Fixture
         $manager->persist($reservation6);
         $reservations[] = $reservation6;
 
-        // Réservation 7 - Validée (payée, à venir)
-        // Note: J'ai changé 'confirmee' en 'validee' car c'est le statut qui existe dans l'enum
+        // RÃ©servation 7 - ValidÃ©e (payÃ©e, Ã  venir)
+        // Note: J'ai changÃ© 'confirmee' en 'validee' car c'est le statut qui existe dans l'enum
         $reservation7 = new Reservation();
         $reservation7->setDateDebut(new \DateTime('+40 days'));
         $reservation7->setDateFin(new \DateTime('+46 days'));
@@ -554,7 +630,7 @@ class AppFixtures extends Fixture
         $reservation7->setMontantCommission('160.00');
         $reservation7->setMontantTotal('1760.00');
         $reservation7->setCautionVersee('1000.00');
-        $reservation7->setStatut(StatutReservation::VALIDEE);  // ✅ Utiliser l'enum
+        $reservation7->setStatut(StatutReservation::VALIDEE);  // âœ… Utiliser l'enum
         $reservation7->setDateDemande(new \DateTime('-8 days'));
         $reservation7->setDateValidation(new \DateTime('-6 days'));
         $reservation7->setDatePaiement(new \DateTime('-5 days'));
@@ -564,10 +640,79 @@ class AppFixtures extends Fixture
         $reservations[] = $reservation7;
 
         // ========================================
-        // 8. CRÉER LES PAIEMENTS
+        // CRÉER 30 RÉSERVATIONS POUR SOPHIE MARTIN (locataire1)
         // ========================================
         
-        // Paiement pour réservation 1
+        $statuts = [
+            StatutReservation::EN_ATTENTE,
+            StatutReservation::VALIDEE,
+            StatutReservation::EN_COURS,
+            StatutReservation::TERMINEE,
+            StatutReservation::REFUSEE,
+            StatutReservation::ANNULEE,
+        ];
+        
+        $emplacementsDisponibles = [$emplacement1, $emplacement2, $emplacement3, $emplacement4, $emplacement5, $emplacement6, $emplacement9, $emplacement10];
+        
+        for ($i = 1; $i <= 30; $i++) {
+            $reservation = new Reservation();
+            
+            // Dates variables
+            $joursDebut = -365 + ($i * 10); // Étalé sur l'année passée et future
+            $duree = rand(3, 30); // Entre 3 et 30 jours
+            
+            $reservation->setDateDebut(new \DateTime("$joursDebut days"));
+            $reservation->setDateFin(new \DateTime(($joursDebut + $duree) . " days"));
+            
+            // Montants variables
+            $montantLocation = rand(500, 5000);
+            $commission = $montantLocation * 0.10;
+            $total = $montantLocation + $commission;
+            
+            $reservation->setMontantLocation(number_format($montantLocation, 2, '.', ''));
+            $reservation->setMontantCommission(number_format($commission, 2, '.', ''));
+            $reservation->setMontantTotal(number_format($total, 2, '.', ''));
+            $reservation->setCautionVersee(number_format(rand(300, 1500), 2, '.', ''));
+            
+            // Statut aléatoire
+            $statut = $statuts[array_rand($statuts)];
+            $reservation->setStatut($statut);
+            
+            // Dates de processus
+            $reservation->setDateDemande(new \DateTime(($joursDebut - 5) . " days"));
+            
+            if ($statut !== StatutReservation::EN_ATTENTE && $statut !== StatutReservation::REFUSEE) {
+                $reservation->setDateValidation(new \DateTime(($joursDebut - 3) . " days"));
+            }
+            
+            if ($statut === StatutReservation::VALIDEE || $statut === StatutReservation::EN_COURS || $statut === StatutReservation::TERMINEE) {
+                $reservation->setDatePaiement(new \DateTime(($joursDebut - 2) . " days"));
+            }
+            
+            if ($statut === StatutReservation::REFUSEE) {
+                $reservation->setDateValidation(new \DateTime(($joursDebut - 2) . " days"));
+                $reservation->setMotifRefus('Dates non disponibles');
+            }
+            
+            if ($statut === StatutReservation::ANNULEE) {
+                $reservation->setDateValidation(new \DateTime(($joursDebut - 3) . " days"));
+                $reservation->setDatePaiement(new \DateTime(($joursDebut - 2) . " days"));
+                $reservation->setAnnuleePar('locataire');
+                $reservation->setDateAnnulation(new \DateTime(($joursDebut - 1) . " days"));
+            }
+            
+            $reservation->setLocataire($locataire1); // Sophie Martin
+            $reservation->setEmplacement($emplacementsDisponibles[array_rand($emplacementsDisponibles)]);
+            
+            $manager->persist($reservation);
+            $reservations[] = $reservation;
+        }
+
+        // ========================================
+        // 9. CRÉER LES PAIEMENTS
+        // ========================================
+        
+        // Paiement pour rÃ©servation 1
         $paiement1 = new Paiement();
         $paiement1->setMontant('1045.00');
         $paiement1->setDatePaiement(new \DateTime('-47 days'));
@@ -577,7 +722,7 @@ class AppFixtures extends Fixture
         $paiement1->setReservation($reservation1);
         $manager->persist($paiement1);
 
-        // Paiement pour réservation 2
+        // Paiement pour rÃ©servation 2
         $paiement2 = new Paiement();
         $paiement2->setMontant('198.00');
         $paiement2->setDatePaiement(new \DateTime('-7 days'));
@@ -587,7 +732,7 @@ class AppFixtures extends Fixture
         $paiement2->setReservation($reservation2);
         $manager->persist($paiement2);
 
-        // Paiement pour réservation 6 (remboursé suite annulation)
+        // Paiement pour rÃ©servation 6 (remboursÃ© suite annulation)
         $paiement3 = new Paiement();
         $paiement3->setMontant('1320.00');
         $paiement3->setDatePaiement(new \DateTime('-12 days'));
@@ -595,11 +740,11 @@ class AppFixtures extends Fixture
         $paiement3->setStatut('rembourse');
         $paiement3->setTransactionId('TRX_' . uniqid());
         $paiement3->setDateRemboursement(new \DateTime('-4 days'));
-        $paiement3->setMontantRembourse('1200.00'); // Frais de 120€ retenus
+        $paiement3->setMontantRembourse('1200.00'); // Frais de 120â‚¬ retenus
         $paiement3->setReservation($reservation6);
         $manager->persist($paiement3);
 
-        // Paiement pour réservation 7
+        // Paiement pour rÃ©servation 7
         $paiement4 = new Paiement();
         $paiement4->setMontant('1760.00');
         $paiement4->setDatePaiement(new \DateTime('-5 days'));
@@ -610,10 +755,10 @@ class AppFixtures extends Fixture
         $manager->persist($paiement4);
 
         // ========================================
-        // 9. CRÉER LES DOCUMENTS
+        // 10. CRÉER LES DOCUMENTS
         // ========================================
         
-        // Documents pour réservation 1
+        // Documents pour rÃ©servation 1
         $document1 = new Document();
         $document1->setTypeDocument('contrat');
         $document1->setNumeroDocument('CONT-2024-001');
@@ -632,7 +777,7 @@ class AppFixtures extends Fixture
         $document2->setReservation($reservation1);
         $manager->persist($document2);
 
-        // Documents pour réservation 2
+        // Documents pour rÃ©servation 2
         $document3 = new Document();
         $document3->setTypeDocument('contrat');
         $document3->setNumeroDocument('CONT-2024-002');
@@ -651,7 +796,7 @@ class AppFixtures extends Fixture
         $document4->setReservation($reservation2);
         $manager->persist($document4);
 
-        // Document pour réservation 4 (en attente de signature)
+        // Document pour rÃ©servation 4 (en attente de signature)
         $document5 = new Document();
         $document5->setTypeDocument('contrat');
         $document5->setNumeroDocument('CONT-2024-004');
@@ -662,17 +807,17 @@ class AppFixtures extends Fixture
         $manager->persist($document5);
 
         // ========================================
-        // 10. CRÉER LES AVIS
+        // 11. CRÉER LES AVIS
         // ========================================
         
-        // Avis du locataire 1 sur réservation 1
+        // Avis du locataire 1 sur rÃ©servation 1
         $avis1 = new Avis();
         $avis1->setNoteGlobale(5);
         $avis1->setNotePropreteConformite(5);
         $avis1->setNoteEmplacement(5);
         $avis1->setNoteQualitePrix(4);
         $avis1->setNoteCommunication(5);
-        $avis1->setCommentaire('Emplacement parfait pour mon pop-up store de bijoux ! Très bon passage, personnel du centre très aidant. Je recommande vivement cet emplacement.');
+        $avis1->setCommentaire('Emplacement parfait pour mon pop-up store de bijoux ! TrÃ¨s bon passage, personnel du centre trÃ¨s aidant. Je recommande vivement cet emplacement.');
         $avis1->setTypeAuteur('locataire');
         $avis1->setDateCreation(new \DateTime('-36 days'));
         $avis1->setDatePublication(new \DateTime('-35 days'));
@@ -680,15 +825,15 @@ class AppFixtures extends Fixture
         $avis1->setReservation($reservation1);
         $manager->persist($avis1);
 
-        // Réponse du centre à l'avis 1
-        $avis1->setReponse('Merci beaucoup Sophie pour votre retour positif ! Nous sommes ravis que votre expérience se soit bien déroulée. Au plaisir de vous accueillir à nouveau.');
+        // RÃ©ponse du centre Ã  l'avis 1
+        $avis1->setReponse('Merci beaucoup Sophie pour votre retour positif ! Nous sommes ravis que votre expÃ©rience se soit bien dÃ©roulÃ©e. Au plaisir de vous accueillir Ã  nouveau.');
         $avis1->setDateReponse(new \DateTime('-34 days'));
         
         // Avis du centre sur locataire 1
         $avis2 = new Avis();
         $avis2->setNoteGlobale(5);
         $avis2->setNoteCommunication(5);
-        $avis2->setCommentaire('Locataire idéale, professionnelle et respectueuse des lieux. Stand très bien tenu, belle présentation. Nous serions heureux de la revoir.');
+        $avis2->setCommentaire('Locataire idÃ©ale, professionnelle et respectueuse des lieux. Stand trÃ¨s bien tenu, belle prÃ©sentation. Nous serions heureux de la revoir.');
         $avis2->setTypeAuteur('centre');
         $avis2->setDateCreation(new \DateTime('-35 days'));
         $avis2->setDatePublication(new \DateTime('-35 days'));
@@ -696,14 +841,14 @@ class AppFixtures extends Fixture
         $avis2->setReservation($reservation1);
         $manager->persist($avis2);
 
-        // Avis non publié (modération en cours)
+        // Avis non publiÃ© (modÃ©ration en cours)
         $avis3 = new Avis();
         $avis3->setNoteGlobale(3);
         $avis3->setNotePropreteConformite(3);
         $avis3->setNoteEmplacement(4);
         $avis3->setNoteQualitePrix(2);
         $avis3->setNoteCommunication(3);
-        $avis3->setCommentaire('Emplacement correct mais prix un peu élevé pour la durée. Manque de prises électriques supplémentaires.');
+        $avis3->setCommentaire('Emplacement correct mais prix un peu Ã©levÃ© pour la durÃ©e. Manque de prises Ã©lectriques supplÃ©mentaires.');
         $avis3->setTypeAuteur('locataire');
         $avis3->setDateCreation(new \DateTime('-2 days'));
         $avis3->setEstPublie(false);
@@ -711,12 +856,12 @@ class AppFixtures extends Fixture
         $manager->persist($avis3);
 
         // ========================================
-        // 11. CRÉER LES CONVERSATIONS ET MESSAGES
+        // 12. CRÉER LES CONVERSATIONS ET MESSAGES
         // ========================================
         
         // Conversation 1 - Entre locataire 1 et centre 1
         $conversation1 = new Conversation();
-        $conversation1->setSujet('Question sur équipements stand central');
+        $conversation1->setSujet('Question sur Ã©quipements stand central');
         $conversation1->setDateCreation(new \DateTime('-52 days'));
         $conversation1->setDernierMessageDate(new \DateTime('-49 days'));
         $conversation1->setEstArchivee(false);
@@ -727,7 +872,7 @@ class AppFixtures extends Fixture
 
         // Messages de la conversation 1
         $message1 = new Message();
-        $message1->setContenu('Bonjour, je souhaiterais savoir si le stand dispose d\'assez de prises électriques pour mon matériel de présentation ?');
+        $message1->setContenu('Bonjour, je souhaiterais savoir si le stand dispose d\'assez de prises Ã©lectriques pour mon matÃ©riel de prÃ©sentation ?');
         $message1->setDateEnvoi(new \DateTime('-52 days'));
         $message1->setEstLu(true);
         $message1->setDateLecture(new \DateTime('-52 days'));
@@ -736,7 +881,7 @@ class AppFixtures extends Fixture
         $manager->persist($message1);
 
         $message2 = new Message();
-        $message2->setContenu('Bonjour Sophie, le stand dispose de 2 prises classiques et 1 prise triphasée. Si vous avez besoin de plus, nous pouvons installer une multiprise. Combien de prises vous faut-il ?');
+        $message2->setContenu('Bonjour Sophie, le stand dispose de 2 prises classiques et 1 prise triphasÃ©e. Si vous avez besoin de plus, nous pouvons installer une multiprise. Combien de prises vous faut-il ?');
         $message2->setDateEnvoi(new \DateTime('-51 days'));
         $message2->setEstLu(true);
         $message2->setDateLecture(new \DateTime('-51 days'));
@@ -745,7 +890,7 @@ class AppFixtures extends Fixture
         $manager->persist($message2);
 
         $message3 = new Message();
-        $message3->setContenu('Parfait, 3 prises suffiront largement. Merci pour votre réactivité !');
+        $message3->setContenu('Parfait, 3 prises suffiront largement. Merci pour votre rÃ©activitÃ© !');
         $message3->setDateEnvoi(new \DateTime('-49 days'));
         $message3->setEstLu(true);
         $message3->setDateLecture(new \DateTime('-49 days'));
@@ -755,7 +900,7 @@ class AppFixtures extends Fixture
 
         // Conversation 2 - Entre locataire 3 et centre 1
         $conversation2 = new Conversation();
-        $conversation2->setSujet('Demande d\'informations boutique 30m²');
+        $conversation2->setSujet('Demande d\'informations boutique 30mÂ²');
         $conversation2->setDateCreation(new \DateTime('-3 days'));
         $conversation2->setDernierMessageDate(new \DateTime('-1 day'));
         $conversation2->setEstArchivee(false);
@@ -765,7 +910,7 @@ class AppFixtures extends Fixture
         $manager->persist($conversation2);
 
         $message4 = new Message();
-        $message4->setContenu('Bonjour, je suis intéressée par votre boutique de 30m². Serait-il possible de la visiter avant de confirmer ma réservation ?');
+        $message4->setContenu('Bonjour, je suis intÃ©ressÃ©e par votre boutique de 30mÂ². Serait-il possible de la visiter avant de confirmer ma rÃ©servation ?');
         $message4->setDateEnvoi(new \DateTime('-3 days'));
         $message4->setEstLu(true);
         $message4->setDateLecture(new \DateTime('-3 days'));
@@ -774,7 +919,7 @@ class AppFixtures extends Fixture
         $manager->persist($message4);
 
         $message5 = new Message();
-        $message5->setContenu('Bonjour, bien sûr ! Nous pouvons organiser une visite. Seriez-vous disponible cette semaine ? Nous proposons des créneaux mardi et jeudi entre 10h et 16h.');
+        $message5->setContenu('Bonjour, bien sÃ»r ! Nous pouvons organiser une visite. Seriez-vous disponible cette semaine ? Nous proposons des crÃ©neaux mardi et jeudi entre 10h et 16h.');
         $message5->setDateEnvoi(new \DateTime('-2 days'));
         $message5->setEstLu(true);
         $message5->setDateLecture(new \DateTime('-2 days'));
@@ -790,9 +935,9 @@ class AppFixtures extends Fixture
         $message6->setConversation($conversation2);
         $manager->persist($message6);
 
-        // Conversation 3 - Question générale (sans réservation)
+        // Conversation 3 - Question gÃ©nÃ©rale (sans rÃ©servation)
         $conversation3 = new Conversation();
-        $conversation3->setSujet('Renseignement sur les modalités de location');
+        $conversation3->setSujet('Renseignement sur les modalitÃ©s de location');
         $conversation3->setDateCreation(new \DateTime('-7 days'));
         $conversation3->setDernierMessageDate(new \DateTime('-6 days'));
         $conversation3->setEstArchivee(false);
@@ -801,7 +946,7 @@ class AppFixtures extends Fixture
         $manager->persist($conversation3);
 
         $message7 = new Message();
-        $message7->setContenu('Bonjour, quelles sont les modalités de paiement ? Faut-il payer l\'intégralité à la réservation ?');
+        $message7->setContenu('Bonjour, quelles sont les modalitÃ©s de paiement ? Faut-il payer l\'intÃ©gralitÃ© Ã  la rÃ©servation ?');
         $message7->setDateEnvoi(new \DateTime('-7 days'));
         $message7->setEstLu(true);
         $message7->setDateLecture(new \DateTime('-7 days'));
@@ -810,7 +955,7 @@ class AppFixtures extends Fixture
         $manager->persist($message7);
 
         $message8 = new Message();
-        $message8->setContenu('Bonjour Pierre, le paiement se fait en ligne une fois votre réservation validée par nos équipes. La caution est débitée séparément et vous sera restituée dans les 7 jours suivant la fin de la location si tout est conforme.');
+        $message8->setContenu('Bonjour Pierre, le paiement se fait en ligne une fois votre rÃ©servation validÃ©e par nos Ã©quipes. La caution est dÃ©bitÃ©e sÃ©parÃ©ment et vous sera restituÃ©e dans les 7 jours suivant la fin de la location si tout est conforme.');
         $message8->setDateEnvoi(new \DateTime('-6 days'));
         $message8->setEstLu(true);
         $message8->setDateLecture(new \DateTime('-6 days'));
@@ -819,27 +964,27 @@ class AppFixtures extends Fixture
         $manager->persist($message8);
 
         // ========================================
-        // 12. CRÉER LES PARAMÈTRES SYSTÈME
+        // 13. CRÉER LES PARAMÈTRES SYSTÃˆME
         // ========================================
         
         $parametre1 = new Parametre();
         $parametre1->setNomParametre('taux_commission');
         $parametre1->setValeur('10');
-        $parametre1->setDescription('Taux de commission en pourcentage appliqué sur chaque location');
+        $parametre1->setDescription('Taux de commission en pourcentage appliquÃ© sur chaque location');
         $parametre1->setDateModification(new \DateTime('-90 days'));
         $manager->persist($parametre1);
 
         $parametre2 = new Parametre();
         $parametre2->setNomParametre('delai_annulation_gratuite');
         $parametre2->setValeur('7');
-        $parametre2->setDescription('Nombre de jours avant le début de la location pour annulation gratuite');
+        $parametre2->setDescription('Nombre de jours avant le dÃ©but de la location pour annulation gratuite');
         $parametre2->setDateModification(new \DateTime('-90 days'));
         $manager->persist($parametre2);
 
         $parametre3 = new Parametre();
         $parametre3->setNomParametre('delai_validation_reservation');
         $parametre3->setValeur('48');
-        $parametre3->setDescription('Délai en heures pour que le centre valide une demande de réservation');
+        $parametre3->setDescription('DÃ©lai en heures pour que le centre valide une demande de rÃ©servation');
         $parametre3->setDateModification(new \DateTime('-90 days'));
         $manager->persist($parametre3);
 
@@ -853,12 +998,12 @@ class AppFixtures extends Fixture
         $parametre5 = new Parametre();
         $parametre5->setNomParametre('duree_affichage_avis');
         $parametre5->setValeur('365');
-        $parametre5->setDescription('Durée en jours pendant laquelle les avis restent visibles');
+        $parametre5->setDescription('DurÃ©e en jours pendant laquelle les avis restent visibles');
         $parametre5->setDateModification(new \DateTime('-90 days'));
         $manager->persist($parametre5);
 
         // ========================================
-        // SAUVEGARDER TOUTES LES DONNÉES
+        // SAUVEGARDER TOUTES LES DONNÃ‰ES
         // ========================================
         $manager->flush();
     }
