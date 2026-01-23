@@ -1,0 +1,627 @@
+{% extends 'locataire/base_dashboard.html.twig' %}
+
+{% block title %}Réservation #{{ reservation.id }} - Références Événements{% endblock %}
+
+{% block dashboard_content %}
+
+<div class="page-header">
+    <a href="{{ path('locataire_reservations') }}" class="back-link">
+        ← Retour aux réservations
+    </a>
+    <div class="page-header-content">
+        <div>
+            <h1 class="page-title">{{ reservation.emplacement.titreAnnonce }}</h1>
+            <p class="page-subtitle">Réservation #{{ reservation.id }} - {{ reservation.emplacement.centreCommercial.nomCentre }}</p>
+        </div>
+        <span class="reservation-status status-{{ reservation.statutCssClass }}">
+            {{ reservation.statut.icone }} {{ reservation.statutLibelle }}
+        </span>
+    </div>
+</div>
+
+<!-- Flash messages -->
+{% for message in app.flashes('success') %}
+    <div class="alert alert-success">{{ message }}</div>
+{% endfor %}
+{% for message in app.flashes('error') %}
+    <div class="alert alert-error">{{ message }}</div>
+{% endfor %}
+
+<div class="detail-grid">
+    <!-- Colonne principale -->
+    <div class="detail-main">
+        <!-- Image de l'emplacement -->
+        <div class="section">
+            <div class="emplacement-gallery">
+                {% if reservation.emplacement.photos|length > 0 %}
+                    <div class="gallery-main">
+                        <img src="{{ asset('uploads/photos/' ~ reservation.emplacement.photos|first.cheminFichier) }}"
+                             alt="{{ reservation.emplacement.titreAnnonce }}">
+                    </div>
+                    {% if reservation.emplacement.photos|length > 1 %}
+                        <div class="gallery-thumbnails">
+                            {% for photo in reservation.emplacement.photos %}
+                                <img src="{{ asset('uploads/photos/' ~ photo.cheminFichier) }}"
+                                     alt="{{ photo.legende ?? 'Photo ' ~ loop.index }}"
+                                     class="gallery-thumb">
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% else %}
+                    <div class="no-image-large">
+                        <span class="no-image-icon">📷</span>
+                        <span>Aucune photo disponible</span>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Informations de l'emplacement -->
+        <div class="section">
+            <h2 class="section-title">Détails de l'emplacement</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="info-label">Type</span>
+                    <span class="info-value">{{ reservation.emplacement.typeEmplacement|capitalize }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Surface</span>
+                    <span class="info-value">{{ reservation.emplacement.surface }} m²</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Localisation</span>
+                    <span class="info-value">{{ reservation.emplacement.localisationPrecise ?? 'Non précisée' }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Centre commercial</span>
+                    <span class="info-value">{{ reservation.emplacement.centreCommercial.nomCentre }}</span>
+                </div>
+            </div>
+
+            {% if reservation.emplacement.description %}
+                <div class="description-box">
+                    <h3>Description</h3>
+                    <p>{{ reservation.emplacement.description|nl2br }}</p>
+                </div>
+            {% endif %}
+
+            {% if reservation.emplacement.equipements %}
+                <div class="equipements-box">
+                    <h3>Équipements inclus</h3>
+                    <p>{{ reservation.emplacement.equipements|nl2br }}</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Documents liés -->
+        <div class="section">
+            <h2 class="section-title">Documents</h2>
+            {% if reservation.documents|length > 0 %}
+                <div class="documents-list">
+                    {% for document in reservation.documents %}
+                        <div class="document-card">
+                            <div class="document-icon {{ document.typeDocument }}">
+                                {% if document.typeDocument == 'contrat' %}📑
+                                {% elseif document.typeDocument == 'facture' %}📄
+                                {% else %}📋
+                                {% endif %}
+                            </div>
+                            <div class="document-info">
+                                <div class="document-title">
+                                    {{ document.typeDocument|capitalize }} {{ document.numeroDocument }}
+                                </div>
+                                <div class="document-meta">
+                                    Généré le {{ document.dateGeneration|date('d/m/Y') }}
+                                </div>
+                                <div class="document-tags">
+                                    <span class="document-tag">{{ document.statut|capitalize }}</span>
+                                </div>
+                            </div>
+                            <div class="document-actions">
+                                <a href="{{ asset('uploads/documents/' ~ document.cheminFichier) }}"
+                                   class="btn-icon" title="Télécharger" target="_blank">
+                                    ⬇️
+                                </a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state-small">
+                    <span class="empty-icon-small">📄</span>
+                    <p>Aucun document pour cette réservation</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Colonne latérale -->
+    <div class="detail-sidebar">
+        <!-- Récapitulatif de la réservation -->
+        <div class="section sticky-section">
+            <h2 class="section-title">Récapitulatif</h2>
+
+            <div class="recap-dates">
+                <div class="recap-date">
+                    <span class="recap-label">Début</span>
+                    <span class="recap-value">{{ reservation.dateDebut|date('d/m/Y') }}</span>
+                </div>
+                <div class="recap-arrow">→</div>
+                <div class="recap-date">
+                    <span class="recap-label">Fin</span>
+                    <span class="recap-value">{{ reservation.dateFin|date('d/m/Y') }}</span>
+                </div>
+            </div>
+
+            <div class="recap-duration">
+                {% set days = reservation.dateFin.diff(reservation.dateDebut).days + 1 %}
+                {{ days }} jour{% if days > 1 %}s{% endif %} de location
+            </div>
+
+            <hr class="recap-divider">
+
+            <div class="recap-prices">
+                <div class="recap-line">
+                    <span>Location</span>
+                    <span>{{ reservation.montantLocation|number_format(2, ',', ' ') }} €</span>
+                </div>
+                <div class="recap-line">
+                    <span>Commission plateforme</span>
+                    <span>{{ reservation.montantCommission|number_format(2, ',', ' ') }} €</span>
+                </div>
+                {% if reservation.cautionVersee %}
+                    <div class="recap-line">
+                        <span>Caution</span>
+                        <span>{{ reservation.cautionVersee|number_format(2, ',', ' ') }} €</span>
+                    </div>
+                {% endif %}
+                <div class="recap-line recap-total">
+                    <span>Total</span>
+                    <span>{{ reservation.montantTotal|number_format(2, ',', ' ') }} €</span>
+                </div>
+            </div>
+
+            <hr class="recap-divider">
+
+            <!-- Informations de statut -->
+            <div class="status-info">
+                <div class="status-line">
+                    <span class="status-label">Demande effectuée</span>
+                    <span class="status-value">{{ reservation.dateDemande|date('d/m/Y à H:i') }}</span>
+                </div>
+                {% if reservation.dateValidation %}
+                    <div class="status-line">
+                        <span class="status-label">Validée le</span>
+                        <span class="status-value">{{ reservation.dateValidation|date('d/m/Y à H:i') }}</span>
+                    </div>
+                {% endif %}
+                {% if reservation.datePaiement %}
+                    <div class="status-line">
+                        <span class="status-label">Payée le</span>
+                        <span class="status-value">{{ reservation.datePaiement|date('d/m/Y à H:i') }}</span>
+                    </div>
+                {% endif %}
+                {% if reservation.dateAnnulation %}
+                    <div class="status-line status-danger">
+                        <span class="status-label">Annulée le</span>
+                        <span class="status-value">{{ reservation.dateAnnulation|date('d/m/Y à H:i') }}</span>
+                    </div>
+                    {% if reservation.annuleePar %}
+                        <div class="status-line status-danger">
+                            <span class="status-label">Annulée par</span>
+                            <span class="status-value">{{ reservation.annuleePar|capitalize }}</span>
+                        </div>
+                    {% endif %}
+                {% endif %}
+                {% if reservation.motifRefus %}
+                    <div class="motif-refus">
+                        <strong>Motif du refus :</strong>
+                        <p>{{ reservation.motifRefus }}</p>
+                    </div>
+                {% endif %}
+            </div>
+
+            <hr class="recap-divider">
+
+            <!-- Actions -->
+            <div class="detail-actions">
+                {% if conversation %}
+                    <a href="{{ path('locataire_messages_show', {id: conversation.id}) }}" class="btn-primary btn-block">
+                        💬 Contacter le centre
+                    </a>
+                {% else %}
+                    <a href="{{ path('locataire_messages_index') }}" class="btn-primary btn-block">
+                        💬 Messagerie
+                    </a>
+                {% endif %}
+
+                {% if reservation.statut.value == 'en_attente' or reservation.statut.value == 'validee' %}
+                    <form method="post" action="{{ path('locataire_reservation_annuler', {id: reservation.id}) }}"
+                          onsubmit="return confirm('Êtes-vous sûr de vouloir annuler cette réservation ?');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('annuler_reservation_' ~ reservation.id) }}">
+                        <button type="submit" class="btn-secondary btn-block btn-danger-outline">
+                            Annuler la réservation
+                        </button>
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Informations du centre commercial -->
+        <div class="section">
+            <h2 class="section-title">Centre commercial</h2>
+            <div class="centre-info">
+                <div class="centre-avatar">
+                    {{ reservation.emplacement.centreCommercial.nomCentre|slice(0, 2)|upper }}
+                </div>
+                <div class="centre-details">
+                    <h3>{{ reservation.emplacement.centreCommercial.nomCentre }}</h3>
+                    <p>{{ reservation.emplacement.centreCommercial.adresse }}</p>
+                    <p>{{ reservation.emplacement.centreCommercial.codePostal }} {{ reservation.emplacement.centreCommercial.ville }}</p>
+                    {% if reservation.emplacement.centreCommercial.telephone %}
+                        <p>📞 {{ reservation.emplacement.centreCommercial.telephone }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Styles spécifiques au détail de réservation */
+.page-header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 24px;
+}
+
+.detail-main {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.detail-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.sticky-section {
+    position: sticky;
+    top: 100px;
+}
+
+/* Galerie */
+.emplacement-gallery {
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.gallery-main {
+    width: 100%;
+    height: 300px;
+    background: #f5f5f5;
+}
+
+.gallery-main img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.gallery-thumbnails {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+}
+
+.gallery-thumb {
+    width: 80px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 6px;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+
+.gallery-thumb:hover {
+    opacity: 1;
+}
+
+.no-image-large {
+    width: 100%;
+    height: 250px;
+    background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    color: #6b6b6b;
+}
+
+.no-image-icon {
+    font-size: 48px;
+}
+
+/* Info grid */
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.info-label {
+    font-size: 13px;
+    color: #6b6b6b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.info-value {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+.description-box,
+.equipements-box {
+    background: #f8f9fa;
+    padding: 16px;
+    border-radius: 8px;
+    margin-top: 16px;
+}
+
+.description-box h3,
+.equipements-box h3 {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #1a1a1a;
+}
+
+.description-box p,
+.equipements-box p {
+    font-size: 14px;
+    color: #4a4a4a;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* Récapitulatif */
+.recap-dates {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.recap-date {
+    text-align: center;
+}
+
+.recap-label {
+    display: block;
+    font-size: 12px;
+    color: #6b6b6b;
+    margin-bottom: 4px;
+}
+
+.recap-value {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+.recap-arrow {
+    font-size: 20px;
+    color: #6b6b6b;
+}
+
+.recap-duration {
+    text-align: center;
+    font-size: 14px;
+    color: #6b6b6b;
+    padding: 12px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.recap-divider {
+    border: none;
+    border-top: 1px solid #e5e5e5;
+    margin: 20px 0;
+}
+
+.recap-prices {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.recap-line {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    color: #4a4a4a;
+}
+
+.recap-total {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1a1a1a;
+    padding-top: 12px;
+    border-top: 1px solid #e5e5e5;
+    margin-top: 8px;
+}
+
+/* Status info */
+.status-info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.status-line {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+}
+
+.status-label {
+    color: #6b6b6b;
+}
+
+.status-value {
+    color: #1a1a1a;
+    font-weight: 500;
+}
+
+.status-danger {
+    color: #dc3545;
+}
+
+.status-danger .status-label,
+.status-danger .status-value {
+    color: #dc3545;
+}
+
+.motif-refus {
+    background: #fff3f3;
+    border: 1px solid #f8d7da;
+    border-radius: 8px;
+    padding: 12px;
+    margin-top: 12px;
+}
+
+.motif-refus strong {
+    font-size: 13px;
+    color: #721c24;
+}
+
+.motif-refus p {
+    margin: 8px 0 0 0;
+    font-size: 14px;
+    color: #721c24;
+}
+
+/* Actions */
+.detail-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.btn-block {
+    width: 100%;
+    text-align: center;
+}
+
+.btn-danger-outline {
+    color: #dc3545;
+    border-color: #dc3545;
+}
+
+.btn-danger-outline:hover {
+    background: #dc3545;
+    color: white;
+}
+
+/* Centre commercial */
+.centre-info {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+}
+
+.centre-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #1a1a1a, #333);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.centre-details h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.centre-details p {
+    font-size: 14px;
+    color: #6b6b6b;
+    margin: 4px 0;
+}
+
+/* Empty state small */
+.empty-state-small {
+    text-align: center;
+    padding: 40px 20px;
+    color: #6b6b6b;
+}
+
+.empty-icon-small {
+    font-size: 32px;
+    margin-bottom: 8px;
+    display: block;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .detail-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .sticky-section {
+        position: static;
+    }
+}
+
+@media (max-width: 768px) {
+    .page-header-content {
+        flex-direction: column;
+    }
+
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .recap-dates {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .recap-arrow {
+        transform: rotate(90deg);
+    }
+}
+</style>
+
+{% endblock %}

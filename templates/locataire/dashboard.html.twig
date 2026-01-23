@@ -56,7 +56,7 @@
                     {% set countKey = 'statut_' ~ statutValue %}
                     <a href="{{ path('locataire_reservations', {filtre: statutValue}) }}" 
                        class="filter-btn filter-btn-status status-{{ statut.cssClass }}">
-                        {{ statut.icone }} {{ statut.libelle }} ({{ stats[countKey]|default(0) }})
+                        {{ statut.icone }} {{ statut.libelle }}
                     </a>
                 {% endfor %}
             </div>

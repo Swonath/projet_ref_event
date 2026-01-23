@@ -6,7 +6,6 @@ use App\Entity\Locataire;
 use App\Entity\Conversation;
 use App\Entity\Message;
 use App\Repository\ConversationRepository;
-use App\Repository\MessageRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -51,7 +50,7 @@ class MessageController extends AbstractController
         // Compter le total de messages non lus
         $totalNonLus = array_sum($messagesNonLus);
         
-        return $this->render('locataire/messages/index.html.twig', [
+        return $this->render('locataire/messagerie.html.twig', [
             'conversations' => $conversations,
             'messagesNonLus' => $messagesNonLus,
             'totalNonLus' => $totalNonLus,

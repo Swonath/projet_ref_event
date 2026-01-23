@@ -1,0 +1,387 @@
+{% extends 'locataire/base_dashboard.html.twig' %}
+
+{% block title %}Mes paiements - Références Événements{% endblock %}
+
+{% block dashboard_content %}
+
+<div class="page-header">
+    <h1 class="page-title">Mes paiements 💳</h1>
+    <p class="page-subtitle">Historique de vos transactions et factures</p>
+</div>
+
+<!-- Statistiques -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon">💰</div>
+        <div class="stat-value">{{ totalDepense|number_format(0, ',', ' ') }} €</div>
+        <div class="stat-label">Total dépensé</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon">✅</div>
+        <div class="stat-value">{{ stats.accepte.count }}</div>
+        <div class="stat-label">Paiements acceptés</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon">⏳</div>
+        <div class="stat-value">{{ stats.en_attente.count }}</div>
+        <div class="stat-label">En attente</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon">↩️</div>
+        <div class="stat-value">{{ totalRembourse|number_format(0, ',', ' ') }} €</div>
+        <div class="stat-label">Remboursements</div>
+    </div>
+</div>
+
+<!-- Filtres -->
+<div class="section">
+    <div class="section-header">
+        <h2 class="section-title">Historique des paiements</h2>
+    </div>
+
+    <div class="tabs">
+        <a href="{{ path('locataire_paiements_index', {statut: 'tous'}) }}"
+           class="tab {{ filtre == 'tous' ? 'active' : '' }}">
+            Tous ({{ stats.total_paiements }})
+        </a>
+        <a href="{{ path('locataire_paiements_index', {statut: 'accepte'}) }}"
+           class="tab {{ filtre == 'accepte' ? 'active' : '' }}">
+            Acceptés ({{ stats.accepte.count }})
+        </a>
+        <a href="{{ path('locataire_paiements_index', {statut: 'en_attente'}) }}"
+           class="tab {{ filtre == 'en_attente' ? 'active' : '' }}">
+            En attente ({{ stats.en_attente.count }})
+        </a>
+        <a href="{{ path('locataire_paiements_index', {statut: 'rembourse'}) }}"
+           class="tab {{ filtre == 'rembourse' ? 'active' : '' }}">
+            Remboursés ({{ stats.rembourse.count }})
+        </a>
+    </div>
+
+    {% if paiements|length > 0 %}
+        <div class="paiements-table-container">
+            <table class="paiements-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Réservation</th>
+                        <th>Méthode</th>
+                        <th>Montant</th>
+                        <th>Statut</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for paiement in paiements %}
+                        <tr>
+                            <td class="date-cell">
+                                <span class="date-main">{{ paiement.datePaiement|date('d/m/Y') }}</span>
+                                <span class="date-time">{{ paiement.datePaiement|date('H:i') }}</span>
+                            </td>
+                            <td class="reservation-cell">
+                                <div class="reservation-info-compact">
+                                    <span class="reservation-title">{{ paiement.reservation.emplacement.titreAnnonce }}</span>
+                                    <span class="reservation-centre">{{ paiement.reservation.emplacement.centreCommercial.nomCentre }}</span>
+                                    <span class="reservation-id">#{{ paiement.reservation.id }}</span>
+                                </div>
+                            </td>
+                            <td class="method-cell">
+                                {% if paiement.methodePaiement == 'carte_bancaire' %}
+                                    <span class="method-badge method-card">
+                                        💳 Carte bancaire
+                                    </span>
+                                {% elseif paiement.methodePaiement == 'virement' %}
+                                    <span class="method-badge method-transfer">
+                                        🏦 Virement
+                                    </span>
+                                {% else %}
+                                    <span class="method-badge">
+                                        {{ paiement.methodePaiement }}
+                                    </span>
+                                {% endif %}
+                            </td>
+                            <td class="amount-cell">
+                                <span class="amount">{{ paiement.montant|number_format(2, ',', ' ') }} €</span>
+                                {% if paiement.montantRembourse %}
+                                    <span class="amount-refund">
+                                        -{{ paiement.montantRembourse|number_format(2, ',', ' ') }} € remboursé
+                                    </span>
+                                {% endif %}
+                            </td>
+                            <td class="status-cell">
+                                {% if paiement.statut == 'accepte' %}
+                                    <span class="status-badge status-paid">✓ Accepté</span>
+                                {% elseif paiement.statut == 'en_attente' %}
+                                    <span class="status-badge status-pending">⏳ En attente</span>
+                                {% elseif paiement.statut == 'rembourse' %}
+                                    <span class="status-badge status-refunded">↩️ Remboursé</span>
+                                {% elseif paiement.statut == 'refuse' %}
+                                    <span class="status-badge status-refused">✕ Refusé</span>
+                                {% else %}
+                                    <span class="status-badge">{{ paiement.statut }}</span>
+                                {% endif %}
+                            </td>
+                            <td class="actions-cell">
+                                <a href="{{ path('locataire_reservation_detail', {id: paiement.reservation.id}) }}"
+                                   class="btn-icon" title="Voir la réservation">
+                                    👁️
+                                </a>
+                                {% if paiement.transactionId %}
+                                    <button class="btn-icon" title="Copier l'ID de transaction"
+                                            onclick="copyToClipboard('{{ paiement.transactionId }}')">
+                                        📋
+                                    </button>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <div class="empty-icon">💳</div>
+            <div class="empty-title">Aucun paiement</div>
+            <div class="empty-text">
+                {% if filtre != 'tous' %}
+                    Aucun paiement avec le statut "{{ filtre }}".<br>
+                    <a href="{{ path('locataire_paiements_index', {statut: 'tous'}) }}">Voir tous les paiements</a>
+                {% else %}
+                    Vos paiements apparaîtront ici une fois effectués.
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+<!-- Informations -->
+<div class="info-box">
+    <strong>Besoin d'aide ?</strong> Si vous avez des questions concernant un paiement ou souhaitez demander un remboursement,
+    contactez le centre commercial concerné via la messagerie ou notre support.
+</div>
+
+<style>
+/* Table des paiements */
+.paiements-table-container {
+    overflow-x: auto;
+    margin-top: 20px;
+}
+
+.paiements-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.paiements-table th {
+    text-align: left;
+    padding: 12px 16px;
+    background: #f8f9fa;
+    font-size: 13px;
+    font-weight: 600;
+    color: #6b6b6b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid #e5e5e5;
+}
+
+.paiements-table td {
+    padding: 16px;
+    border-bottom: 1px solid #e5e5e5;
+    vertical-align: middle;
+}
+
+.paiements-table tbody tr:hover {
+    background: #f8f9fa;
+}
+
+/* Cellules */
+.date-cell {
+    white-space: nowrap;
+}
+
+.date-main {
+    display: block;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+.date-time {
+    display: block;
+    font-size: 12px;
+    color: #6b6b6b;
+}
+
+.reservation-cell {
+    min-width: 200px;
+}
+
+.reservation-info-compact {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.reservation-title {
+    font-weight: 600;
+    color: #1a1a1a;
+    font-size: 14px;
+}
+
+.reservation-centre {
+    font-size: 13px;
+    color: #6b6b6b;
+}
+
+.reservation-id {
+    font-size: 12px;
+    color: #9b9b9b;
+}
+
+.method-cell {
+    white-space: nowrap;
+}
+
+.method-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    background: #f5f5f5;
+    color: #4a4a4a;
+}
+
+.method-card {
+    background: #e3f2fd;
+    color: #1565c0;
+}
+
+.method-transfer {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+.amount-cell {
+    white-space: nowrap;
+}
+
+.amount {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+.amount-refund {
+    display: block;
+    font-size: 12px;
+    color: #28a745;
+    margin-top: 4px;
+}
+
+.status-cell {
+    white-space: nowrap;
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.status-paid {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-refunded {
+    background: #cce5ff;
+    color: #004085;
+}
+
+.status-refused {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.actions-cell {
+    white-space: nowrap;
+}
+
+.actions-cell .btn-icon {
+    margin-right: 4px;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .paiements-table th,
+    .paiements-table td {
+        padding: 12px 10px;
+    }
+
+    .reservation-cell {
+        min-width: 150px;
+    }
+}
+
+@media (max-width: 768px) {
+    .paiements-table thead {
+        display: none;
+    }
+
+    .paiements-table tbody tr {
+        display: block;
+        padding: 16px;
+        margin-bottom: 12px;
+        border: 1px solid #e5e5e5;
+        border-radius: 8px;
+        background: white;
+    }
+
+    .paiements-table td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .paiements-table td:last-child {
+        border-bottom: none;
+    }
+
+    .paiements-table td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: #6b6b6b;
+        font-size: 12px;
+        text-transform: uppercase;
+    }
+
+    .reservation-info-compact {
+        text-align: right;
+    }
+}
+</style>
+
+<script>
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(function() {
+        alert('ID de transaction copié : ' + text);
+    }).catch(function(err) {
+        console.error('Erreur lors de la copie : ', err);
+    });
+}
+</script>
+
+{% endblock %}

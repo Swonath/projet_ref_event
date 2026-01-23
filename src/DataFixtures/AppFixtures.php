@@ -399,7 +399,7 @@ class AppFixtures extends Fixture
         $typesEmplacement = ['stand', 'kiosque', 'boutique', 'corner'];
         $centresDisponibles = [$centre1, $centre2];
         
-        for ($i = 11; $i <= 22; $i++) {
+        for ($i = 11; $i <= 42; $i++) {
             $emplacement = new Emplacement();
             $type = $typesEmplacement[array_rand($typesEmplacement)];
             
@@ -638,6 +638,23 @@ class AppFixtures extends Fixture
         $reservation7->setEmplacement($emplacement9);
         $manager->persist($reservation7);
         $reservations[] = $reservation7;
+
+        // RÃ©servation 8 - En cours
+        $reservation2 = new Reservation();
+        $reservation2->setDateDebut(new \DateTime('-3 days'));
+        $reservation2->setDateFin(new \DateTime('+4 days'));
+        $reservation2->setMontantLocation('180.00');
+        $reservation2->setMontantCommission('18.00');
+        $reservation2->setMontantTotal('198.00');
+        $reservation2->setCautionVersee('500.00');
+        $reservation2->setStatut(StatutReservation::EN_COURS);  // âœ… Utiliser l'enum
+        $reservation2->setDateDemande(new \DateTime('-10 days'));
+        $reservation2->setDateValidation(new \DateTime('-8 days'));
+        $reservation2->setDatePaiement(new \DateTime('-7 days'));
+        $reservation2->setLocataire($locataire1);
+        $reservation2->setEmplacement($emplacement1);
+        $manager->persist($reservation2);
+        $reservations[] = $reservation2;
 
         // ========================================
         // CRÉER 30 RÉSERVATIONS POUR SOPHIE MARTIN (locataire1)

@@ -1,0 +1,121 @@
+{% extends 'locataire/base_dashboard.html.twig' %}
+
+{% block title %}Conversation - {{ conversation.centreCommercial.nomCentre }}{% endblock %}
+
+{% block dashboard_content %}
+
+<!-- En-tête de la conversation -->
+<div class="conversation-header-page">
+    <a href="{{ path('locataire_messages_index') }}" class="back-link">
+        ← Retour aux messages
+    </a>
+    
+    <div class="conversation-title-section">
+        <div class="conversation-avatar-large">
+            {{ conversation.centreCommercial.nomCentre|slice(0, 2)|upper }}
+        </div>
+        <div>
+            <h1 class="page-title">{{ conversation.centreCommercial.nomCentre }}</h1>
+            <p class="page-subtitle">
+                {% if conversation.sujet %}
+                    {{ conversation.sujet }}
+                {% elseif conversation.reservation %}
+                    Réservation : {{ conversation.reservation.emplacement.titreAnnonce }}
+                {% else %}
+                    Conversation
+                {% endif %}
+            </p>
+        </div>
+    </div>
+    
+    <!-- Actions -->
+    <div class="conversation-actions">
+        {% if conversation.reservation %}
+            <a href="{{ path('locataire_reservation_detail', {id: conversation.reservation.id}) }}" 
+               class="btn-small btn-secondary-small">
+                📋 Voir la réservation
+            </a>
+        {% endif %}
+        
+        <form method="post" action="{{ path('locataire_messages_archive', {id: conversation.id}) }}" 
+              onsubmit="return confirm('Êtes-vous sûr de vouloir archiver cette conversation ?');"
+              style="display: inline;">
+            <input type="hidden" name="_token" value="{{ csrf_token('archive_conversation_' ~ conversation.id) }}">
+            <button type="submit" class="btn-small btn-secondary-small">
+                📁 Archiver
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- Zone des messages -->
+<div class="messages-container">
+    <div class="messages-list">
+        {% if messages is empty %}
+            <div class="empty-state">
+                <div class="empty-icon">💬</div>
+                <div class="empty-title">Aucun message</div>
+                <div class="empty-text">Commencez la conversation en envoyant un message ci-dessous</div>
+            </div>
+        {% else %}
+            {% for message in messages %}
+                <div class="message-item message-{{ message.typeExpediteur }}">
+                    <div class="message-bubble">
+                        <div class="message-header">
+                            <span class="message-author">
+                                {% if message.typeExpediteur == 'locataire' %}
+                                    Vous
+                                {% else %}
+                                    {{ conversation.centreCommercial.nomCentre }}
+                                {% endif %}
+                            </span>
+                            <span class="message-time">
+                                {{ message.dateEnvoi|date('d/m/Y à H:i') }}
+                            </span>
+                        </div>
+                        <div class="message-content">
+                            {{ message.contenu|nl2br }}
+                        </div>
+                        {% if message.isEstLu and message.typeExpediteur == 'locataire' %}
+                            <div class="message-read-status">
+                                ✓✓ Lu {{ message.dateLecture ? 'le ' ~ message.dateLecture|date('d/m à H:i') : '' }}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>
+
+<!-- Formulaire d'envoi de message -->
+<div class="message-compose-container">
+    <form method="post" action="{{ path('locataire_messages_send', {id: conversation.id}) }}" 
+          class="message-compose-form">
+        <input type="hidden" name="_token" value="{{ csrf_token('send_message_' ~ conversation.id) }}">
+        
+        <div class="message-compose">
+            <textarea 
+                name="contenu" 
+                class="message-input" 
+                placeholder="Écrivez votre message ici..."
+                rows="3"
+                required></textarea>
+            
+            <button type="submit" class="btn-primary btn-send-message">
+                Envoyer 📤
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- Flash messages -->
+{% for message in app.flashes('success') %}
+    <div class="alert alert-success">{{ message }}</div>
+{% endfor %}
+
+{% for message in app.flashes('error') %}
+    <div class="alert alert-error">{{ message }}</div>
+{% endfor %}
+
+{% endblock %}

@@ -11,13 +11,13 @@
                 </a>
             </li>
             <li>
-                <a href="{{ path('locataire_reservations') }}" class="sidebar-item {{ app.request.attributes.get('_route') == 'locataire_reservations' ? 'active' : '' }}">
+                <a href="{{ path('locataire_reservations') }}" class="sidebar-item {{ app.request.attributes.get('_route') starts with 'locataire_reservation' ? 'active' : '' }}">
                     <span class="sidebar-icon">📅</span>
                     <span>Mes réservations</span>
                 </a>
             </li>
             <li>
-                <a href="{{ path('locataire_favoris') }}" class="sidebar-item {{ app.request.attributes.get('_route') == 'locataire_favoris' ? 'active' : '' }}">
+                <a href="{{ path('locataire_favoris_index') }}" class="sidebar-item {{ app.request.attributes.get('_route') starts with 'locataire_favoris' ? 'active' : '' }}">
                     <span class="sidebar-icon">❤️</span>
                     <span>Mes favoris</span>
                 </a>
@@ -28,20 +28,32 @@
                     <span>Messages</span>
                 </a>
             </li>
+        </ul>
+    </div>
+
+    <div class="sidebar-section">
+        <div class="sidebar-title">Facturation</div>
+        <ul class="sidebar-menu">
             <li>
-                <a href="#" class="sidebar-item">
+                <a href="{{ path('locataire_paiements_index') }}" class="sidebar-item {{ app.request.attributes.get('_route') starts with 'locataire_paiements' ? 'active' : '' }}">
+                    <span class="sidebar-icon">💳</span>
+                    <span>Mes paiements</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('locataire_documents') }}" class="sidebar-item {{ app.request.attributes.get('_route') == 'locataire_documents' ? 'active' : '' }}">
                     <span class="sidebar-icon">📄</span>
                     <span>Mes documents</span>
                 </a>
             </li>
         </ul>
     </div>
-    
+
     <div class="sidebar-section">
         <div class="sidebar-title">Compte</div>
         <ul class="sidebar-menu">
             <li>
-                <a href="{{ path('locataire_profil_') }}" class="sidebar-item {{ app.request.attributes.get('_route') == 'locataire_profil' ? 'active' : '' }}">
+                <a href="{{ path('locataire_profil') }}" class="sidebar-item {{ app.request.attributes.get('_route') starts with 'locataire_profil' ? 'active' : '' }}">
                     <span class="sidebar-icon">👤</span>
                     <span>Mon profil</span>
                 </a>

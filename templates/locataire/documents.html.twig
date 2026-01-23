@@ -5,101 +5,144 @@
 {% block dashboard_content %}
 
 <div class="page-header">
-    <h1 class="page-title">Mes documents</h1>
-    <p class="page-subtitle">{{ documents|length }} document{% if documents|length > 1 %}s{% endif %}</p>
+    <h1 class="page-title">Mes documents 📄</h1>
+    <p class="page-subtitle">Retrouvez tous vos contrats, factures et devis</p>
 </div>
 
-<div class="info-box">
-    ℹ️ <strong>Tous vos documents sont disponibles ici.</strong>
-    Factures, devis et contrats liés à vos réservations. Vous pouvez les télécharger à tout moment.
-</div>
-
-<div class="filters">
-    <span class="filter-label">Filtrer par :</span>
-    <select class="filter-select">
-        <option>Tous les types</option>
-        <option>Factures</option>
-        <option>Devis</option>
-        <option>Contrats</option>
-    </select>
-    <select class="filter-select">
-        <option>Toutes les dates</option>
-        <option>2025</option>
-        <option>2024</option>
-    </select>
-    <select class="filter-select">
-        <option>Tous les centres</option>
-        <option>Centre Atlantis</option>
-        <option>Paridis</option>
-        <option>Beaulieu</option>
-    </select>
-</div>
-
-<div class="tabs">
-    <button class="tab active">Tous ({{ documents|length }})</button>
-    <button class="tab">Factures (0)</button>
-    <button class="tab">Devis (0)</button>
-    <button class="tab">Contrats (0)</button>
-</div>
-
-{% if documents is empty %}
-    <div class="empty-state">
-        <div class="empty-icon">📄</div>
-        <div class="empty-title">Aucun document</div>
-        <div class="empty-text">
-            Vous n'avez pas encore de documents.<br>
-            Vos factures, devis et contrats apparaîtront ici après vos réservations.
-        </div>
+<!-- Statistiques documents -->
+<div class="stats-grid stats-grid-3">
+    <div class="stat-card">
+        <div class="stat-icon">📑</div>
+        <div class="stat-value">{{ stats.contrats }}</div>
+        <div class="stat-label">Contrats</div>
     </div>
-{% else %}
-    <div class="section">
-        <div class="section-header">
-            <h2 class="section-title">Tous mes documents</h2>
-            <button class="btn-secondary">
-                📥 Tout télécharger
-            </button>
-        </div>
+    <div class="stat-card">
+        <div class="stat-icon">📄</div>
+        <div class="stat-value">{{ stats.factures }}</div>
+        <div class="stat-label">Factures</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon">📋</div>
+        <div class="stat-value">{{ stats.devis }}</div>
+        <div class="stat-label">Devis</div>
+    </div>
+</div>
 
+<!-- Filtres -->
+<div class="section">
+    <div class="tabs">
+        <a href="{{ path('locataire_documents', {type: 'tous'}) }}"
+           class="tab {{ filtre == 'tous' ? 'active' : '' }}">
+            Tous ({{ documents|length }})
+        </a>
+        <a href="{{ path('locataire_documents', {type: 'contrat'}) }}"
+           class="tab {{ filtre == 'contrat' ? 'active' : '' }}">
+            Contrats ({{ stats.contrats }})
+        </a>
+        <a href="{{ path('locataire_documents', {type: 'facture'}) }}"
+           class="tab {{ filtre == 'facture' ? 'active' : '' }}">
+            Factures ({{ stats.factures }})
+        </a>
+        <a href="{{ path('locataire_documents', {type: 'devis'}) }}"
+           class="tab {{ filtre == 'devis' ? 'active' : '' }}">
+            Devis ({{ stats.devis }})
+        </a>
+    </div>
+
+    {% if documents|length > 0 %}
         <div class="documents-list">
             {% for document in documents %}
                 <div class="document-card">
-                    <div class="document-icon {{ document.type|lower }}">
-                        {% if document.type == 'facture' %}
+                    <div class="document-icon {{ document.typeDocument }}">
+                        {% if document.typeDocument == 'contrat' %}
+                            📑
+                        {% elseif document.typeDocument == 'facture' %}
                             📄
-                        {% elseif document.type == 'devis' %}
-                            📋
-                        {% elseif document.type == 'contrat' %}
-                            📜
                         {% else %}
-                            📎
+                            📋
                         {% endif %}
                     </div>
-                    
                     <div class="document-info">
-                        <div class="document-title">{{ document.nom }}</div>
+                        <div class="document-title">
+                            {{ document.typeDocument|capitalize }} {{ document.numeroDocument }}
+                        </div>
                         <div class="document-meta">
-                            {{ document.reservation.emplacement.centreCommercial.nom }} •
-                            {{ document.dateCreation|date('d/m/Y') }} •
-                            {{ document.taille }} Ko
+                            {{ document.reservation.emplacement.titreAnnonce }}
+                            • {{ document.reservation.emplacement.centreCommercial.nomCentre }}
+                        </div>
+                        <div class="document-meta">
+                            Généré le {{ document.dateGeneration|date('d/m/Y') }}
                         </div>
                         <div class="document-tags">
-                            <span class="document-tag">{{ document.type|capitalize }}</span>
-                            <span class="document-tag">{{ document.emplacement.nom }}</span>
+                            <span class="document-tag tag-{{ document.statut }}">
+                                {% if document.statut == 'signe' %}
+                                    ✓ Signé
+                                {% elseif document.statut == 'payee' %}
+                                    ✓ Payée
+                                {% elseif document.statut == 'en_attente' %}
+                                    ⏳ En attente
+                                {% else %}
+                                    {{ document.statut|capitalize }}
+                                {% endif %}
+                            </span>
+                            <span class="document-tag">
+                                Réservation #{{ document.reservation.id }}
+                            </span>
                         </div>
                     </div>
-                    
                     <div class="document-actions">
-                        <button class="btn-icon" title="Télécharger">
-                            📥
-                        </button>
-                        <button class="btn-icon" title="Prévisualiser">
+                        <a href="{{ path('locataire_reservation_detail', {id: document.reservation.id}) }}"
+                           class="btn-icon" title="Voir la réservation">
                             👁️
-                        </button>
+                        </a>
+                        <a href="{{ asset('uploads/documents/' ~ document.cheminFichier) }}"
+                           class="btn-icon" title="Télécharger" target="_blank" download>
+                            ⬇️
+                        </a>
                     </div>
                 </div>
             {% endfor %}
         </div>
-    </div>
-{% endif %}
+    {% else %}
+        <div class="empty-state">
+            <div class="empty-icon">📄</div>
+            <div class="empty-title">Aucun document</div>
+            <div class="empty-text">
+                {% if filtre != 'tous' %}
+                    Aucun {{ filtre }} trouvé.<br>
+                    <a href="{{ path('locataire_documents', {type: 'tous'}) }}">Voir tous les documents</a>
+                {% else %}
+                    Vos contrats, factures et devis apparaîtront ici une fois générés.
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+<style>
+/* Stats grid 3 colonnes */
+.stats-grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+/* Tags de statut */
+.tag-signe,
+.tag-payee {
+    background: #d4edda;
+    color: #155724;
+}
+
+.tag-en_attente {
+    background: #fff3cd;
+    color: #856404;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .stats-grid-3 {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
 
 {% endblock %}

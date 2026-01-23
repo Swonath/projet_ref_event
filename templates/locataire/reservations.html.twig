@@ -2,6 +2,12 @@
 
 {% block title %}Mes réservations - Références événements{% endblock %}
 
+{% block javascripts %}
+    {{ parent() }}
+    {# CORRIGÉ : Nom du fichier au pluriel #}
+    <script src="{{ asset('js/reservations.js') }}"></script>
+{% endblock %}
+
 {% block dashboard_content %}
 
 <div class="section">
@@ -11,7 +17,7 @@
     {% if filtre_actif != 'toutes' %}{{ filtre_actif|replace({'_': ' '}) }}{% endif %}</p>
 </div>
 
-    {# Section 2 : Filtres par statut (gÃ©nÃ©rÃ©s dynamiquement depuis l'enum) #}
+    {# Section 2 : Filtres par statut (générés dynamiquement depuis l'enum) #}
     <div class="filters-group">
         <span class="filters-label">Par statut :</span>
         <div class="filters">
@@ -24,7 +30,7 @@
                 {% set countKey = 'statut_' ~ statutValue %}
                 <a href="{{ path('locataire_reservations', {filtre: statutValue}) }}" 
                    class="filter-btn filter-btn-status status-{{ statut.cssClass }} {% if filtre_actif == statutValue %}active{% endif %}">
-                    {{ statut.icone }} {{ statut.libelle }} ({{ stats[countKey]|default(0) }})
+                    {{ statut.icone }} {{ statut.libelle }}
                 </a>
             {% endfor %}
         </div>
@@ -45,10 +51,10 @@
                 <img src="{{ asset('uploads/photos/' ~ reservation.emplacement.photos[0].cheminFichier) }}" 
                      alt="{{ reservation.emplacement.titreAnnonce }}">
             {% else %}
-                    <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; background:#f5f5f5; color:#999;">
-                        📷
-                    </div>
-                {% endif %}
+                <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; background:#f5f5f5; color:#999;">
+                    📷
+                </div>
+            {% endif %}
         </div>
         
         <div class="reservation-info">
@@ -61,7 +67,7 @@
             <div class="reservation-details">
                 Du {{ reservation.dateDebut|date('d/m/Y') }} au {{ reservation.dateFin|date('d/m/Y') }}
             </div>
-            {# âœ… Badge de statut avec enum #}
+            {# Badge de statut avec enum #}
             <span class="reservation-status status-{{ reservation.statutCssClass }}">
                 {{ reservation.statut.icone }} {{ reservation.statutLibelle }}
             </span>
@@ -75,7 +81,35 @@
         </div>
     </div>
     {% endfor %}
-{% endif %}
+    
+    {# Bouton Afficher Plus #}
+    {% if totalReservations > 12 %}
+    {# CORRIGÉ : ID unique pour les réservations #}
+    <div id="load-more-container-reservations" style="text-align: center; margin-top: 30px;">
+        <button id="btn-load-more" 
+                class="btn-primary" 
+                onclick="chargerPlusReservations()"
+                data-load-url="{{ path('locataire_reservations_charger_plus') }}">
+            {# CORRIGÉ : ID correct pour les réservations #}
+            Afficher plus (<span id="reservations-affiches">12</span>/{{ totalReservations }})
+        </button>
     </div>
+    {% endif %}
+{% endif %}
+</div>
+
+{# Initialisation du JavaScript - À LA FIN #}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof initialiserReservations === 'function') {
+            {# CORRIGÉ : Passe le total ET le filtre #}
+            initialiserReservations({{ totalReservations }}, '{{ filtre_actif }}');
+            console.log('✅ Réservations initialisées. Total:', {{ totalReservations }}, 'Filtre: {{ filtre_actif }}');
+        } else {
+            console.error('❌ La fonction initialiserReservations n\'existe pas !');
+            console.error('Vérifiez que le fichier reservations.js est bien chargé');
+        }
+    });
+</script>
 
 {% endblock %}

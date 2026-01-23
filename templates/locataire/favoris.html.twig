@@ -5,6 +5,11 @@
 {% block javascripts %}
     {{ parent() }}
     <script src="{{ asset('js/favoris.js') }}"></script>
+    {# Initialiser les variables JavaScript depuis Twig #}
+    <script>
+        // Passer le total des favoris au JavaScript
+        initialiserFavoris({{ totalFavoris }});
+    </script>
 {% endblock %}
 
 {% block dashboard_content %}
@@ -62,6 +67,7 @@
                    class="btn-small btn-primary-small">Voir détails</a>
                 <button class="btn-small btn-secondary-small" 
                         onclick="retirerDesFavoris({{ emplacement.id }}, this)"
+                        data-delete-url="{{ path('locataire_favoris_retirer', {'id': emplacement.id}) }}"
                         title="Retirer des favoris">
                     Retirer ❤️
                 </button>
@@ -73,115 +79,14 @@
 {# Bouton Afficher Plus #}
 {% if totalFavoris > 12 %}
 <div id="load-more-container" style="text-align: center; margin-top: 30px;">
-    <button id="btn-load-more" class="btn-primary" onclick="chargerPlusFavoris()">
+    <button id="btn-load-more" 
+            class="btn-primary" 
+            onclick="chargerPlusFavoris()"
+            data-load-url="{{ path('locataire_favoris_charger_plus') }}">
         Afficher plus (<span id="favoris-affiches">12</span>/{{ totalFavoris }})
     </button>
 </div>
 {% endif %}
 </div>
-
-<script>
-let offsetFavoris = 12; // Commence après les 12 premiers
-const totalFavoris = {{ totalFavoris }};
-
-function chargerPlusFavoris() {
-    const btn = document.getElementById('btn-load-more');
-    const originalText = btn.innerHTML;
-    
-    // Désactiver le bouton pendant le chargement
-    btn.disabled = true;
-    btn.innerHTML = 'Chargement...';
-    
-    fetch(`{{ path('locataire_favoris_charger_plus') }}?offset=${offsetFavoris}`)
-        .then(response => response.json())
-        .then(data => {
-            if (data.success && data.html) {
-                // Trouver le dernier élément .reservation-card
-                const lastCard = document.querySelector('.reservation-card:last-of-type');
-                
-                // Insérer le nouveau HTML après le dernier élément
-                lastCard.insertAdjacentHTML('afterend', data.html);
-                
-                // Mettre à jour l'offset
-                offsetFavoris += 12;
-                
-                // Mettre à jour le compteur
-                const affichesSpan = document.getElementById('favoris-affiches');
-                const nouveauNombre = Math.min(offsetFavoris, totalFavoris);
-                affichesSpan.textContent = nouveauNombre;
-                
-                // Si tous les favoris sont chargés, masquer le bouton
-                if (!data.hasMore || offsetFavoris >= totalFavoris) {
-                    document.getElementById('load-more-container').style.display = 'none';
-                } else {
-                    btn.disabled = false;
-                    btn.innerHTML = originalText;
-                }
-            } else {
-                btn.disabled = false;
-                btn.innerHTML = originalText;
-                alert('Erreur lors du chargement');
-            }
-        })
-        .catch(error => {
-            console.error('Erreur:', error);
-            btn.disabled = false;
-            btn.innerHTML = originalText;
-            alert('Erreur lors du chargement des favoris');
-        });
-}
-
-function retirerDesFavoris(emplacementId, button) {
-    if (!confirm('Voulez-vous vraiment retirer cet emplacement de vos favoris ?')) {
-        return;
-    }
-    
-    // Trouver la card parente
-    const card = button.closest('.reservation-card');
-    
-    // Animation de suppression
-    card.style.opacity = '0.5';
-    button.disabled = true;
-    button.textContent = 'Suppression...';
-    
-    // Simuler une suppression (à remplacer par un vrai appel AJAX)
-    fetch(`/dashboard/locataire/favoris/retirer/${emplacementId}`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            // Supprimer la card avec animation
-            card.style.transition = 'all 0.3s ease';
-            card.style.transform = 'translateX(-100%)';
-            card.style.opacity = '0';
-            
-            setTimeout(() => {
-                card.remove();
-                
-                // Si plus aucun favori, recharger la page pour afficher l'état vide
-                if (document.querySelectorAll('.reservation-card').length === 0) {
-                    location.reload();
-                }
-            }, 300);
-        } else {
-            alert(data.message || 'Erreur lors de la suppression');
-            card.style.opacity = '1';
-            button.disabled = false;
-            button.textContent = 'Retirer ❤️';
-        }
-    })
-    .catch(error => {
-        console.error('Erreur:', error);
-        alert('Erreur lors de la suppression du favori');
-        card.style.opacity = '1';
-        button.disabled = false;
-        button.textContent = 'Retirer ❤️';
-    });
-}
-</script>
 
 {% endblock %}
