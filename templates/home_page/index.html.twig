@@ -22,7 +22,11 @@
                 {# Utilisateur connecté : afficher l'avatar et le lien vers le compte #}
                 <a href="{{ path('app_my_account') }}" class="user-menu">
                     <div class="user-avatar">
-                        {{ app.user.nom|slice(0, 2)|upper }}
+                        {% if app.user.photoProfile is defined and app.user.photoProfile %}
+                            <img src="{{ asset('uploads/profiles/' ~ app.user.photoProfile) }}" alt="Photo de profil" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+                        {% else %}
+                            {{ app.user.nom|slice(0, 2)|upper }}
+                        {% endif %}
                     </div>
                     <span class="user-name">{{ app.user.nom }}</span>
                 </a>

@@ -713,13 +713,4 @@ class DashboardController extends AbstractController
         ]);
     }
     
-    /**
-     * Page "Messages" - Redirige vers le contrôleur de messagerie
-     */
-    #[Route('/messages', name: 'messages')]
-    public function messages(): Response
-    {
-        // Rediriger vers le nouveau contrôleur de messagerie
-        return $this->redirectToRoute('locataire_messages_index');
-    }
 }

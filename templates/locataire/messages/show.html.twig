@@ -4,12 +4,20 @@
 
 {% block dashboard_content %}
 
+<!-- Flash messages -->
+{% for message in app.flashes('success') %}
+    <div class="alert alert-success">{{ message }}</div>
+{% endfor %}
+{% for message in app.flashes('error') %}
+    <div class="alert alert-error">{{ message }}</div>
+{% endfor %}
+
 <!-- En-tête de la conversation -->
 <div class="conversation-header-page">
     <a href="{{ path('locataire_messages_index') }}" class="back-link">
         ← Retour aux messages
     </a>
-    
+
     <div class="conversation-title-section">
         <div class="conversation-avatar-large">
             {{ conversation.centreCommercial.nomCentre|slice(0, 2)|upper }}
@@ -27,17 +35,17 @@
             </p>
         </div>
     </div>
-    
+
     <!-- Actions -->
     <div class="conversation-actions">
         {% if conversation.reservation %}
-            <a href="{{ path('locataire_reservation_detail', {id: conversation.reservation.id}) }}" 
+            <a href="{{ path('locataire_reservation_detail', {id: conversation.reservation.id}) }}"
                class="btn-small btn-secondary-small">
                 📋 Voir la réservation
             </a>
         {% endif %}
-        
-        <form method="post" action="{{ path('locataire_messages_archive', {id: conversation.id}) }}" 
+
+        <form method="post" action="{{ path('locataire_messages_archive', {id: conversation.id}) }}"
               onsubmit="return confirm('Êtes-vous sûr de vouloir archiver cette conversation ?');"
               style="display: inline;">
             <input type="hidden" name="_token" value="{{ csrf_token('archive_conversation_' ~ conversation.id) }}">
@@ -49,7 +57,7 @@
 </div>
 
 <!-- Zone des messages -->
-<div class="messages-container">
+<div class="messages-container" id="messagesContainer">
     <div class="messages-list">
         {% if messages is empty %}
             <div class="empty-state">
@@ -60,6 +68,19 @@
         {% else %}
             {% for message in messages %}
                 <div class="message-item message-{{ message.typeExpediteur }}">
+                    <!-- Avatar -->
+                    <div class="message-avatar">
+                        {% if message.typeExpediteur == 'locataire' %}
+                            {% if app.user.photoProfile %}
+                                <img src="{{ asset('uploads/profiles/' ~ app.user.photoProfile) }}" alt="Vous" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover;">
+                            {% else %}
+                                {{ app.user.nom|slice(0, 2)|upper }}
+                            {% endif %}
+                        {% else %}
+                            {{ conversation.centreCommercial.nomCentre|slice(0, 2)|upper }}
+                        {% endif %}
+                    </div>
+
                     <div class="message-bubble">
                         <div class="message-header">
                             <span class="message-author">
@@ -76,7 +97,7 @@
                         <div class="message-content">
                             {{ message.contenu|nl2br }}
                         </div>
-                        {% if message.isEstLu and message.typeExpediteur == 'locataire' %}
+                        {% if message.estLu and message.typeExpediteur == 'locataire' %}
                             <div class="message-read-status">
                                 ✓✓ Lu {{ message.dateLecture ? 'le ' ~ message.dateLecture|date('d/m à H:i') : '' }}
                             </div>
@@ -90,18 +111,18 @@
 
 <!-- Formulaire d'envoi de message -->
 <div class="message-compose-container">
-    <form method="post" action="{{ path('locataire_messages_send', {id: conversation.id}) }}" 
+    <form method="post" action="{{ path('locataire_messages_send', {id: conversation.id}) }}"
           class="message-compose-form">
         <input type="hidden" name="_token" value="{{ csrf_token('send_message_' ~ conversation.id) }}">
-        
+
         <div class="message-compose">
-            <textarea 
-                name="contenu" 
-                class="message-input" 
+            <textarea
+                name="contenu"
+                class="message-input"
                 placeholder="Écrivez votre message ici..."
                 rows="3"
                 required></textarea>
-            
+
             <button type="submit" class="btn-primary btn-send-message">
                 Envoyer 📤
             </button>
@@ -109,13 +130,14 @@
     </form>
 </div>
 
-<!-- Flash messages -->
-{% for message in app.flashes('success') %}
-    <div class="alert alert-success">{{ message }}</div>
-{% endfor %}
-
-{% for message in app.flashes('error') %}
-    <div class="alert alert-error">{{ message }}</div>
-{% endfor %}
+<script>
+// Scroll automatique vers le bas des messages
+document.addEventListener('DOMContentLoaded', function() {
+    const container = document.getElementById('messagesContainer');
+    if (container) {
+        container.scrollTop = container.scrollHeight;
+    }
+});
+</script>
 
 {% endblock %}

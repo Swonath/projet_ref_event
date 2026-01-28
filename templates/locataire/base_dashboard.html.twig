@@ -17,7 +17,11 @@
         <a href="#" class="btn-search">🔍 Rechercher un emplacement</a>
         <div class="user-menu">
             <div class="user-avatar">
-                {{ app.user.nom|slice(0, 2)|upper }}
+                {% if app.user.photoProfile %}
+                    <img src="{{ asset('uploads/profiles/' ~ app.user.photoProfile) }}" alt="Photo de profil" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover;">
+                {% else %}
+                    {{ app.user.nom|slice(0, 2)|upper }}
+                {% endif %}
             </div>
             <span style="font-size: 14px; font-weight: 500;">{{ app.user.nom }}</span>
         </div>

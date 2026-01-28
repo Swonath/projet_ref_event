@@ -93,6 +93,16 @@ body {
     justify-content: center;
     font-weight: 600;
     font-size: 14px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.user-avatar img,
+.user-avatar-img {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
 }
 
 /* ===================================
@@ -926,6 +936,15 @@ textarea.form-control {
     background: #f5f5f5;
 }
 
+/* Assurer que les boutons <a> et <button> ont le même style */
+a.btn-small,
+button.btn-small {
+    font-family: inherit;
+    line-height: 1.4;
+    vertical-align: middle;
+    box-sizing: border-box;
+}
+
 .btn-primary,
 .btn-secondary {
     padding: 12px 32px;
@@ -1279,11 +1298,45 @@ textarea.form-control {
 .message-item {
     display: flex;
     margin-bottom: 8px;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
 }
 
 /* Message envoyé par le locataire (à droite) */
 .message-item.message-locataire {
     justify-content: flex-end;
+}
+
+.message-item.message-locataire .message-avatar {
+    order: 2;
+}
+
+/* Avatar dans les messages */
+.message-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 12px;
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+.message-avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Message du centre (à gauche) */
+.message-item.message-centre .message-avatar {
+    background: linear-gradient(135deg, #6b7280, #9ca3af);
 }
 
 .message-item.message-locataire .message-bubble {
@@ -1353,10 +1406,10 @@ textarea.form-control {
 .message-compose-container {
     background: white;
     border: 1px solid #e5e7eb;
-    border-radius: 12px;
-    padding: 20px;
-    position: sticky;
-    bottom: 20px;
+    border-radius: 16px;
+    padding: 16px;
+    margin-top: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .message-compose-form {
@@ -1365,20 +1418,21 @@ textarea.form-control {
 
 .message-compose {
     display: flex;
+    flex-direction: column;
     gap: 12px;
-    align-items: flex-end;
 }
 
 .message-input {
-    flex: 1;
-    padding: 12px 16px;
+    width: 100%;
+    padding: 16px;
     border: 1px solid #e5e7eb;
     border-radius: 12px;
-    font-size: 14px;
+    font-size: 15px;
     font-family: inherit;
-    resize: vertical;
-    min-height: 80px;
+    resize: none;
+    min-height: 120px;
     transition: all 0.2s;
+    box-sizing: border-box;
 }
 
 .message-input:focus {
@@ -1388,9 +1442,12 @@ textarea.form-control {
 }
 
 .btn-send-message {
-    padding: 12px 24px;
-    min-width: 120px;
+    padding: 14px 32px;
+    min-width: 140px;
     white-space: nowrap;
+    align-self: flex-end;
+    border-radius: 10px;
+    font-size: 15px;
 }
 
 /* ---------------
