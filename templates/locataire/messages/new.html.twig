@@ -1,0 +1,94 @@
+{% extends 'locataire/base_dashboard.html.twig' %}
+
+{% block title %}Contacter {{ emplacement.centreCommercial.nomCentre }}{% endblock %}
+
+{% block dashboard_content %}
+
+<div class="page-header">
+    <h1 class="page-title">Nouveau message</h1>
+    <a href="{{ path('emplacement_detail', {id: emplacement.id}) }}" class="btn-secondary">← Retour à l'annonce</a>
+</div>
+
+<!-- Flash messages -->
+{% for message in app.flashes('success') %}
+    <div class="alert alert-success">{{ message }}</div>
+{% endfor %}
+{% for message in app.flashes('error') %}
+    <div class="alert alert-error">{{ message }}</div>
+{% endfor %}
+
+<div class="section">
+    <!-- Info sur l'emplacement -->
+    <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; margin-bottom: 30px;">
+        <div style="display: flex; gap: 20px; align-items: center;">
+            {% if emplacement.photos is not empty %}
+                <div style="width: 120px; height: 90px; flex-shrink: 0; border-radius: 8px; overflow: hidden;">
+                    <img src="{{ asset(emplacement.photos|first.cheminFichier) }}"
+                         alt="{{ emplacement.titreAnnonce }}"
+                         style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+            {% endif %}
+            <div>
+                <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">{{ emplacement.titreAnnonce }}</h3>
+                <div style="color: #666; margin-bottom: 4px;">
+                    <strong>Centre:</strong> {{ emplacement.centreCommercial.nomCentre }}
+                </div>
+                <div style="color: #666;">
+                    <strong>Localisation:</strong> {{ emplacement.localisationPrecise }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Formulaire -->
+    <div style="background: white; padding: 30px; border-radius: 12px; border: 1px solid #e5e5e5;">
+        <h2 style="font-size: 20px; font-weight: 600; margin-bottom: 20px;">Votre message</h2>
+
+        <form method="POST" action="{{ path('locataire_messages_create', {emplacementId: emplacement.id}) }}">
+            <input type="hidden" name="_token" value="{{ csrf_token('create_conversation_' ~ emplacement.id) }}">
+
+            <div class="form-group">
+                <label class="form-label">Sujet du message *</label>
+                <input type="text"
+                       name="sujet"
+                       class="form-control"
+                       placeholder="Ex: Question sur la disponibilité"
+                       required
+                       maxlength="255">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Votre message *</label>
+                <textarea name="contenu"
+                          class="form-control"
+                          rows="8"
+                          placeholder="Décrivez votre demande en détail..."
+                          required></textarea>
+                <div style="color: #666; font-size: 14px; margin-top: 8px;">
+                    💡 Astuce: Précisez vos dates souhaitées, le type d'activité, et toute question spécifique.
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 12px; margin-top: 30px;">
+                <button type="submit" class="btn-primary">
+                    📤 Envoyer le message
+                </button>
+                <a href="{{ path('emplacement_detail', {id: emplacement.id}) }}" class="btn-secondary">
+                    Annuler
+                </a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Informations -->
+    <div style="background: #e8f5e9; padding: 20px; border-radius: 12px; margin-top: 20px;">
+        <div style="font-weight: 600; margin-bottom: 10px;">📧 Après l'envoi</div>
+        <ul style="margin: 0; padding-left: 20px; color: #2e7d32;">
+            <li>Le centre commercial recevra votre message</li>
+            <li>Vous serez notifié de sa réponse par email</li>
+            <li>Vous pourrez suivre la conversation dans votre messagerie</li>
+        </ul>
+    </div>
+</div>
+
+{% endblock %}

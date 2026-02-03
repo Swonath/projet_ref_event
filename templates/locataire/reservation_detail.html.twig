@@ -248,7 +248,7 @@
         </div>
 
         <!-- Informations du centre commercial -->
-        <div class="section">
+        <div class="section sticky-centre-section">
             <h2 class="section-title">Centre commercial</h2>
             <div class="centre-info">
                 <div class="centre-avatar">
@@ -298,6 +298,11 @@
 .sticky-section {
     position: sticky;
     top: 100px;
+}
+
+.sticky-centre-section {
+    position: sticky;
+    top: calc(100px + 24px); /* Position sous le récapitulatif sticky */
 }
 
 /* Galerie */

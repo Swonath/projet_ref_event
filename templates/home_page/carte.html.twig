@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rechercher avec la carte - Références Evénements</title>
+
+    <link rel="stylesheet" href="{{ asset('css/homepage.css') }}">
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+          crossorigin=""/>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        .carte-container {
+            display: flex;
+            height: calc(100vh - 80px);
+        }
+
+        .carte-sidebar {
+            width: 400px;
+            background: white;
+            overflow-y: auto;
+            border-right: 1px solid #e5e5e5;
+            padding: 20px;
+        }
+
+        .carte-sidebar h2 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #1a1a1a;
+        }
+
+        .carte-sidebar-search {
+            margin-bottom: 20px;
+        }
+
+        .carte-sidebar-search input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e5e5e5;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .carte-sidebar-filters {
+            margin-bottom: 20px;
+            padding: 16px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .carte-sidebar-filters h3 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #333;
+        }
+
+        .filter-group {
+            margin-bottom: 12px;
+        }
+
+        .filter-group label {
+            display: block;
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 4px;
+        }
+
+        .filter-group input,
+        .filter-group select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #e5e5e5;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+
+        .carte-emplacements-liste {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .carte-emplacement-card {
+            background: white;
+            border: 1px solid #e5e5e5;
+            border-radius: 8px;
+            padding: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .carte-emplacement-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border-color: #1a1a1a;
+        }
+
+        .carte-emplacement-card.active {
+            border-color: #1a1a1a;
+            background: #f8f9fa;
+        }
+
+        .carte-emplacement-card h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #1a1a1a;
+        }
+
+        .carte-emplacement-card p {
+            font-size: 13px;
+            color: #666;
+            margin: 4px 0;
+        }
+
+        .carte-emplacement-price {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-top: 8px;
+        }
+
+        #map {
+            flex: 1;
+            height: 100%;
+        }
+
+        .leaflet-popup-content {
+            margin: 8px;
+        }
+
+        .popup-content h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1a1a1a;
+        }
+
+        .popup-content p {
+            font-size: 13px;
+            color: #666;
+            margin: 4px 0;
+        }
+
+        .popup-content .popup-price {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin: 8px 0;
+        }
+
+        .popup-content a {
+            display: inline-block;
+            background: #1a1a1a;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+
+        .popup-content a:hover {
+            background: #000;
+        }
+
+        .btn-retour {
+            display: inline-block;
+            background: white;
+            color: #1a1a1a;
+            border: 2px solid #1a1a1a;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .btn-retour:hover {
+            background: #1a1a1a;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .carte-container {
+                flex-direction: column;
+                height: auto;
+            }
+
+            .carte-sidebar {
+                width: 100%;
+                max-height: 50vh;
+            }
+
+            #map {
+                height: 50vh;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <a href="{{ path('app_home_page') }}" class="logo">Références Evénements</a>
+        <nav class="nav">
+            <a href="{{ path('app_home_page') }}#comment-ca-marche" class="nav-link">Comment ça marche</a>
+            <a href="{{ path('app_home_page') }}#emplacements" class="nav-link">Emplacements populaires</a>
+
+            {% if app.user %}
+                <a href="{{ path('app_my_account') }}" class="user-menu">
+                    <div class="user-avatar">
+                        {% if app.user.photoProfile is defined and app.user.photoProfile %}
+                            <img src="{{ asset('uploads/profiles/' ~ app.user.photoProfile) }}" alt="Photo de profil" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+                        {% else %}
+                            {% if app.user.nomCentre is defined %}
+                                {{ app.user.nomCentre|slice(0, 2)|upper }}
+                            {% else %}
+                                {{ app.user.nom|slice(0, 2)|upper }}
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                    <span class="user-name">
+                        {% if app.user.nomCentre is defined %}
+                            {{ app.user.nomCentre }}
+                        {% else %}
+                            {{ app.user.nom }}
+                        {% endif %}
+                    </span>
+                </a>
+            {% else %}
+                <a href="{{ path('app_login') }}" class="nav-link">Connexion</a>
+                <a href="{{ path('app_register') }}" class="nav-link primary">Inscription</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <div class="carte-container">
+        <!-- Sidebar avec liste d'emplacements -->
+        <div class="carte-sidebar">
+            <a href="{{ path('app_home_page') }}" class="btn-retour">← Retour à l'accueil</a>
+
+            <h2>Rechercher sur la carte</h2>
+
+            <div class="carte-sidebar-search">
+                <input type="text" id="searchInput" placeholder="Rechercher une ville, un centre...">
+            </div>
+
+            <div class="carte-sidebar-filters">
+                <h3>Filtres</h3>
+                <div class="filter-group">
+                    <label>Type d'emplacement</label>
+                    <select id="filterType">
+                        <option value="">Tous les types</option>
+                        <option value="stand">Stand</option>
+                        <option value="kiosque">Kiosque</option>
+                        <option value="boutique">Boutique</option>
+                        <option value="corner">Corner</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Prix max (€/jour)</label>
+                    <input type="number" id="filterPrix" placeholder="Ex: 500">
+                </div>
+                <div class="filter-group">
+                    <label>Surface min (m²)</label>
+                    <input type="number" id="filterSurface" placeholder="Ex: 10">
+                </div>
+            </div>
+
+            <div class="carte-emplacements-liste" id="emplacementsListe">
+                {% for emplacement in emplacements %}
+                    <div class="carte-emplacement-card"
+                         data-id="{{ emplacement.id }}"
+                         data-ville="{{ emplacement.centreCommercial.ville|lower }}"
+                         data-centre="{{ emplacement.centreCommercial.nomCentre|lower }}"
+                         data-type="{{ emplacement.typeEmplacement|lower }}"
+                         data-prix="{{ emplacement.tarifJour }}"
+                         data-surface="{{ emplacement.surface }}">
+                        <h4>{{ emplacement.centreCommercial.nomCentre }}</h4>
+                        <p>📍 {{ emplacement.centreCommercial.ville }} ({{ emplacement.centreCommercial.codePostal }})</p>
+                        <p>{{ emplacement.typeEmplacement|capitalize }} • {{ emplacement.surface }} m²</p>
+                        <div class="carte-emplacement-price">{{ emplacement.tarifJour }}€/jour</div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Carte Leaflet -->
+        <div id="map"></div>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+            crossorigin=""></script>
+
+    <script>
+        // Données des emplacements
+        const emplacements = [
+            {% for emplacement in emplacements %}
+            {
+                id: {{ emplacement.id }},
+                nom: "{{ emplacement.centreCommercial.nomCentre|e('js') }}",
+                ville: "{{ emplacement.centreCommercial.ville|e('js') }}",
+                codePostal: "{{ emplacement.centreCommercial.codePostal|e('js') }}",
+                type: "{{ emplacement.typeEmplacement|e('js') }}",
+                surface: {{ emplacement.surface }},
+                prix: {{ emplacement.tarifJour }},
+                // Coordonnées approximatives basées sur le code postal (à améliorer)
+                lat: {% if emplacement.centreCommercial.latitude is defined and emplacement.centreCommercial.latitude %}{{ emplacement.centreCommercial.latitude }}{% else %}46.603354 + (Math.random() * 5 - 2.5){% endif %},
+                lng: {% if emplacement.centreCommercial.longitude is defined and emplacement.centreCommercial.longitude %}{{ emplacement.centreCommercial.longitude }}{% else %}1.888334 + (Math.random() * 5 - 2.5){% endif %},
+                url: "{{ path('emplacement_detail', {id: emplacement.id}) }}"
+            }{% if not loop.last %},{% endif %}
+            {% endfor %}
+        ];
+
+        // Initialiser la carte centrée sur la France
+        const map = L.map('map').setView([46.603354, 1.888334], 6);
+
+        // Ajouter la couche de tuiles OpenStreetMap
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+            maxZoom: 19
+        }).addTo(map);
+
+        // Icône personnalisée pour les marqueurs
+        const customIcon = L.icon({
+            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        });
+
+        // Stocker les marqueurs
+        const markers = {};
+
+        // Ajouter les marqueurs sur la carte
+        emplacements.forEach(emplacement => {
+            const marker = L.marker([emplacement.lat, emplacement.lng], {icon: customIcon})
+                .addTo(map)
+                .bindPopup(`
+                    <div class="popup-content">
+                        <h3>${emplacement.nom}</h3>
+                        <p>📍 ${emplacement.ville} (${emplacement.codePostal})</p>
+                        <p>${emplacement.type} • ${emplacement.surface} m²</p>
+                        <div class="popup-price">${emplacement.prix}€/jour</div>
+                        <a href="${emplacement.url}">Voir les détails</a>
+                    </div>
+                `);
+
+            markers[emplacement.id] = marker;
+
+            // Événement au clic sur le marqueur
+            marker.on('click', () => {
+                highlightCard(emplacement.id);
+            });
+        });
+
+        // Fonction pour mettre en surbrillance une carte dans la sidebar
+        function highlightCard(id) {
+            document.querySelectorAll('.carte-emplacement-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            const card = document.querySelector(`.carte-emplacement-card[data-id="${id}"]`);
+            if (card) {
+                card.classList.add('active');
+                card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        }
+
+        // Événement au clic sur une carte dans la sidebar
+        document.querySelectorAll('.carte-emplacement-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const id = parseInt(card.dataset.id);
+                const emplacement = emplacements.find(e => e.id === id);
+                if (emplacement && markers[id]) {
+                    map.setView([emplacement.lat, emplacement.lng], 13);
+                    markers[id].openPopup();
+                    highlightCard(id);
+                }
+            });
+        });
+
+        // Recherche
+        const searchInput = document.getElementById('searchInput');
+        const filterType = document.getElementById('filterType');
+        const filterPrix = document.getElementById('filterPrix');
+        const filterSurface = document.getElementById('filterSurface');
+
+        function filterEmplacements() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const typeFilter = filterType.value.toLowerCase();
+            const prixMax = parseFloat(filterPrix.value) || Infinity;
+            const surfaceMin = parseFloat(filterSurface.value) || 0;
+
+            document.querySelectorAll('.carte-emplacement-card').forEach(card => {
+                const ville = card.dataset.ville;
+                const centre = card.dataset.centre;
+                const type = card.dataset.type;
+                const prix = parseFloat(card.dataset.prix);
+                const surface = parseFloat(card.dataset.surface);
+
+                const matchSearch = !searchTerm || ville.includes(searchTerm) || centre.includes(searchTerm);
+                const matchType = !typeFilter || type === typeFilter;
+                const matchPrix = prix <= prixMax;
+                const matchSurface = surface >= surfaceMin;
+
+                if (matchSearch && matchType && matchPrix && matchSurface) {
+                    card.style.display = 'block';
+                    const id = parseInt(card.dataset.id);
+                    if (markers[id]) {
+                        markers[id].addTo(map);
+                    }
+                } else {
+                    card.style.display = 'none';
+                    const id = parseInt(card.dataset.id);
+                    if (markers[id]) {
+                        map.removeLayer(markers[id]);
+                    }
+                }
+            });
+        }
+
+        searchInput.addEventListener('input', filterEmplacements);
+        filterType.addEventListener('change', filterEmplacements);
+        filterPrix.addEventListener('input', filterEmplacements);
+        filterSurface.addEventListener('input', filterEmplacements);
+    </script>
+</body>
+</html>

@@ -31,23 +31,32 @@ class DashboardController extends AbstractController
     #[Route('', name: 'dashboard')]
     public function index(
         ReservationRepository $reservationRepo,
-        FavoriRepository $favoriRepo
+        FavoriRepository $favoriRepo,
+        ConversationRepository $conversationRepo
     ): Response {
         /** @var Locataire $locataire */
         $locataire = $this->getUser();
-        
+
         // Afficher TOUTES les réservations (maximum 10)
         $reservations = $reservationRepo->findBy(
             ['locataire' => $locataire],
             ['dateDebut' => 'DESC'],
             10
         );
-        
+
         // Calculer tous les compteurs (avec favoris)
         $stats = $this->calculateStats($reservationRepo, $favoriRepo, $locataire);
-        
-        $messages = [];
-        
+
+        // Récupérer les 5 dernières conversations avec messages
+        $messages = $conversationRepo->createQueryBuilder('c')
+            ->where('c.locataire = :locataire')
+            ->andWhere('c.estArchivee = false')
+            ->setParameter('locataire', $locataire)
+            ->orderBy('c.dernierMessageDate', 'DESC')
+            ->setMaxResults(5)
+            ->getQuery()
+            ->getResult();
+
         return $this->render('locataire/dashboard.html.twig', [
             'locataire' => $locataire,
             'stats' => $stats,

@@ -1,0 +1,146 @@
+{% extends 'centre_commercial/base_dashboard.html.twig' %}
+
+{% block title %}Créer un emplacement - Centre Commercial{% endblock %}
+
+{% block dashboard_content %}
+
+<div class="page-header">
+    <h1 class="page-title">Créer un nouvel emplacement</h1>
+    <a href="{{ path('centre_emplacements_index') }}" class="btn-secondary">← Retour à la liste</a>
+</div>
+
+<!-- Flash messages -->
+{% for message in app.flashes('success') %}
+    <div class="alert alert-success">{{ message }}</div>
+{% endfor %}
+{% for message in app.flashes('error') %}
+    <div class="alert alert-error">{{ message }}</div>
+{% endfor %}
+
+{{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
+
+    <div class="section">
+        <h2 class="section-title">Informations générales</h2>
+
+        <div class="form-group">
+            {{ form_label(form.titreAnnonce) }}
+            {{ form_widget(form.titreAnnonce, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.titreAnnonce) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.description) }}
+            {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.description) }}
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                {{ form_label(form.surface) }}
+                {{ form_widget(form.surface, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.surface) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.typeEmplacement) }}
+                {{ form_widget(form.typeEmplacement, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.typeEmplacement) }}
+            </div>
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.localisationPrecise) }}
+            {{ form_widget(form.localisationPrecise, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.localisationPrecise) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.equipements) }}
+            {{ form_widget(form.equipements, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.equipements) }}
+            <small class="form-text">Listez les équipements disponibles (climatisation, Wi-Fi, vitrine, etc.)</small>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">Tarification</h2>
+
+        <div class="form-row">
+            <div class="form-group">
+                {{ form_label(form.tarifJour) }}
+                {{ form_widget(form.tarifJour, {'attr': {'class': 'form-control', 'step': '0.01'}}) }}
+                {{ form_errors(form.tarifJour) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.tarifSemaine) }}
+                {{ form_widget(form.tarifSemaine, {'attr': {'class': 'form-control', 'step': '0.01'}}) }}
+                {{ form_errors(form.tarifSemaine) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.tarifMois) }}
+                {{ form_widget(form.tarifMois, {'attr': {'class': 'form-control', 'step': '0.01'}}) }}
+                {{ form_errors(form.tarifMois) }}
+            </div>
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.caution) }}
+            {{ form_widget(form.caution, {'attr': {'class': 'form-control', 'step': '0.01'}}) }}
+            {{ form_errors(form.caution) }}
+        </div>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">Durée de location</h2>
+
+        <div class="form-row">
+            <div class="form-group">
+                {{ form_label(form.dureeMinLocation) }}
+                {{ form_widget(form.dureeMinLocation, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.dureeMinLocation) }}
+                <small class="form-text">Nombre minimum de jours</small>
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.dureeMaxLocation) }}
+                {{ form_widget(form.dureeMaxLocation, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.dureeMaxLocation) }}
+                <small class="form-text">Nombre maximum de jours (laisser vide si pas de limite)</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">Photos</h2>
+
+        <div class="form-group">
+            <label class="form-label">Ajouter des photos (max 10)</label>
+            <input type="file" name="photos[]" multiple accept="image/jpeg,image/png,image/webp" class="form-control">
+            <small class="form-text">JPG, PNG ou WebP. Max 5 Mo par photo.</small>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">Statut</h2>
+
+        <div class="form-group">
+            {{ form_label(form.statutAnnonce) }}
+            {{ form_widget(form.statutAnnonce, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.statutAnnonce) }}
+        </div>
+    </div>
+
+    <div class="form-actions">
+        <button type="submit" class="btn-primary">
+            Créer l'emplacement
+        </button>
+        <a href="{{ path('centre_emplacements_index') }}" class="btn-secondary">
+            Annuler
+        </a>
+    </div>
+
+{{ form_end(form) }}
+
+{% endblock %}

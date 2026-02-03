@@ -1,0 +1,24 @@
+{% for emplacement in emplacements %}
+    <a href="{{ path('emplacement_detail', {id: emplacement.id}) }}" class="emplacement-card">
+        <div class="emplacement-card-image">
+            {% if emplacement.photos is not empty %}
+                <img src="{{ asset(emplacement.photos|first.cheminFichier) }}" alt="{{ emplacement.titreAnnonce }}">
+            {% else %}
+                <div style="display: flex; align-items: center; justify-content: center; height: 100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; font-size: 48px;">
+                    📍
+                </div>
+            {% endif %}
+        </div>
+        <div class="emplacement-card-content">
+            <div class="emplacement-card-title">{{ emplacement.centreCommercial.nomCentre }}</div>
+            <div class="emplacement-card-location">
+                📍 {{ emplacement.centreCommercial.ville }} • {{ emplacement.surface }} m²
+            </div>
+            <div class="emplacement-card-info">{{ emplacement.typeEmplacement|capitalize }}</div>
+            <div class="emplacement-card-price">
+                {{ emplacement.tarifJour }}€
+                <span class="emplacement-card-price-label">/ jour</span>
+            </div>
+        </div>
+    </a>
+{% endfor %}

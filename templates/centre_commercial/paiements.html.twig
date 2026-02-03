@@ -1,0 +1,103 @@
+{% extends 'centre_commercial/base_dashboard.html.twig' %}
+
+{% block title %}Paiements - Centre Commercial{% endblock %}
+
+{% block dashboard_content %}
+
+<div class="page-header">
+    <h1 class="page-title">Paiements reçus</h1>
+</div>
+
+<!-- Stats -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon">💰</div>
+        <div class="stat-value">{{ stats.ca_total|number_format(0, ',', ' ') }}€</div>
+        <div class="stat-label">CA Total</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon">📊</div>
+        <div class="stat-value">{{ stats.commission_totale|number_format(0, ',', ' ') }}€</div>
+        <div class="stat-label">Commission</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon">✅</div>
+        <div class="stat-value">{{ stats.net_a_recevoir|number_format(0, ',', ' ') }}€</div>
+        <div class="stat-label">Net à recevoir</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon">⏳</div>
+        <div class="stat-value">{{ stats.en_attente|number_format(0, ',', ' ') }}€</div>
+        <div class="stat-label">En attente</div>
+    </div>
+</div>
+
+<!-- Filtres -->
+<div class="filters-group">
+    <div class="filters">
+        <a href="{{ path('centre_paiements_index', {filtre: 'tous'}) }}"
+           class="filter-btn {{ filtre == 'tous' ? 'active' : '' }}">
+            Tous
+        </a>
+        <a href="{{ path('centre_paiements_index', {filtre: 'complete'}) }}"
+           class="filter-btn {{ filtre == 'complete' ? 'active' : '' }}">
+            Acceptés
+        </a>
+        <a href="{{ path('centre_paiements_index', {filtre: 'en_attente'}) }}"
+           class="filter-btn {{ filtre == 'en_attente' ? 'active' : '' }}">
+            En attente
+        </a>
+    </div>
+</div>
+
+<!-- Liste -->
+{% if paiements is empty %}
+    <div class="empty-state">
+        <div class="empty-icon">💳</div>
+        <div class="empty-title">Aucun paiement</div>
+        <div class="empty-text">Aucun paiement enregistré pour le moment</div>
+    </div>
+{% else %}
+    <table style="width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden;">
+        <thead>
+            <tr style="background: #f8f9fa; border-bottom: 2px solid #e5e5e5;">
+                <th style="padding: 16px; text-align: left;">Date</th>
+                <th style="padding: 16px; text-align: left;">Réservation</th>
+                <th style="padding: 16px; text-align: left;">Locataire</th>
+                <th style="padding: 16px; text-align: right;">Montant</th>
+                <th style="padding: 16px; text-align: center;">Statut</th>
+                <th style="padding: 16px; text-align: center;">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for paiement in paiements %}
+                <tr style="border-bottom: 1px solid #e5e5e5;">
+                    <td style="padding: 16px;">
+                        {{ paiement.datePaiement ? paiement.datePaiement|date('d/m/Y') : '-' }}
+                    </td>
+                    <td style="padding: 16px;">
+                        {{ paiement.reservation.emplacement.titreAnnonce }}
+                    </td>
+                    <td style="padding: 16px;">
+                        {{ paiement.reservation.locataire.nom }}
+                    </td>
+                    <td style="padding: 16px; text-align: right; font-weight: 600;">
+                        {{ paiement.montant }}€
+                    </td>
+                    <td style="padding: 16px; text-align: center;">
+                        <span class="reservation-status status-{{ paiement.statut == 'complete' ? 'validee' : 'en_attente' }}">
+                            {{ paiement.statut }}
+                        </span>
+                    </td>
+                    <td style="padding: 16px; text-align: center;">
+                        <a href="{{ path('centre_reservations_detail', {id: paiement.reservation.id}) }}" class="btn-small btn-secondary-small">
+                            Voir
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+
+{% endblock %}

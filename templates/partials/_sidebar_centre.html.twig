@@ -1,0 +1,75 @@
+{# templates/partials/_sidebar_centre.html.twig #}
+
+<aside class="sidebar">
+    <div class="sidebar-section">
+        <div class="sidebar-title">Mon centre</div>
+        <ul class="sidebar-menu">
+            <li>
+                <a href="{{ path('centre_dashboard') }}" class="sidebar-item {{ app.request.attributes.get('_route') == 'centre_dashboard' ? 'active' : '' }}">
+                    <span class="sidebar-icon">📊</span>
+                    <span>Vue d'ensemble</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('centre_emplacements_index') }}" class="sidebar-item {{ app.request.attributes.get('_route') starts with 'centre_emplacements' ? 'active' : '' }}">
+                    <span class="sidebar-icon">🏪</span>
+                    <span>Mes emplacements</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('centre_reservations_index') }}" class="sidebar-item {{ app.request.attributes.get('_route') starts with 'centre_reservations' ? 'active' : '' }}">
+                    <span class="sidebar-icon">📅</span>
+                    <span>Réservations</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('centre_messages_index') }}" class="sidebar-item {{ app.request.attributes.get('_route') starts with 'centre_messages' ? 'active' : '' }}">
+                    <span class="sidebar-icon">💬</span>
+                    <span>Messages</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="sidebar-section">
+        <div class="sidebar-title">Finances</div>
+        <ul class="sidebar-menu">
+            <li>
+                <a href="{{ path('centre_paiements_index') }}" class="sidebar-item {{ app.request.attributes.get('_route') starts with 'centre_paiements' ? 'active' : '' }}">
+                    <span class="sidebar-icon">💰</span>
+                    <span>Paiements</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="sidebar-section">
+        <div class="sidebar-title">Évaluations</div>
+        <ul class="sidebar-menu">
+            <li>
+                <a href="{{ path('centre_avis_index') }}" class="sidebar-item {{ app.request.attributes.get('_route') starts with 'centre_avis' ? 'active' : '' }}">
+                    <span class="sidebar-icon">⭐</span>
+                    <span>Avis reçus</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="sidebar-section">
+        <div class="sidebar-title">Compte</div>
+        <ul class="sidebar-menu">
+            <li>
+                <a href="{{ path('centre_profil') }}" class="sidebar-item {{ app.request.attributes.get('_route') starts with 'centre_profil' ? 'active' : '' }}">
+                    <span class="sidebar-icon">👤</span>
+                    <span>Mon profil</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('app_logout') }}" class="sidebar-item">
+                    <span class="sidebar-icon">🚪</span>
+                    <span>Déconnexion</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</aside>

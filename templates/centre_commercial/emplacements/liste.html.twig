@@ -1,0 +1,112 @@
+{% extends 'centre_commercial/base_dashboard.html.twig' %}
+
+{% block title %}Mes emplacements - Centre Commercial{% endblock %}
+
+{% block dashboard_content %}
+
+<div class="page-header">
+    <h1 class="page-title">Mes emplacements</h1>
+    <a href="{{ path('centre_emplacements_creer') }}" class="btn-primary">+ Créer un emplacement</a>
+</div>
+
+<!-- Stats -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-value">{{ stats.total }}</div>
+        <div class="stat-label">Total</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ stats.actifs }}</div>
+        <div class="stat-label">Actifs</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ stats.inactifs }}</div>
+        <div class="stat-label">Inactifs</div>
+    </div>
+</div>
+
+<!-- Filtres -->
+<div class="filters-group">
+    <div class="filters">
+        <a href="{{ path('centre_emplacements_index', {filtre: 'tous'}) }}"
+           class="filter-btn {{ filtre_actif == 'tous' ? 'active' : '' }}">
+            Tous ({{ stats.total }})
+        </a>
+        <a href="{{ path('centre_emplacements_index', {filtre: 'actifs'}) }}"
+           class="filter-btn {{ filtre_actif == 'actifs' ? 'active' : '' }}">
+            Actifs ({{ stats.actifs }})
+        </a>
+        <a href="{{ path('centre_emplacements_index', {filtre: 'inactifs'}) }}"
+           class="filter-btn {{ filtre_actif == 'inactifs' ? 'active' : '' }}">
+            Inactifs ({{ stats.inactifs }})
+        </a>
+    </div>
+</div>
+
+<!-- Liste -->
+<div id="emplacements-container">
+    {% if emplacements is empty %}
+        <div class="empty-state">
+            <div class="empty-icon">🏪</div>
+            <div class="empty-title">Aucun emplacement</div>
+            <div class="empty-text">Créez votre premier emplacement pour commencer</div>
+            <a href="{{ path('centre_emplacements_creer') }}" class="btn-primary">Créer un emplacement</a>
+        </div>
+    {% else %}
+        {% for emplacement in emplacements %}
+            {% include 'centre_commercial/emplacements/_card.html.twig' with {'emplacement': emplacement} %}
+        {% endfor %}
+    {% endif %}
+</div>
+
+{% if totalEmplacements > 12 %}
+    <button id="btn-afficher-plus-emplacements" class="btn-secondary" onclick="chargerPlusEmplacements()">
+        Afficher plus
+    </button>
+{% endif %}
+
+<script>
+let offsetEmplacements = 12;
+const totalEmplacements = {{ totalEmplacements }};
+const filtreActif = '{{ filtre_actif }}';
+
+function chargerPlusEmplacements() {
+    const btn = document.getElementById('btn-afficher-plus-emplacements');
+    btn.disabled = true;
+    btn.textContent = 'Chargement...';
+
+    const url = `{{ path('centre_emplacements_charger_plus') }}?offset=${offsetEmplacements}&filtre=${filtreActif}`;
+
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const container = document.getElementById('emplacements-container');
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = data.html;
+
+                // Ajouter chaque carte au container
+                while (tempDiv.firstChild) {
+                    container.appendChild(tempDiv.firstChild);
+                }
+
+                offsetEmplacements += data.count;
+
+                if (offsetEmplacements >= totalEmplacements) {
+                    btn.style.display = 'none';
+                } else {
+                    btn.disabled = false;
+                    btn.textContent = 'Afficher plus';
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Erreur:', error);
+            btn.disabled = false;
+            btn.textContent = 'Afficher plus';
+            alert('Erreur lors du chargement des emplacements');
+        });
+}
+</script>
+
+{% endblock %}

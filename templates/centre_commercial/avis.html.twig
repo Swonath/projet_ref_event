@@ -1,0 +1,167 @@
+{% extends 'centre_commercial/base_dashboard.html.twig' %}
+
+{% block title %}Avis reçus - Centre Commercial{% endblock %}
+
+{% block dashboard_content %}
+
+<div class="page-header">
+    <h1 class="page-title">Avis reçus</h1>
+</div>
+
+<!-- Flash messages -->
+{% for message in app.flashes('success') %}
+    <div class="alert alert-success">{{ message }}</div>
+{% endfor %}
+{% for message in app.flashes('error') %}
+    <div class="alert alert-error">{{ message }}</div>
+{% endfor %}
+
+<!-- Stats -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon">📊</div>
+        <div class="stat-value">{{ stats.total }}</div>
+        <div class="stat-label">Total avis</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon">⭐</div>
+        <div class="stat-value">{{ stats.moyenne }}/5</div>
+        <div class="stat-label">Note moyenne</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon">✅</div>
+        <div class="stat-value">{{ stats.publies }}</div>
+        <div class="stat-label">Publiés</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon">💬</div>
+        <div class="stat-value">{{ stats.taux_reponse }}%</div>
+        <div class="stat-label">Taux de réponse</div>
+    </div>
+</div>
+
+<!-- Filtres -->
+<div class="filters-group">
+    <div class="filters">
+        <a href="{{ path('centre_avis_index', {filtre: 'tous'}) }}"
+           class="filter-btn {{ filtre == 'tous' ? 'active' : '' }}">
+            Tous
+        </a>
+        <a href="{{ path('centre_avis_index', {filtre: 'publies'}) }}"
+           class="filter-btn {{ filtre == 'publies' ? 'active' : '' }}">
+            Publiés
+        </a>
+        <a href="{{ path('centre_avis_index', {filtre: 'non_publies'}) }}"
+           class="filter-btn {{ filtre == 'non_publies' ? 'active' : '' }}">
+            Non publiés
+        </a>
+        <a href="{{ path('centre_avis_index', {filtre: 'sans_reponse'}) }}"
+           class="filter-btn {{ filtre == 'sans_reponse' ? 'active' : '' }}">
+            Sans réponse
+        </a>
+    </div>
+</div>
+
+<!-- Liste -->
+{% if avis is empty %}
+    <div class="empty-state">
+        <div class="empty-icon">⭐</div>
+        <div class="empty-title">Aucun avis</div>
+        <div class="empty-text">Vous n'avez pas encore reçu d'avis</div>
+    </div>
+{% else %}
+    <div class="section">
+        {% for avisItem in avis %}
+            <div style="background: white; border-radius: 12px; padding: 24px; margin-bottom: 20px; border: 1px solid #e5e5e5;">
+                <!-- En-tête -->
+                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 16px;">
+                    <div>
+                        <div style="font-weight: 600; font-size: 16px; margin-bottom: 8px;">
+                            {{ avisItem.reservation.locataire.nom }}
+                        </div>
+                        <div style="color: #6b6b6b; font-size: 14px; margin-bottom: 8px;">
+                            {{ avisItem.reservation.emplacement.titreAnnonce }}
+                        </div>
+                        <div style="color: #6b6b6b; font-size: 14px;">
+                            {{ avisItem.dateCreation|date('d/m/Y') }}
+                        </div>
+                    </div>
+                    <div>
+                        <span class="reservation-status status-{{ avisItem.estPublie ? 'validee' : 'en_attente' }}">
+                            {{ avisItem.estPublie ? '✅ Publié' : '⏳ Non publié' }}
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Notes -->
+                <div style="display: flex; gap: 20px; margin-bottom: 16px; flex-wrap: wrap;">
+                    <div>
+                        <strong>Note globale:</strong>
+                        <span style="color: #f59e0b; font-size: 18px; margin-left: 8px;">
+                            {% for i in 1..5 %}
+                                {{ i <= avisItem.noteGlobale ? '⭐' : '☆' }}
+                            {% endfor %}
+                            ({{ avisItem.noteGlobale }}/5)
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Commentaire -->
+                {% if avisItem.commentaire %}
+                    <div style="background: #f8f9fa; padding: 16px; border-radius: 8px; margin-bottom: 16px;">
+                        <div style="font-weight: 600; margin-bottom: 8px;">Commentaire:</div>
+                        <div>{{ avisItem.commentaire|nl2br }}</div>
+                    </div>
+                {% endif %}
+
+                <!-- Réponse -->
+                {% if avisItem.reponse %}
+                    <div style="background: #e8f5e9; padding: 16px; border-radius: 8px; margin-bottom: 16px;">
+                        <div style="font-weight: 600; margin-bottom: 8px; color: #2e7d32;">Votre réponse:</div>
+                        <div>{{ avisItem.reponse|nl2br }}</div>
+                        <div style="font-size: 12px; color: #6b6b6b; margin-top: 8px;">
+                            Répondu le {{ avisItem.dateReponse|date('d/m/Y H:i') }}
+                        </div>
+                    </div>
+                {% else %}
+                    <!-- Formulaire de réponse -->
+                    <div id="form-reponse-{{ avisItem.id }}" style="display: none; margin-top: 16px;">
+                        <form method="POST" action="{{ path('centre_avis_repondre', {id: avisItem.id}) }}">
+                            <input type="hidden" name="_token" value="{{ csrf_token('repondre_avis_' ~ avisItem.id) }}">
+                            <div class="form-group">
+                                <label class="form-label">Votre réponse</label>
+                                <textarea name="reponse" class="form-control" rows="4" required placeholder="Répondez à cet avis..."></textarea>
+                            </div>
+                            <div style="display: flex; gap: 12px; margin-top: 12px;">
+                                <button type="submit" class="btn-primary" style="flex: 1;">Publier la réponse</button>
+                                <button type="button" class="btn-secondary" onclick="document.getElementById('form-reponse-{{ avisItem.id }}').style.display='none'" style="flex: 1;">Annuler</button>
+                            </div>
+                        </form>
+                    </div>
+                {% endif %}
+
+                <!-- Actions -->
+                <div style="display: flex; gap: 12px; margin-top: 16px; flex-wrap: wrap;">
+                    {% if not avisItem.reponse %}
+                        <button class="btn-primary" onclick="document.getElementById('form-reponse-{{ avisItem.id }}').style.display='block'" style="min-width: 140px;">
+                            💬 Répondre
+                        </button>
+                    {% endif %}
+
+                    <form method="POST" action="{{ path('centre_avis_moderer', {id: avisItem.id}) }}" style="display: inline;">
+                        <input type="hidden" name="_token" value="{{ csrf_token('moderer_avis_' ~ avisItem.id) }}">
+                        <button type="submit" class="btn-secondary" style="min-width: 140px;">
+                            {{ avisItem.estPublie ? '👁️ Masquer' : '✅ Publier' }}
+                        </button>
+                    </form>
+
+                    <a href="{{ path('centre_reservations_detail', {id: avisItem.reservation.id}) }}" class="btn-secondary" style="min-width: 180px; display: inline-flex; align-items: center; justify-content: center; text-decoration: none;">
+                        📄 Voir la réservation
+                    </a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+{% endblock %}

@@ -4,22 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Références Evénements{% endblock %}</title>
-    
+
     {# Fichiers CSS externes #}
     <link rel="stylesheet" href="{{ asset('css/auth.css') }}">
     <link rel="stylesheet" href="{{ asset('css/forms.css') }}">
     <link rel="stylesheet" href="{{ asset('css/responsive.css') }}">
-    
+    <link rel="stylesheet" href="{{ asset('css/homepage.css') }}">
+
     {% block stylesheets %}{% endblock %}
 </head>
 <body>
     <!-- Header -->
     <div class="header">
-        <a href="{{ path('app_register') }}" class="logo">Références Evénements</a>
+        <a href="{{ path('app_home_page') }}" class="logo">Références Evénements</a>
     </div>
 
     {% block body %}{% endblock %}
-    
+
+    <!-- Footer -->
+    {% include 'partials/_footer.html.twig' %}
+
     {% block javascripts %}{% endblock %}
 </body>
 </html>

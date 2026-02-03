@@ -1,0 +1,47 @@
+<footer class="footer">
+    <div class="footer-content">
+        <div class="footer-column">
+            <h4>Références Evénements</h4>
+            <p style="color: #b0b0b0; font-size: 14px; line-height: 1.6; margin-top: 10px;">
+                La plateforme qui connecte centres commerciaux et entrepreneurs pour des locations d'emplacements éphémères.
+            </p>
+        </div>
+
+        <div class="footer-column">
+            <h4>Pour les locataires</h4>
+            <ul>
+                <li><a href="{{ path('app_home_page') }}">Rechercher un emplacement</a></li>
+                <li><a href="{{ path('app_home_page') }}#comment-ca-marche">Comment ça marche</a></li>
+                <li><a href="{{ path('app_register') }}">Créer un compte</a></li>
+                {% if app.user and app.user.nom is defined %}
+                    <li><a href="{{ path('locataire_dashboard') }}">Mon dashboard</a></li>
+                {% endif %}
+            </ul>
+        </div>
+
+        <div class="footer-column">
+            <h4>Pour les centres</h4>
+            <ul>
+                <li><a href="{{ path('app_register') }}">Proposer un emplacement</a></li>
+                {% if app.user and app.user.nomCentre is defined %}
+                    <li><a href="{{ path('centre_dashboard') }}">Mon dashboard</a></li>
+                {% endif %}
+            </ul>
+        </div>
+
+        <div class="footer-column">
+            <h4>Informations</h4>
+            <ul>
+                <li><a href="{{ path('page_about') }}">À propos</a></li>
+                <li><a href="{{ path('page_legal') }}">Mentions légales</a></li>
+                <li><a href="{{ path('page_terms') }}">Conditions générales</a></li>
+                <li><a href="{{ path('page_privacy') }}">Politique de confidentialité</a></li>
+                <li><a href="{{ path('page_contact') }}">Contact</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        © {{ 'now'|date('Y') }} Références Evénements. Tous droits réservés.
+    </div>
+</footer>

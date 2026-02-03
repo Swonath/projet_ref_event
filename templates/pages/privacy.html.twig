@@ -1,0 +1,406 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Politique de confidentialité - Références Événements{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/pages.css') }}">
+    <style>
+        .legal-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .legal-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .legal-header h1 {
+            font-size: 36px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 12px;
+        }
+
+        .legal-header p {
+            font-size: 16px;
+            color: #666;
+        }
+
+        .legal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .legal-section {
+            margin-bottom: 40px;
+        }
+
+        .legal-section h2 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #6366f1;
+        }
+
+        .legal-section h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin: 20px 0 12px 0;
+        }
+
+        .legal-section p {
+            font-size: 15px;
+            line-height: 1.7;
+            color: #444;
+            margin-bottom: 12px;
+        }
+
+        .legal-section ul {
+            margin-left: 20px;
+            margin-bottom: 12px;
+        }
+
+        .legal-section li {
+            font-size: 15px;
+            line-height: 1.7;
+            color: #444;
+            margin-bottom: 8px;
+        }
+
+        .legal-section table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .legal-section table th,
+        .legal-section table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        .legal-section table th {
+            background: #f8f9fa;
+            font-weight: 600;
+        }
+
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        @media (max-width: 768px) {
+            .legal-content {
+                padding: 24px;
+            }
+
+            .legal-header h1 {
+                font-size: 28px;
+            }
+
+            .legal-section table {
+                font-size: 13px;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    {% include 'partials/_navbar.html.twig' %}
+
+    <div class="legal-container">
+        <div class="legal-header">
+            <h1>Politique de confidentialité</h1>
+            <p>Dernière mise à jour : {{ "now"|date("d/m/Y") }}</p>
+        </div>
+
+        <div class="legal-content">
+            <div class="info-box">
+                <p><strong>Votre vie privée est importante pour nous.</strong> Cette politique de confidentialité explique comment Références Événements collecte, utilise, partage et protège vos données personnelles.</p>
+            </div>
+
+            <div class="legal-section">
+                <h2>1. Responsable du traitement</h2>
+                <p>
+                    Le responsable du traitement de vos données personnelles est :
+                </p>
+                <p>
+                    <strong>Références Événements SAS</strong><br>
+                    123 Avenue des Champs-Élysées<br>
+                    75008 Paris, France<br>
+                    Email : privacy@references-evenements.fr
+                </p>
+            </div>
+
+            <div class="legal-section">
+                <h2>2. Données collectées</h2>
+
+                <h3>2.1 Données fournies par vous</h3>
+                <p>Nous collectons les données que vous nous fournissez directement :</p>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Type d'utilisateur</th>
+                            <th>Données collectées</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Locataires</td>
+                            <td>Nom, prénom, email, téléphone, adresse, SIRET, IBAN (optionnel), photo de profil</td>
+                        </tr>
+                        <tr>
+                            <td>Centres commerciaux</td>
+                            <td>Nom du centre, SIRET, numéro TVA, adresse, ville, téléphone, IBAN, email, description, photo de profil</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>2.2 Données collectées automatiquement</h3>
+                <ul>
+                    <li>Adresse IP</li>
+                    <li>Type de navigateur et version</li>
+                    <li>Pages visitées sur notre site</li>
+                    <li>Date et heure de visite</li>
+                    <li>Temps passé sur chaque page</li>
+                    <li>Source de référence (comment vous êtes arrivé sur notre site)</li>
+                </ul>
+
+                <h3>2.3 Cookies</h3>
+                <p>
+                    Nous utilisons des cookies et technologies similaires pour améliorer votre expérience. Vous pouvez contrôler
+                    l'utilisation des cookies via les paramètres de votre navigateur.
+                </p>
+            </div>
+
+            <div class="legal-section">
+                <h2>3. Finalités du traitement</h2>
+                <p>Nous utilisons vos données personnelles pour les finalités suivantes :</p>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Finalité</th>
+                            <th>Base légale</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Création et gestion de votre compte</td>
+                            <td>Exécution du contrat</td>
+                        </tr>
+                        <tr>
+                            <td>Traitement des réservations</td>
+                            <td>Exécution du contrat</td>
+                        </tr>
+                        <tr>
+                            <td>Traitement des paiements</td>
+                            <td>Exécution du contrat / Obligation légale</td>
+                        </tr>
+                        <tr>
+                            <td>Communication sur les réservations</td>
+                            <td>Exécution du contrat</td>
+                        </tr>
+                        <tr>
+                            <td>Service client et support</td>
+                            <td>Intérêt légitime</td>
+                        </tr>
+                        <tr>
+                            <td>Amélioration de nos services</td>
+                            <td>Intérêt légitime</td>
+                        </tr>
+                        <tr>
+                            <td>Envoi d'emails marketing (avec consentement)</td>
+                            <td>Consentement</td>
+                        </tr>
+                        <tr>
+                            <td>Prévention de la fraude</td>
+                            <td>Intérêt légitime / Obligation légale</td>
+                        </tr>
+                        <tr>
+                            <td>Respect des obligations légales</td>
+                            <td>Obligation légale</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="legal-section">
+                <h2>4. Partage des données</h2>
+
+                <h3>4.1 Avec d'autres utilisateurs</h3>
+                <p>
+                    Certaines données sont partagées entre utilisateurs dans le cadre du service :
+                </p>
+                <ul>
+                    <li>Les Centres voient les coordonnées des Locataires ayant effectué une réservation</li>
+                    <li>Les Locataires voient les coordonnées des Centres pour les emplacements réservés</li>
+                    <li>Les avis publiés sont visibles publiquement (sans données sensibles)</li>
+                </ul>
+
+                <h3>4.2 Avec des prestataires de services</h3>
+                <p>
+                    Nous partageons vos données avec des prestataires qui nous aident à fournir nos services :
+                </p>
+                <ul>
+                    <li>Hébergeur web</li>
+                    <li>Processeur de paiement (Stripe, PayPal, etc.)</li>
+                    <li>Service d'emailing</li>
+                    <li>Outils d'analyse et de statistiques</li>
+                </ul>
+                <p>
+                    Ces prestataires sont contractuellement tenus de protéger vos données et de les utiliser uniquement
+                    pour les services qu'ils nous fournissent.
+                </p>
+
+                <h3>4.3 Obligations légales</h3>
+                <p>
+                    Nous pouvons divulguer vos données si la loi l'exige ou pour répondre à des procédures judiciaires.
+                </p>
+            </div>
+
+            <div class="legal-section">
+                <h2>5. Durée de conservation</h2>
+                <p>Nous conservons vos données personnelles pendant les durées suivantes :</p>
+                <ul>
+                    <li><strong>Données de compte actif :</strong> pendant toute la durée d'utilisation de votre compte</li>
+                    <li><strong>Données de réservation :</strong> 10 ans à compter de la fin de la location (obligation comptable)</li>
+                    <li><strong>Données de paiement :</strong> selon les obligations légales (comptabilité, fiscalité)</li>
+                    <li><strong>Cookies et données de navigation :</strong> 13 mois maximum</li>
+                    <li><strong>Après fermeture de compte :</strong> 3 ans (sauf obligations légales de conservation plus longues)</li>
+                </ul>
+            </div>
+
+            <div class="legal-section">
+                <h2>6. Vos droits</h2>
+                <p>
+                    Conformément au RGPD et à la loi Informatique et Libertés, vous disposez des droits suivants :
+                </p>
+
+                <h3>6.1 Droit d'accès</h3>
+                <p>Vous pouvez demander une copie de toutes les données personnelles que nous détenons sur vous.</p>
+
+                <h3>6.2 Droit de rectification</h3>
+                <p>Vous pouvez demander la correction de données inexactes ou incomplètes.</p>
+
+                <h3>6.3 Droit à l'effacement</h3>
+                <p>
+                    Vous pouvez demander la suppression de vos données dans certains cas (sauf obligations légales
+                    de conservation).
+                </p>
+
+                <h3>6.4 Droit à la limitation du traitement</h3>
+                <p>Vous pouvez demander de limiter le traitement de vos données dans certaines circonstances.</p>
+
+                <h3>6.5 Droit à la portabilité</h3>
+                <p>
+                    Vous pouvez recevoir vos données dans un format structuré et les transmettre à un autre responsable
+                    de traitement.
+                </p>
+
+                <h3>6.6 Droit d'opposition</h3>
+                <p>
+                    Vous pouvez vous opposer au traitement de vos données pour des raisons tenant à votre situation
+                    particulière ou pour des finalités marketing.
+                </p>
+
+                <h3>6.7 Retrait du consentement</h3>
+                <p>
+                    Lorsque le traitement est basé sur votre consentement, vous pouvez le retirer à tout moment.
+                </p>
+
+                <h3>6.8 Comment exercer vos droits</h3>
+                <p>Pour exercer vos droits, contactez-nous :</p>
+                <ul>
+                    <li>Par email : privacy@references-evenements.fr</li>
+                    <li>Par courrier : Références Événements SAS - Service Protection des Données, 123 Avenue des Champs-Élysées, 75008 Paris</li>
+                </ul>
+                <p>
+                    Nous vous répondrons dans un délai d'un mois. Une pièce d'identité pourra être demandée pour
+                    vérifier votre identité.
+                </p>
+            </div>
+
+            <div class="legal-section">
+                <h2>7. Sécurité des données</h2>
+                <p>
+                    Nous mettons en œuvre des mesures techniques et organisationnelles appropriées pour protéger vos données :
+                </p>
+                <ul>
+                    <li>Chiffrement HTTPS pour toutes les communications</li>
+                    <li>Mots de passe cryptés (bcrypt)</li>
+                    <li>Accès restreint aux données personnelles</li>
+                    <li>Sauvegardes régulières</li>
+                    <li>Audits de sécurité</li>
+                    <li>Formation du personnel à la protection des données</li>
+                </ul>
+            </div>
+
+            <div class="legal-section">
+                <h2>8. Transferts internationaux</h2>
+                <p>
+                    Vos données sont stockées et traitées au sein de l'Union Européenne. Si un transfert hors UE est
+                    nécessaire, nous veillerons à ce que des garanties appropriées soient en place (clauses contractuelles
+                    types de la Commission européenne, etc.).
+                </p>
+            </div>
+
+            <div class="legal-section">
+                <h2>9. Mineurs</h2>
+                <p>
+                    Notre service n'est pas destiné aux personnes de moins de 18 ans. Nous ne collectons pas sciemment
+                    de données personnelles auprès de mineurs.
+                </p>
+            </div>
+
+            <div class="legal-section">
+                <h2>10. Modifications de la politique</h2>
+                <p>
+                    Nous pouvons modifier cette politique de confidentialité. En cas de modification significative,
+                    nous vous en informerons par email ou via une notification sur la plateforme.
+                </p>
+            </div>
+
+            <div class="legal-section">
+                <h2>11. Réclamation</h2>
+                <p>
+                    Si vous estimez que vos droits ne sont pas respectés, vous pouvez introduire une réclamation auprès de
+                    la Commission Nationale de l'Informatique et des Libertés (CNIL) :
+                </p>
+                <p>
+                    <strong>CNIL</strong><br>
+                    3 Place de Fontenoy - TSA 80715<br>
+                    75334 Paris Cedex 07<br>
+                    Téléphone : 01 53 73 22 22<br>
+                    Site web : <a href="https://www.cnil.fr" target="_blank" style="color: #6366f1;">www.cnil.fr</a>
+                </p>
+            </div>
+
+            <div class="legal-section">
+                <h2>12. Contact</h2>
+                <p>
+                    Pour toute question concernant cette politique de confidentialité ou le traitement de vos données :
+                </p>
+                <ul>
+                    <li>Email : <a href="mailto:privacy@references-evenements.fr" style="color: #6366f1;">privacy@references-evenements.fr</a></li>
+                    <li><a href="{{ path('page_contact') }}" style="color: #6366f1; text-decoration: underline;">Formulaire de contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    {% include 'partials/_footer.html.twig' %}
+{% endblock %}

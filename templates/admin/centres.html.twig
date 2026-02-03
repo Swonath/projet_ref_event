@@ -1,0 +1,292 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion Centres - Admin{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
+    <style>
+        body {
+            background: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .admin-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .admin-header {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .admin-header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+        }
+
+        .admin-nav {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .admin-nav-link {
+            padding: 12px 24px;
+            border-radius: 8px;
+            background: #f8f9fa;
+            color: #1a1a1a;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .admin-nav-link:hover,
+        .admin-nav-link.active {
+            background: #6366f1;
+            color: white;
+        }
+
+        .filters {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: flex;
+            gap: 12px;
+        }
+
+        .filter-btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            background: #f8f9fa;
+            color: #1a1a1a;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: #6366f1;
+            color: white;
+        }
+
+        .users-table {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #f8f9fa;
+        }
+
+        th {
+            padding: 16px;
+            text-align: left;
+            font-weight: 600;
+            color: #1a1a1a;
+            border-bottom: 2px solid #e5e5e5;
+        }
+
+        td {
+            padding: 16px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .user-status {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .user-status.actif {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .user-status.inactif {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .btn-action {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-right: 8px;
+        }
+
+        .btn-toggle {
+            background: #6366f1;
+            color: white;
+        }
+
+        .btn-toggle:hover {
+            background: #4f46e5;
+        }
+
+        .btn-delete {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background: #dc2626;
+        }
+
+        .alert {
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        @media (max-width: 768px) {
+            .users-table {
+                overflow-x: auto;
+            }
+
+            table {
+                min-width: 800px;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    {% include 'partials/_navbar.html.twig' %}
+
+    <div class="admin-container">
+        <div class="admin-header">
+            <h1>Gestion des Centres Commerciaux 🏢</h1>
+        </div>
+
+        <div class="admin-nav">
+            <a href="{{ path('admin_dashboard') }}" class="admin-nav-link">Vue d'ensemble</a>
+            <a href="{{ path('admin_locataires') }}" class="admin-nav-link">Locataires</a>
+            <a href="{{ path('admin_centres') }}" class="admin-nav-link active">Centres</a>
+            <a href="{{ path('admin_reservations') }}" class="admin-nav-link">Réservations</a>
+            <a href="{{ path('app_home_page') }}" class="admin-nav-link">Retour au site</a>
+        </div>
+
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success">✓ {{ message }}</div>
+        {% endfor %}
+
+        {% for message in app.flashes('error') %}
+            <div class="alert alert-error">✗ {{ message }}</div>
+        {% endfor %}
+
+        <div class="filters">
+            <a href="{{ path('admin_centres', {filtre: 'tous'}) }}" class="filter-btn {{ filtre == 'tous' ? 'active' : '' }}">
+                Tous ({{ centres|length }})
+            </a>
+            <a href="{{ path('admin_centres', {filtre: 'actifs'}) }}" class="filter-btn {{ filtre == 'actifs' ? 'active' : '' }}">
+                Actifs
+            </a>
+            <a href="{{ path('admin_centres', {filtre: 'inactifs'}) }}" class="filter-btn {{ filtre == 'inactifs' ? 'active' : '' }}">
+                Inactifs
+            </a>
+        </div>
+
+        <div class="users-table">
+            {% if centres is empty %}
+                <div style="padding: 60px; text-align: center; color: #666;">
+                    Aucun centre commercial trouvé
+                </div>
+            {% else %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nom du centre</th>
+                            <th>Email</th>
+                            <th>Téléphone</th>
+                            <th>Ville</th>
+                            <th>SIRET</th>
+                            <th>Statut</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for centre in centres %}
+                            <tr>
+                                <td>{{ centre.id }}</td>
+                                <td style="font-weight: 600;">{{ centre.nomCentre }}</td>
+                                <td>{{ centre.email }}</td>
+                                <td>{{ centre.telephone }}</td>
+                                <td>{{ centre.ville }}</td>
+                                <td>{{ centre.siret }}</td>
+                                <td>
+                                    <span class="user-status {{ centre.statutCompte == 'actif' ? 'actif' : 'inactif' }}">
+                                        {{ centre.statutCompte == 'actif' ? 'Actif' : 'Inactif' }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <form method="POST" action="{{ path('admin_centres_toggle', {id: centre.id}) }}" style="display: inline;">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('toggle_centre_' ~ centre.id) }}">
+                                        <button type="submit" class="btn-action btn-toggle">
+                                            {{ centre.statutCompte == 'actif' ? 'Désactiver' : 'Activer' }}
+                                        </button>
+                                    </form>
+
+                                    <form method="POST" action="{{ path('admin_centres_supprimer', {id: centre.id}) }}"
+                                          style="display: inline;"
+                                          onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce centre ?');">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('supprimer_centre_' ~ centre.id) }}">
+                                        <button type="submit" class="btn-action btn-delete">
+                                            Supprimer
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

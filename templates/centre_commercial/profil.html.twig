@@ -1,0 +1,314 @@
+{% extends 'centre_commercial/base_dashboard.html.twig' %}
+
+{% block title %}Mon profil - Références Événements{% endblock %}
+
+{% block dashboard_content %}
+
+<div class="page-header">
+    <h1 class="page-title">Mon profil</h1>
+    <p class="page-subtitle">Gérez les informations de votre centre commercial</p>
+</div>
+
+<!-- Flash messages -->
+{% for message in app.flashes('success') %}
+    <div class="alert alert-success">{{ message }}</div>
+{% endfor %}
+{% for message in app.flashes('error') %}
+    <div class="alert alert-error">{{ message }}</div>
+{% endfor %}
+
+<form method="post" action="{{ path('centre_profil_edit') }}" enctype="multipart/form-data">
+
+    <!-- Photo de profil -->
+    <div class="section">
+        <h2 class="section-title">Photo de profil</h2>
+
+        <div class="profile-photo-section">
+            <div class="profile-photo-preview">
+                {% if app.user.photoProfile %}
+                    <img src="{{ asset('uploads/profiles/' ~ app.user.photoProfile) }}"
+                         alt="Photo de profil"
+                         class="profile-photo-img"
+                         id="photoPreview">
+                    <div class="profile-photo-placeholder" id="photoPlaceholder" style="display: none;">
+                        {{ app.user.nomCentre|slice(0, 2)|upper }}
+                    </div>
+                {% else %}
+                    <div class="profile-photo-placeholder" id="photoPlaceholder">
+                        {{ app.user.nomCentre|slice(0, 2)|upper }}
+                    </div>
+                    <img src="" alt="Aperçu" class="profile-photo-img" id="photoPreview" style="display: none;">
+                {% endif %}
+            </div>
+
+            <div class="profile-photo-actions">
+                <label for="photo_profile" class="btn-secondary btn-upload">
+                    📷 {% if app.user.photoProfile %}Changer la photo{% else %}Ajouter une photo{% endif %}
+                </label>
+                <input type="file"
+                       id="photo_profile"
+                       name="photo_profile"
+                       accept="image/jpeg,image/png,image/gif,image/webp"
+                       style="display: none;"
+                       onchange="previewPhoto(this)">
+
+                {% if app.user.photoProfile %}
+                    <button type="button" class="btn-secondary btn-delete-photo" onclick="confirmDeletePhoto()">
+                        🗑️ Supprimer
+                    </button>
+                {% endif %}
+
+                <p class="photo-hint">JPG, PNG, GIF ou WebP. Max 5 Mo.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Informations du centre -->
+    <div class="section">
+        <h2 class="section-title">Informations du centre</h2>
+
+        <div class="form-group">
+            <label class="form-label required">Nom du centre commercial</label>
+            <input type="text" name="nomCentre" class="form-control" value="{{ app.user.nomCentre }}" required>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Description</label>
+            <textarea name="description" class="form-control" rows="4" placeholder="Décrivez votre centre commercial...">{{ app.user.description ?? '' }}</textarea>
+            <small class="form-text">Cette description sera visible par les locataires</small>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label required">Email</label>
+                <input type="email" name="email" class="form-control" value="{{ app.user.email }}" required>
+                <small class="form-text">Cet email est utilisé pour vous connecter</small>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label required">Téléphone</label>
+                <input type="tel" name="telephone" class="form-control" value="{{ app.user.telephone }}" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label required">Adresse</label>
+            <input type="text" name="adresse" class="form-control" value="{{ app.user.adresse ?? '' }}" placeholder="Numéro et nom de rue" required>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label required">Code postal</label>
+                <input type="text" name="codePostal" class="form-control" value="{{ app.user.codePostal ?? '' }}" placeholder="44000" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label required">Ville</label>
+                <input type="text" name="ville" class="form-control" value="{{ app.user.ville ?? '' }}" placeholder="Nantes" required>
+            </div>
+        </div>
+    </div>
+
+    <!-- Informations légales et financières -->
+    <div class="section">
+        <h2 class="section-title">Informations légales et financières</h2>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label required">SIRET</label>
+                <input type="text" name="siret" class="form-control" value="{{ app.user.siret ?? '' }}" placeholder="123 456 789 00012" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Numéro de TVA</label>
+                <input type="text" name="numeroTva" class="form-control" value="{{ app.user.numeroTva ?? '' }}" placeholder="FR12345678901">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">IBAN</label>
+            <input type="text" name="iban" class="form-control" value="{{ app.user.iban ?? '' }}" placeholder="FR76 1234 5678 9012 3456 7890 123" maxlength="34">
+            <small class="form-text">Pour recevoir les paiements des réservations</small>
+        </div>
+    </div>
+
+    <!-- Sécurité -->
+    <div class="section">
+        <h2 class="section-title">Sécurité</h2>
+
+        <div class="form-group">
+            <label class="form-label">Nouveau mot de passe</label>
+            <input type="password" name="nouveauMotDePasse" class="form-control" placeholder="Laissez vide pour ne pas changer" autocomplete="new-password">
+            <small class="form-text">Minimum 8 caractères</small>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Confirmer le mot de passe</label>
+            <input type="password" name="confirmerMotDePasse" class="form-control" placeholder="Confirmez le nouveau mot de passe" autocomplete="new-password">
+        </div>
+    </div>
+
+    <div class="form-actions">
+        <button type="submit" class="btn-primary">
+            Enregistrer les modifications
+        </button>
+        <a href="{{ path('centre_dashboard') }}" class="btn-secondary">
+            Annuler
+        </a>
+    </div>
+
+</form>
+
+<!-- Formulaire caché pour supprimer la photo -->
+<form id="deletePhotoForm" method="post" action="{{ path('centre_profil_delete_photo') }}" style="display: none;">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete_photo') }}">
+</form>
+
+<style>
+/* Styles pour la section photo de profil */
+.profile-photo-section {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.profile-photo-preview {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+    border: 3px solid #e5e5e5;
+}
+
+.profile-photo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-photo-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #1a1a1a, #333);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    font-weight: 600;
+}
+
+.profile-photo-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.btn-upload {
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-delete-photo {
+    color: #dc3545;
+    border-color: #dc3545;
+}
+
+.btn-delete-photo:hover {
+    background: #dc3545;
+    color: white;
+}
+
+.photo-hint {
+    font-size: 13px;
+    color: #6b6b6b;
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .profile-photo-section {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .profile-photo-actions {
+        align-items: center;
+    }
+}
+</style>
+
+<script>
+function previewPhoto(input) {
+    if (input.files && input.files[0]) {
+        const file = input.files[0];
+
+        // Vérifier la taille
+        if (file.size > 5 * 1024 * 1024) {
+            alert('L\'image ne doit pas dépasser 5 Mo.');
+            input.value = '';
+            return;
+        }
+
+        // Vérifier le type
+        const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+        if (!allowedTypes.includes(file.type)) {
+            alert('Le fichier doit être une image (JPG, PNG, GIF ou WebP).');
+            input.value = '';
+            return;
+        }
+
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+            const preview = document.getElementById('photoPreview');
+            const placeholder = document.getElementById('photoPlaceholder');
+
+            preview.src = e.target.result;
+            preview.style.display = 'block';
+            if (placeholder) {
+                placeholder.style.display = 'none';
+            }
+        };
+
+        reader.readAsDataURL(file);
+    }
+}
+
+function confirmDeletePhoto() {
+    if (confirm('Êtes-vous sûr de vouloir supprimer votre photo de profil ?')) {
+        // Envoyer la requête AJAX
+        const form = document.getElementById('deletePhotoForm');
+        const formData = new FormData(form);
+
+        fetch(form.action, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Masquer l'image et afficher le placeholder
+                const preview = document.getElementById('photoPreview');
+                const placeholder = document.getElementById('photoPlaceholder');
+
+                preview.style.display = 'none';
+                placeholder.style.display = 'flex';
+
+                // Recharger la page pour mettre à jour le bouton
+                location.reload();
+            } else {
+                alert('Erreur lors de la suppression de la photo.');
+            }
+        })
+        .catch(error => {
+            console.error('Erreur:', error);
+            alert('Erreur lors de la suppression de la photo.');
+        });
+    }
+}
+</script>
+
+{% endblock %}

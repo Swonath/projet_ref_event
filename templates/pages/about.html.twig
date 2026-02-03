@@ -1,0 +1,241 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}À propos - Références Événements{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/pages.css') }}">
+    <style>
+        .page-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .page-header h1 {
+            font-size: 42px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 16px;
+        }
+
+        .page-header p {
+            font-size: 18px;
+            color: #666;
+        }
+
+        .content-section {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .content-section h2 {
+            font-size: 28px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 20px;
+        }
+
+        .content-section p {
+            font-size: 16px;
+            line-height: 1.7;
+            color: #444;
+            margin-bottom: 16px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-top: 40px;
+        }
+
+        .feature-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .feature-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .feature-card h3 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 12px;
+        }
+
+        .feature-card p {
+            font-size: 15px;
+            color: #666;
+            margin: 0;
+        }
+
+        .cta-section {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            border-radius: 12px;
+            padding: 50px 40px;
+            text-align: center;
+            color: white;
+        }
+
+        .cta-section h2 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: white;
+        }
+
+        .cta-section p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            color: rgba(255,255,255,0.9);
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-white {
+            background: white;
+            color: #6366f1;
+            padding: 14px 32px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-white:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .btn-outline-white {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+            padding: 14px 32px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-outline-white:hover {
+            background: white;
+            color: #6366f1;
+        }
+
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 32px;
+            }
+
+            .content-section {
+                padding: 24px;
+            }
+
+            .cta-section {
+                padding: 30px 24px;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    {% include 'partials/_navbar.html.twig' %}
+
+    <div class="page-container">
+        <div class="page-header">
+            <h1>À propos de Références Événements</h1>
+            <p>La plateforme qui connecte centres commerciaux et entrepreneurs</p>
+        </div>
+
+        <div class="content-section">
+            <h2>Notre mission</h2>
+            <p>
+                Références Événements est née d'une volonté simple : faciliter la mise en relation entre les centres commerciaux
+                disposant d'espaces temporaires et les entrepreneurs à la recherche d'emplacements stratégiques pour leurs événements,
+                boutiques éphémères ou animations commerciales.
+            </p>
+            <p>
+                Nous croyons que chaque centre commercial possède des opportunités uniques et que chaque entrepreneur mérite
+                un accès transparent à ces espaces. Notre plateforme digitale révolutionne ce marché traditionnellement opaque
+                en offrant visibilité, simplicité et confiance.
+            </p>
+        </div>
+
+        <div class="content-section">
+            <h2>Comment ça marche</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🏢</div>
+                    <h3>Pour les centres commerciaux</h3>
+                    <p>
+                        Publiez vos emplacements disponibles, gérez vos réservations en temps réel,
+                        et maximisez la valorisation de vos espaces temporaires.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">👔</div>
+                    <h3>Pour les entrepreneurs</h3>
+                    <p>
+                        Recherchez l'emplacement idéal, réservez en ligne en toute sécurité,
+                        et développez votre activité dans les meilleurs centres commerciaux.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>Sécurité & Confiance</h3>
+                    <p>
+                        Paiements sécurisés, contrats digitaux, système d'avis vérifié :
+                        nous garantissons une transaction sereine pour tous.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Nos valeurs</h2>
+            <p>
+                <strong>Transparence :</strong> Nous croyons en une information claire et accessible pour tous nos utilisateurs.
+            </p>
+            <p>
+                <strong>Innovation :</strong> Nous digitalisons un secteur traditionnel pour le rendre plus efficace et accessible.
+            </p>
+            <p>
+                <strong>Excellence :</strong> Nous nous engageons à offrir la meilleure expérience utilisateur possible.
+            </p>
+            <p>
+                <strong>Partenariat :</strong> Nous créons des relations durables entre centres commerciaux et entrepreneurs.
+            </p>
+        </div>
+
+        <div class="cta-section">
+            <h2>Prêt à commencer ?</h2>
+            <p>Rejoignez des centaines d'utilisateurs qui font confiance à Références Événements</p>
+            <div class="cta-buttons">
+                <a href="{{ path('app_register') }}" class="btn-white">Créer un compte</a>
+                <a href="{{ path('app_home_page') }}" class="btn-outline-white">Voir les emplacements</a>
+            </div>
+        </div>
+    </div>
+
+    {% include 'partials/_footer.html.twig' %}
+{% endblock %}

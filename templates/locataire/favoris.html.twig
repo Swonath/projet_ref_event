@@ -63,9 +63,9 @@
             
             <div class="reservation-actions">
                 <div class="reservation-price">{{ emplacement.tarifJour }}€/jour</div>
-                <a href="{{ path('app_home_page') }}" 
+                <a href="{{ path('emplacement_detail', {id: emplacement.id}) }}"
                    class="btn-small btn-primary-small">Voir détails</a>
-                <button class="btn-small btn-secondary-small" 
+                <button class="btn-small btn-secondary-small"
                         onclick="retirerDesFavoris({{ emplacement.id }}, this)"
                         data-delete-url="{{ path('locataire_favoris_retirer', {'id': emplacement.id}) }}"
                         title="Retirer des favoris">

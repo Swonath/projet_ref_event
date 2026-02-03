@@ -1,0 +1,87 @@
+{% extends 'centre_commercial/base_dashboard.html.twig' %}
+
+{% block title %}Réservations - Centre Commercial{% endblock %}
+
+{% block dashboard_content %}
+
+<div class="page-header">
+    <h1 class="page-title">Réservations</h1>
+</div>
+
+<!-- Stats -->
+<div class="stats-grid">
+    {% for statut in statuts %}
+        {% set statutKey = 'statut_' ~ statut.value %}
+        <div class="stat-card">
+            <div class="stat-value">{{ stats[statutKey] ?? 0 }}</div>
+            <div class="stat-label">{{ statut.libelle }}</div>
+        </div>
+    {% endfor %}
+</div>
+
+<!-- Filtres -->
+<div class="filters-group">
+    <div class="filters">
+        <a href="{{ path('centre_reservations_index', {filtre: 'toutes'}) }}"
+           class="filter-btn {{ filtre_actif == 'toutes' ? 'active' : '' }}">
+            Toutes ({{ stats.total_reservations }})
+        </a>
+        {% for statut in statuts %}
+            {% set statutKey = 'statut_' ~ statut.value %}
+            <a href="{{ path('centre_reservations_index', {filtre: statut.value}) }}"
+               class="filter-btn status-{{ statut.cssClass }} {{ filtre_actif == statut.value ? 'active' : '' }}">
+                {{ statut.icone }} {{ statut.libelle }} ({{ stats[statutKey] ?? 0 }})
+            </a>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Liste -->
+<div id="reservations-container">
+    {% if reservations is empty %}
+        <div class="empty-state">
+            <div class="empty-icon">📅</div>
+            <div class="empty-title">Aucune réservation</div>
+            <div class="empty-text">Aucune réservation ne correspond à ce filtre</div>
+        </div>
+    {% else %}
+        {% for reservation in reservations %}
+            <div class="reservation-card">
+                <div class="reservation-image">
+                    {% if reservation.emplacement.photos|length > 0 %}
+                        <img src="{{ asset('uploads/photos/' ~ reservation.emplacement.photos[0].cheminFichier) }}"
+                             alt="{{ reservation.emplacement.titreAnnonce }}">
+                    {% else %}
+                        <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; background:#f5f5f5; color:#999;">📷</div>
+                    {% endif %}
+                </div>
+
+                <div class="reservation-info">
+                    <h3>{{ reservation.emplacement.titreAnnonce }}</h3>
+                    <div class="reservation-details">
+                        <strong>Locataire:</strong> {{ reservation.locataire.nom }}
+                    </div>
+                    <div class="reservation-details">
+                        Du {{ reservation.dateDebut|date('d/m/Y') }} au {{ reservation.dateFin|date('d/m/Y') }}
+                    </div>
+                    <span class="reservation-status status-{{ reservation.statut.cssClass }}">
+                        {{ reservation.statut.icone }} {{ reservation.statut.libelle }}
+                    </span>
+                </div>
+
+                <div class="reservation-actions">
+                    <div class="reservation-price">{{ reservation.montantTotal }} €</div>
+                    {% if reservation.statut.value == 'en_attente' %}
+                        <form method="POST" action="{{ path('centre_reservations_valider', {id: reservation.id}) }}" style="display:inline;">
+                            <input type="hidden" name="_token" value="{{ csrf_token('valider_' ~ reservation.id) }}">
+                            <button type="submit" class="btn-small btn-primary-small">✅ Valider</button>
+                        </form>
+                    {% endif %}
+                    <a href="{{ path('centre_reservations_detail', {id: reservation.id}) }}" class="btn-small btn-secondary-small">Voir détail</a>
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+</div>
+
+{% endblock %}

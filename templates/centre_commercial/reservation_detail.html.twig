@@ -1,0 +1,173 @@
+{% extends 'centre_commercial/base_dashboard.html.twig' %}
+
+{% block title %}Détail réservation - Centre Commercial{% endblock %}
+
+{% block dashboard_content %}
+
+<div class="page-header">
+    <h1 class="page-title">Détail de la réservation #{{ reservation.id }}</h1>
+    <a href="{{ path('centre_reservations_index') }}" class="btn-secondary">← Retour</a>
+</div>
+
+<!-- Flash messages -->
+{% for message in app.flashes('success') %}
+    <div class="alert alert-success">{{ message }}</div>
+{% endfor %}
+{% for message in app.flashes('error') %}
+    <div class="alert alert-error">{{ message }}</div>
+{% endfor %}
+
+<div class="section">
+    <h2 class="section-title">Statut</h2>
+    <span class="reservation-status status-{{ reservation.statut.cssClass }}" style="font-size: 18px; padding: 12px 24px;">
+        {{ reservation.statut.icone }} {{ reservation.statut.libelle }}
+    </span>
+
+    {% if reservation.statut.value == 'en_attente' %}
+        <div style="margin-top: 20px; display: flex; gap: 12px; max-width: 600px;">
+            <form method="POST" action="{{ path('centre_reservations_valider', {id: reservation.id}) }}" style="flex: 1;">
+                <input type="hidden" name="_token" value="{{ csrf_token('valider_' ~ reservation.id) }}">
+                <button type="submit" class="btn-primary" onclick="return confirm('Valider cette réservation ?')" style="width: 100%;">
+                    ✅ Valider la réservation
+                </button>
+            </form>
+
+            <button type="button" class="btn-secondary" onclick="document.getElementById('refusForm').style.display='block'" style="flex: 1;">
+                ❌ Refuser
+            </button>
+        </div>
+        <div style="margin-top: 0;">  <!-- Wrapper moved outside -->
+
+        <div id="refusForm" style="display: none; margin-top: 20px; padding: 20px; background: #f8f9fa; border-radius: 8px;">
+            <form method="POST" action="{{ path('centre_reservations_refuser', {id: reservation.id}) }}">
+                <input type="hidden" name="_token" value="{{ csrf_token('refuser_' ~ reservation.id) }}">
+                <div class="form-group">
+                    <label class="form-label">Motif du refus</label>
+                    <textarea name="motifRefus" class="form-control" rows="4" required></textarea>
+                </div>
+                <div style="display: flex; gap: 12px; margin-top: 16px;">
+                    <button type="submit" class="btn-primary" style="flex: 1;">Confirmer le refus</button>
+                    <button type="button" class="btn-secondary" onclick="document.getElementById('refusForm').style.display='none'" style="flex: 1;">Annuler</button>
+                </div>
+            </form>
+        </div>
+    {% endif %}
+
+    {% if reservation.motifRefus %}
+        <div style="margin-top: 20px; padding: 12px; background: #fff3cd; border-radius: 8px;">
+            <strong>Motif du refus:</strong> {{ reservation.motifRefus }}
+        </div>
+    {% endif %}
+</div>
+
+<div class="section">
+    <h2 class="section-title">Informations du locataire</h2>
+    <div class="info-grid">
+        <div class="info-item">
+            <strong>Nom:</strong> {{ reservation.locataire.nom }}
+        </div>
+        <div class="info-item">
+            <strong>Email:</strong> {{ reservation.locataire.email }}
+        </div>
+        <div class="info-item">
+            <strong>Téléphone:</strong> {{ reservation.locataire.telephone }}
+        </div>
+        {% if reservation.locataire.siret %}
+            <div class="info-item">
+                <strong>SIRET:</strong> {{ reservation.locataire.siret }}
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="section">
+    <h2 class="section-title">Informations de l'emplacement</h2>
+    <div class="info-grid">
+        <div class="info-item">
+            <strong>Emplacement:</strong> {{ reservation.emplacement.titreAnnonce }}
+        </div>
+        <div class="info-item">
+            <strong>Type:</strong> {{ reservation.emplacement.typeEmplacement }}
+        </div>
+        <div class="info-item">
+            <strong>Surface:</strong> {{ reservation.emplacement.surface }} m²
+        </div>
+    </div>
+    <a href="{{ path('centre_emplacements_detail', {id: reservation.emplacement.id}) }}" class="btn-secondary" style="margin-top: 12px; display: inline-block; max-width: 250px;">
+        Voir l'emplacement
+    </a>
+</div>
+
+<div class="section">
+    <h2 class="section-title">Dates et durée</h2>
+    <div class="info-grid">
+        <div class="info-item">
+            <strong>Date de début:</strong> {{ reservation.dateDebut|date('d/m/Y') }}
+        </div>
+        <div class="info-item">
+            <strong>Date de fin:</strong> {{ reservation.dateFin|date('d/m/Y') }}
+        </div>
+        <div class="info-item">
+            <strong>Durée:</strong> {{ reservation.dateDebut.diff(reservation.dateFin).days + 1 }} jours
+        </div>
+    </div>
+</div>
+
+<div class="section">
+    <h2 class="section-title">Montants</h2>
+    <div class="info-grid">
+        <div class="info-item">
+            <strong>Montant location:</strong> {{ reservation.montantLocation }} €
+        </div>
+        {% if reservation.montantCommission %}
+            <div class="info-item">
+                <strong>Commission:</strong> {{ reservation.montantCommission }} €
+            </div>
+        {% endif %}
+        {% if reservation.cautionVersee %}
+            <div class="info-item">
+                <strong>Caution:</strong> {{ reservation.cautionVersee }} €
+            </div>
+        {% endif %}
+        <div class="info-item" style="background: #e8f5e9;">
+            <strong>TOTAL:</strong> <span style="font-size: 20px; color: #2e7d32;">{{ reservation.montantTotal }} €</span>
+        </div>
+    </div>
+</div>
+
+{% if reservation.paiement %}
+    <div class="section">
+        <h2 class="section-title">Paiement</h2>
+        <div class="info-grid">
+            <div class="info-item">
+                <strong>Statut:</strong> {{ reservation.paiement.statut }}
+            </div>
+            {% if reservation.paiement.methodePaiement %}
+                <div class="info-item">
+                    <strong>Méthode:</strong> {{ reservation.paiement.methodePaiement }}
+                </div>
+            {% endif %}
+            {% if reservation.paiement.datePaiement %}
+                <div class="info-item">
+                    <strong>Date:</strong> {{ reservation.paiement.datePaiement|date('d/m/Y H:i') }}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endif %}
+
+<style>
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 16px;
+}
+
+.info-item {
+    padding: 12px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+</style>
+
+{% endblock %}

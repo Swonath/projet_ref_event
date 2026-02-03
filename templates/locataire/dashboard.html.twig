@@ -124,17 +124,17 @@
             <div class="empty-text">Vous n'avez pas encore de messages</div>
         </div>
     {% else %}
-        {% for message in messages %}
+        {% for conversation in messages %}
         <div class="reservation-card" style="grid-template-columns: 1fr auto;">
             <div class="reservation-info">
-                <h3>{{ message.expediteur }}</h3>
-                <div class="reservation-details">{{ message.contenu }}</div>
+                <h3>{{ conversation.centreCommercial.nomCentre }}</h3>
+                <div class="reservation-details">{{ conversation.sujet }}</div>
                 <div class="reservation-details">
-                    🕐 {{ message.date|date('d/m/Y à H:i') }}
+                    🕐 {{ conversation.dernierMessageDate|date('d/m/Y à H:i') }}
                 </div>
             </div>
             <div class="reservation-actions">
-                <a href="#" class="btn-small btn-primary-small">Répondre</a>
+                <a href="{{ path('locataire_messages_show', {id: conversation.id}) }}" class="btn-small btn-primary-small">Voir</a>
             </div>
         </div>
         {% endfor %}

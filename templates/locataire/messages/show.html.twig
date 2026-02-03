@@ -14,8 +14,8 @@
 
 <!-- En-tête de la conversation -->
 <div class="conversation-header-page">
-    <a href="{{ path('locataire_messages_index') }}" class="back-link">
-        ← Retour aux messages
+    <a href="{{ conversation.estArchivee ? path('locataire_messages_archives') : path('locataire_messages_index') }}" class="back-link">
+        ← Retour aux {{ conversation.estArchivee ? 'archives' : 'messages' }}
     </a>
 
     <div class="conversation-title-section">
@@ -23,7 +23,12 @@
             {{ conversation.centreCommercial.nomCentre|slice(0, 2)|upper }}
         </div>
         <div>
-            <h1 class="page-title">{{ conversation.centreCommercial.nomCentre }}</h1>
+            <h1 class="page-title">
+                {% if conversation.estArchivee %}
+                    <span style="background: #6b6b6b; color: white; padding: 4px 12px; border-radius: 6px; font-size: 14px; margin-right: 12px;">ARCHIVÉ</span>
+                {% endif %}
+                {{ conversation.centreCommercial.nomCentre }}
+            </h1>
             <p class="page-subtitle">
                 {% if conversation.sujet %}
                     {{ conversation.sujet }}
@@ -45,14 +50,24 @@
             </a>
         {% endif %}
 
-        <form method="post" action="{{ path('locataire_messages_archive', {id: conversation.id}) }}"
-              onsubmit="return confirm('Êtes-vous sûr de vouloir archiver cette conversation ?');"
-              style="display: inline;">
-            <input type="hidden" name="_token" value="{{ csrf_token('archive_conversation_' ~ conversation.id) }}">
-            <button type="submit" class="btn-small btn-secondary-small">
-                📁 Archiver
-            </button>
-        </form>
+        {% if conversation.estArchivee %}
+            <form method="post" action="{{ path('locataire_messages_unarchive', {id: conversation.id}) }}"
+                  style="display: inline;">
+                <input type="hidden" name="_token" value="{{ csrf_token('unarchive_conversation_' ~ conversation.id) }}">
+                <button type="submit" class="btn-small btn-secondary-small">
+                    ↩️ Restaurer
+                </button>
+            </form>
+        {% else %}
+            <form method="post" action="{{ path('locataire_messages_archive', {id: conversation.id}) }}"
+                  onsubmit="return confirm('Êtes-vous sûr de vouloir archiver cette conversation ?');"
+                  style="display: inline;">
+                <input type="hidden" name="_token" value="{{ csrf_token('archive_conversation_' ~ conversation.id) }}">
+                <button type="submit" class="btn-small btn-secondary-small">
+                    📁 Archiver
+                </button>
+            </form>
+        {% endif %}
     </div>
 </div>
 

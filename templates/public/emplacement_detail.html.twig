@@ -1,0 +1,186 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ emplacement.titreAnnonce }}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/homepage.css') }}">
+{% endblock %}
+
+{% block body %}
+
+<!-- Header -->
+<header class="header">
+    <a href="{{ path('app_home_page') }}" class="logo">Références Evénements</a>
+    <nav class="nav">
+        <a href="{{ path('app_home_page') }}#comment-ca-marche" class="nav-link">Comment ça marche</a>
+        <a href="{{ path('app_home_page') }}#emplacements" class="nav-link">Emplacements populaires</a>
+
+        {% if app.user %}
+            <a href="{{ path('app_my_account') }}" class="user-menu">
+                <div class="user-avatar">
+                    {% if app.user.photoProfile is defined and app.user.photoProfile %}
+                        <img src="{{ asset('uploads/profiles/' ~ app.user.photoProfile) }}" alt="Photo de profil" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+                    {% else %}
+                        {% if app.user.nomCentre is defined %}
+                            {{ app.user.nomCentre|slice(0, 2)|upper }}
+                        {% else %}
+                            {{ app.user.nom|slice(0, 2)|upper }}
+                        {% endif %}
+                    {% endif %}
+                </div>
+                <span class="user-name">
+                    {% if app.user.nomCentre is defined %}
+                        {{ app.user.nomCentre }}
+                    {% else %}
+                        {{ app.user.nom }}
+                    {% endif %}
+                </span>
+            </a>
+        {% else %}
+            <a href="{{ path('app_login') }}" class="nav-link">Connexion</a>
+            <a href="{{ path('app_register') }}" class="nav-link primary">Inscription</a>
+        {% endif %}
+    </nav>
+</header>
+
+<div class="container" style="max-width: 1200px; margin: 40px auto; padding: 0 20px;">
+    <!-- En-tête -->
+    <div style="margin-bottom: 30px;">
+        <a href="{{ path('app_home_page') }}" style="color: #666; text-decoration: none; display: inline-flex; align-items: center; margin-bottom: 20px;">
+            ← Retour à l'accueil
+        </a>
+        <h1 style="font-size: 32px; font-weight: 700; margin-bottom: 10px;">{{ emplacement.titreAnnonce }}</h1>
+        <div style="color: #666; font-size: 16px;">
+            📍 {{ emplacement.centreCommercial.nomCentre }} - {{ emplacement.centreCommercial.ville }}
+        </div>
+    </div>
+
+    <!-- Galerie photos -->
+    {% if emplacement.photos is not empty %}
+        <div style="margin-bottom: 40px;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px;">
+                {% for photo in emplacement.photos %}
+                    <div style="aspect-ratio: 4/3; background: #f0f0f0; border-radius: 12px; overflow: hidden;">
+                        <img src="{{ asset(photo.cheminFichier) }}" alt="{{ photo.legende }}" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+
+    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 40px;">
+        <!-- Colonne principale -->
+        <div>
+            <!-- Description -->
+            <div style="background: white; padding: 30px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #e5e5e5;">
+                <h2 style="font-size: 24px; font-weight: 600; margin-bottom: 20px;">Description</h2>
+                <p style="line-height: 1.6; color: #333;">{{ emplacement.description|nl2br }}</p>
+            </div>
+
+            <!-- Caractéristiques -->
+            <div style="background: white; padding: 30px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #e5e5e5;">
+                <h2 style="font-size: 24px; font-weight: 600; margin-bottom: 20px;">Caractéristiques</h2>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+                    <div>
+                        <div style="color: #666; font-size: 14px; margin-bottom: 5px;">Type</div>
+                        <div style="font-weight: 600;">{{ emplacement.typeEmplacement }}</div>
+                    </div>
+                    <div>
+                        <div style="color: #666; font-size: 14px; margin-bottom: 5px;">Surface</div>
+                        <div style="font-weight: 600;">{{ emplacement.surface }} m²</div>
+                    </div>
+                    <div>
+                        <div style="color: #666; font-size: 14px; margin-bottom: 5px;">Localisation</div>
+                        <div style="font-weight: 600;">{{ emplacement.localisationPrecise }}</div>
+                    </div>
+                    {% if emplacement.equipements %}
+                        <div>
+                            <div style="color: #666; font-size: 14px; margin-bottom: 5px;">Équipements</div>
+                            <div style="font-weight: 600;">{{ emplacement.equipements }}</div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Disponibilité -->
+            {% if emplacement.periodesIndisponibilite is not empty %}
+                <div style="background: white; padding: 30px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #e5e5e5;">
+                    <h2 style="font-size: 24px; font-weight: 600; margin-bottom: 20px;">Périodes d'indisponibilité</h2>
+                    <div style="display: flex; flex-direction: column; gap: 10px;">
+                        {% for periode in emplacement.periodesIndisponibilite %}
+                            <div style="padding: 12px; background: #fff3cd; border-radius: 8px;">
+                                <strong>{{ periode.dateDebut|date('d/m/Y') }} - {{ periode.dateFin|date('d/m/Y') }}</strong>
+                                {% if periode.motif %}
+                                    <div style="color: #666; margin-top: 5px;">{{ periode.motif }}</div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Colonne latérale -->
+        <div>
+            <!-- Card tarifs -->
+            <div style="background: white; padding: 30px; border-radius: 12px; border: 1px solid #e5e5e5; position: sticky; top: 20px;">
+                <h2 style="font-size: 24px; font-weight: 600; margin-bottom: 20px;">Tarifs</h2>
+
+                <div style="margin-bottom: 20px;">
+                    <div style="font-size: 32px; font-weight: 700; color: #1a1a1a;">{{ emplacement.tarifJour }} €</div>
+                    <div style="color: #666;">par jour</div>
+                </div>
+
+                {% if emplacement.tarifSemaine %}
+                    <div style="padding: 12px; background: #f8f9fa; border-radius: 8px; margin-bottom: 10px;">
+                        <div style="font-weight: 600;">{{ emplacement.tarifSemaine }} €</div>
+                        <div style="color: #666; font-size: 14px;">par semaine</div>
+                    </div>
+                {% endif %}
+
+                {% if emplacement.tarifMois %}
+                    <div style="padding: 12px; background: #f8f9fa; border-radius: 8px; margin-bottom: 10px;">
+                        <div style="font-weight: 600;">{{ emplacement.tarifMois }} €</div>
+                        <div style="color: #666; font-size: 14px;">par mois</div>
+                    </div>
+                {% endif %}
+
+                <div style="padding: 12px; background: #f8f9fa; border-radius: 8px; margin-bottom: 20px;">
+                    <div style="font-weight: 600;">{{ emplacement.caution }} €</div>
+                    <div style="color: #666; font-size: 14px;">caution</div>
+                </div>
+
+                <!-- Boutons d'action -->
+                {% if isLocataire %}
+                    <a href="{{ path('locataire_messages_new', {emplacementId: emplacement.id}) }}"
+                       class="btn-primary"
+                       style="display: block; text-align: center; padding: 16px; background: #1a1a1a; color: white; border-radius: 8px; text-decoration: none; font-weight: 600; margin-bottom: 10px;">
+                        💬 Contacter le centre
+                    </a>
+                {% else %}
+                    <a href="{{ path('app_login') }}"
+                       class="btn-primary"
+                       style="display: block; text-align: center; padding: 16px; background: #1a1a1a; color: white; border-radius: 8px; text-decoration: none; font-weight: 600; margin-bottom: 10px;">
+                        Se connecter pour contacter
+                    </a>
+                {% endif %}
+
+                <!-- Info centre commercial -->
+                <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e5e5;">
+                    <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 15px;">À propos du centre</h3>
+                    <div style="font-weight: 600; margin-bottom: 5px;">{{ emplacement.centreCommercial.nomCentre }}</div>
+                    <div style="color: #666; font-size: 14px;">
+                        {{ emplacement.centreCommercial.adresse }}<br>
+                        {{ emplacement.centreCommercial.codePostal }} {{ emplacement.centreCommercial.ville }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+{% include 'partials/_footer.html.twig' %}
+
+{% endblock %}

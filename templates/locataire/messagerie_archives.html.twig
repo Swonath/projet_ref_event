@@ -1,47 +1,39 @@
 {% extends 'locataire/base_dashboard.html.twig' %}
 
-{% block title %}Mes messages - Locataire{% endblock %}
+{% block title %}Messages archivés - Locataire{% endblock %}
 
 {% block dashboard_content %}
 
 <div class="page-header">
-    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-        <div>
-            <h1 class="page-title">Mes messages 💬</h1>
-            <p class="page-subtitle">
-                {% if totalNonLus > 0 %}
-                    Vous avez {{ totalNonLus }} message{% if totalNonLus > 1 %}s{% endif %} non lu{% if totalNonLus > 1 %}s{% endif %}
-                {% else %}
-                    Tous vos messages sont à jour
-                {% endif %}
-            </p>
-        </div>
-        <a href="{{ path('locataire_messages_archives') }}" class="btn-small btn-secondary-small">
-            📦 Voir les archives
-        </a>
-    </div>
+    <h1 class="page-title">Messages archivés 📦</h1>
+    <a href="{{ path('locataire_messages_index') }}" class="btn-secondary">← Retour aux messages</a>
 </div>
+
+<!-- Flash messages -->
+{% for message in app.flashes('success') %}
+    <div class="alert alert-success">{{ message }}</div>
+{% endfor %}
+{% for message in app.flashes('error') %}
+    <div class="alert alert-error">{{ message }}</div>
+{% endfor %}
 
 <div class="section">
     {% if conversations is empty %}
         <div class="empty-state">
-            <div class="empty-icon">💬</div>
-            <div class="empty-title">Aucune conversation</div>
-            <div class="empty-text">Vous n'avez pas encore de conversations avec les centres commerciaux</div>
-            <a href="{{ path('app_home_page') }}" class="btn-primary">Rechercher un emplacement</a>
+            <div class="empty-icon">📦</div>
+            <div class="empty-title">Aucune conversation archivée</div>
+            <div class="empty-text">Les conversations que vous archivez apparaîtront ici</div>
+            <a href="{{ path('locataire_messages_index') }}" class="btn-primary">Retour aux messages</a>
         </div>
     {% else %}
         <div class="conversations-list">
             {% for conversation in conversations %}
-                {% set unreadCount = messagesNonLus[conversation.id] %}
-                <a href="{{ path('locataire_messages_show', {id: conversation.id}) }}" 
-                   class="conversation-card {% if unreadCount > 0 %}conversation-unread{% endif %}">
-                    
+                <div class="conversation-card" style="opacity: 0.8; border-left: 3px solid #6b6b6b;">
                     <!-- Avatar du centre commercial -->
-                    <div class="conversation-avatar">
+                    <div class="conversation-avatar" style="background: #6b6b6b;">
                         {{ conversation.centreCommercial.nomCentre|slice(0, 2)|upper }}
                     </div>
-                    
+
                     <!-- Informations de la conversation -->
                     <div class="conversation-info">
                         <div class="conversation-header">
@@ -52,8 +44,9 @@
                                 {% endif %}
                             </span>
                         </div>
-                        
+
                         <div class="conversation-subject">
+                            <span style="background: #6b6b6b; color: white; padding: 2px 8px; border-radius: 4px; font-size: 12px; margin-right: 8px;">ARCHIVÉ</span>
                             {% if conversation.sujet %}
                                 {{ conversation.sujet }}
                             {% elseif conversation.reservation %}
@@ -62,7 +55,7 @@
                                 Conversation
                             {% endif %}
                         </div>
-                        
+
                         <!-- Aperçu du dernier message -->
                         {% set lastMessage = conversation.messages|last %}
                         {% if lastMessage %}
@@ -74,12 +67,20 @@
                             </div>
                         {% endif %}
                     </div>
-                    
-                    <!-- Badge de messages non lus -->
-                    {% if unreadCount > 0 %}
-                        <div class="conversation-badge">{{ unreadCount }}</div>
-                    {% endif %}
-                </a>
+
+                    <!-- Actions -->
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                        <a href="{{ path('locataire_messages_show', {id: conversation.id}) }}" class="btn-small btn-primary-small">
+                            👁️ Voir
+                        </a>
+                        <form method="POST" action="{{ path('locataire_messages_unarchive', {id: conversation.id}) }}" style="margin: 0;">
+                            <input type="hidden" name="_token" value="{{ csrf_token('unarchive_conversation_' ~ conversation.id) }}">
+                            <button type="submit" class="btn-small btn-secondary-small" title="Restaurer la conversation">
+                                ↩️ Restaurer
+                            </button>
+                        </form>
+                    </div>
+                </div>
             {% endfor %}
         </div>
     {% endif %}

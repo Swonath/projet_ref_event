@@ -1,0 +1,237 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mentions légales - Références Événements{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/pages.css') }}">
+    <style>
+        .legal-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .legal-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .legal-header h1 {
+            font-size: 36px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 12px;
+        }
+
+        .legal-header p {
+            font-size: 16px;
+            color: #666;
+        }
+
+        .legal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .legal-section {
+            margin-bottom: 40px;
+        }
+
+        .legal-section h2 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #6366f1;
+        }
+
+        .legal-section h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin: 20px 0 12px 0;
+        }
+
+        .legal-section p {
+            font-size: 15px;
+            line-height: 1.7;
+            color: #444;
+            margin-bottom: 12px;
+        }
+
+        .legal-section ul {
+            margin-left: 20px;
+            margin-bottom: 12px;
+        }
+
+        .legal-section li {
+            font-size: 15px;
+            line-height: 1.7;
+            color: #444;
+            margin-bottom: 8px;
+        }
+
+        .info-box {
+            background: #f8f9fa;
+            border-left: 4px solid #6366f1;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .info-box strong {
+            color: #6366f1;
+        }
+
+        @media (max-width: 768px) {
+            .legal-content {
+                padding: 24px;
+            }
+
+            .legal-header h1 {
+                font-size: 28px;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    {% include 'partials/_navbar.html.twig' %}
+
+    <div class="legal-container">
+        <div class="legal-header">
+            <h1>Mentions légales</h1>
+            <p>Dernière mise à jour : {{ "now"|date("d/m/Y") }}</p>
+        </div>
+
+        <div class="legal-content">
+            <div class="legal-section">
+                <h2>1. Éditeur du site</h2>
+                <div class="info-box">
+                    <p><strong>Raison sociale :</strong> Références Événements SAS</p>
+                    <p><strong>Forme juridique :</strong> Société par Actions Simplifiée</p>
+                    <p><strong>Capital social :</strong> 50 000 €</p>
+                    <p><strong>RCS :</strong> Paris B XXX XXX XXX</p>
+                    <p><strong>SIRET :</strong> XXX XXX XXX 00010</p>
+                    <p><strong>Numéro TVA intracommunautaire :</strong> FR XX XXX XXX XXX</p>
+                    <p><strong>Siège social :</strong> 123 Avenue des Champs-Élysées, 75008 Paris, France</p>
+                    <p><strong>Téléphone :</strong> +33 1 XX XX XX XX</p>
+                    <p><strong>Email :</strong> contact@references-evenements.fr</p>
+                    <p><strong>Directeur de la publication :</strong> [Nom du directeur]</p>
+                </div>
+            </div>
+
+            <div class="legal-section">
+                <h2>2. Hébergement</h2>
+                <div class="info-box">
+                    <p><strong>Hébergeur :</strong> [Nom de l'hébergeur]</p>
+                    <p><strong>Adresse :</strong> [Adresse de l'hébergeur]</p>
+                    <p><strong>Téléphone :</strong> [Téléphone de l'hébergeur]</p>
+                </div>
+            </div>
+
+            <div class="legal-section">
+                <h2>3. Propriété intellectuelle</h2>
+                <p>
+                    L'ensemble du contenu de ce site (textes, images, vidéos, logos, icônes, etc.) est la propriété exclusive
+                    de Références Événements SAS, sauf mention contraire.
+                </p>
+                <p>
+                    Toute reproduction, distribution, modification, adaptation, retransmission ou publication de ces différents
+                    éléments est strictement interdite sans l'accord exprès par écrit de Références Événements SAS.
+                </p>
+                <p>
+                    Les marques et logos figurant sur le site sont des marques déposées. Toute reproduction totale ou partielle
+                    de ces marques ou logos sans l'autorisation préalable et écrite de Références Événements SAS est interdite.
+                </p>
+            </div>
+
+            <div class="legal-section">
+                <h2>4. Protection des données personnelles</h2>
+                <p>
+                    Références Événements SAS accorde une grande importance à la protection de vos données personnelles.
+                </p>
+                <p>
+                    Conformément au Règlement Général sur la Protection des Données (RGPD) et à la loi Informatique et Libertés,
+                    vous disposez d'un droit d'accès, de rectification, de suppression et d'opposition aux données vous concernant.
+                </p>
+                <p>
+                    Pour exercer ces droits ou pour toute question sur le traitement de vos données, vous pouvez nous contacter :
+                </p>
+                <ul>
+                    <li>Par email : privacy@references-evenements.fr</li>
+                    <li>Par courrier : Références Événements SAS - Service Protection des Données, 123 Avenue des Champs-Élysées, 75008 Paris</li>
+                </ul>
+                <p>
+                    Pour plus d'informations, consultez notre <a href="{{ path('page_privacy') }}" style="color: #6366f1; text-decoration: underline;">Politique de confidentialité</a>.
+                </p>
+            </div>
+
+            <div class="legal-section">
+                <h2>5. Cookies</h2>
+                <p>
+                    Ce site utilise des cookies pour améliorer votre expérience de navigation, réaliser des statistiques de visites
+                    et vous proposer des contenus adaptés.
+                </p>
+                <p>
+                    Vous pouvez à tout moment configurer vos préférences en matière de cookies via les paramètres de votre navigateur.
+                </p>
+            </div>
+
+            <div class="legal-section">
+                <h2>6. Responsabilité</h2>
+                <p>
+                    Références Événements SAS s'efforce d'assurer l'exactitude et la mise à jour des informations diffusées sur ce site,
+                    dont elle se réserve le droit de corriger le contenu à tout moment et sans préavis.
+                </p>
+                <p>
+                    Toutefois, Références Événements SAS ne peut garantir l'exactitude, la précision ou l'exhaustivité des informations
+                    mises à disposition sur ce site.
+                </p>
+                <p>
+                    Références Événements SAS ne pourra être tenue responsable des dommages directs ou indirects résultant de l'utilisation
+                    de ce site ou d'autres sites qui lui sont liés.
+                </p>
+            </div>
+
+            <div class="legal-section">
+                <h2>7. Liens hypertextes</h2>
+                <p>
+                    Le site peut contenir des liens hypertextes vers d'autres sites. Références Événements SAS n'exerce aucun contrôle
+                    sur ces sites et décline toute responsabilité quant à leur contenu.
+                </p>
+                <p>
+                    La création de liens hypertextes vers le site Références Événements nécessite une autorisation préalable écrite.
+                </p>
+            </div>
+
+            <div class="legal-section">
+                <h2>8. Droit applicable</h2>
+                <p>
+                    Les présentes mentions légales sont régies par le droit français.
+                </p>
+                <p>
+                    En cas de litige et à défaut d'accord amiable, le litige sera porté devant les tribunaux français conformément
+                    aux règles de compétence en vigueur.
+                </p>
+            </div>
+
+            <div class="legal-section">
+                <h2>9. Contact</h2>
+                <p>
+                    Pour toute question concernant les mentions légales, vous pouvez nous contacter :
+                </p>
+                <ul>
+                    <li>Par email : <a href="mailto:contact@references-evenements.fr" style="color: #6366f1;">contact@references-evenements.fr</a></li>
+                    <li>Via notre <a href="{{ path('page_contact') }}" style="color: #6366f1; text-decoration: underline;">formulaire de contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    {% include 'partials/_footer.html.twig' %}
+{% endblock %}

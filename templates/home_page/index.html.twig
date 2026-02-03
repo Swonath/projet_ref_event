@@ -4,9 +4,268 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Références Evénements - Louez votre emplacement éphémère</title>
-    
-    {# CSS de la homepage #}
+
     <link rel="stylesheet" href="{{ asset('css/homepage.css') }}">
+    <style>
+        /* OVERRIDE - Formulaire de recherche */
+        .search-form {
+            display: grid !important;
+            grid-template-columns: 2fr 0.9fr 0.9fr 130px 150px !important;
+            gap: 10px !important;
+            align-items: flex-end !important;
+        }
+
+        .form-group input,
+        .form-group select,
+        .btn-search,
+        .btn-plus-filtres {
+            height: 47px !important;
+        }
+
+        .btn-search {
+            padding: 12px 14px !important;
+        }
+
+        .btn-plus-filtres {
+            padding: 12px 10px !important;
+            white-space: nowrap !important;
+            background: white !important;
+            color: #1a1a1a !important;
+            border: 2px solid #1a1a1a !important;
+            border-radius: 6px !important;
+            font-size: 13px !important;
+            font-weight: 600 !important;
+            line-height: 1 !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+        }
+
+        .btn-plus-filtres:hover {
+            background: #f5f4f4 !important;
+            color: black !important;
+        }
+
+        /* Grille d'emplacements */
+        .emplacements-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 24px;
+            margin-top: 40px;
+        }
+
+        .emplacement-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #e5e5e5;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .emplacement-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+
+        .emplacement-card-image {
+            width: 100%;
+            height: 180px;
+            background: #f0f0f0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .emplacement-card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .emplacement-card-content {
+            padding: 16px;
+        }
+
+        .emplacement-card-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1a1a1a;
+        }
+
+        .emplacement-card-location {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .emplacement-card-info {
+            font-size: 13px;
+            color: #999;
+            margin-bottom: 12px;
+        }
+
+        .emplacement-card-price {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+
+        .emplacement-card-price-label {
+            font-size: 14px;
+            color: #666;
+            font-weight: 400;
+        }
+
+        .emplacements-section {
+            max-width: 1400px;
+            margin: 60px auto;
+            padding: 0 40px;
+        }
+
+        .voir-plus-container {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .btn-voir-plus {
+            background: #1a1a1a;
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-voir-plus:hover {
+            background: #333;
+        }
+
+        .emplacements-count {
+            text-align: center;
+            color: #666;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        /* Filtres avancés */
+        .filtres-avances {
+            background: white;
+            border: 1px solid #e5e5e5;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 15px;
+        }
+
+        .filtres-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .filtre-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .filtre-group label {
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .filtre-group input,
+        .filtre-group select {
+            padding: 10px;
+            border: 1px solid #e5e5e5;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .btn-reset-filtres {
+            background: #f8f9fa;
+            color: #666;
+            border: 1px solid #e5e5e5;
+            padding: 10px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+        }
+
+        .btn-reset-filtres:hover {
+            background: #e9ecef;
+        }
+
+        /* Bouton recherche carte */
+        .btn-carte-recherche {
+            display: inline-block;
+            background: white;
+            color: #1a1a1a;
+            border: 2px solid #1a1a1a;
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .btn-carte-recherche:hover {
+            background: #1a1a1a;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        @media (max-width: 1024px) {
+            .filtres-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .filtres-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 1400px) {
+            .emplacements-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .emplacements-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .emplacements-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .emplacements-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
 
@@ -16,22 +275,29 @@
         <nav class="nav">
             <a href="#comment-ca-marche" class="nav-link">Comment ça marche</a>
             <a href="#emplacements" class="nav-link">Emplacements populaires</a>
-            
-            {# MODIFICATION : Affichage conditionnel selon l'état de connexion #}
+
             {% if app.user %}
-                {# Utilisateur connecté : afficher l'avatar et le lien vers le compte #}
                 <a href="{{ path('app_my_account') }}" class="user-menu">
                     <div class="user-avatar">
                         {% if app.user.photoProfile is defined and app.user.photoProfile %}
                             <img src="{{ asset('uploads/profiles/' ~ app.user.photoProfile) }}" alt="Photo de profil" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
                         {% else %}
-                            {{ app.user.nom|slice(0, 2)|upper }}
+                            {% if app.user.nomCentre is defined %}
+                                {{ app.user.nomCentre|slice(0, 2)|upper }}
+                            {% else %}
+                                {{ app.user.nom|slice(0, 2)|upper }}
+                            {% endif %}
                         {% endif %}
                     </div>
-                    <span class="user-name">{{ app.user.nom }}</span>
+                    <span class="user-name">
+                        {% if app.user.nomCentre is defined %}
+                            {{ app.user.nomCentre }}
+                        {% else %}
+                            {{ app.user.nom }}
+                        {% endif %}
+                    </span>
                 </a>
             {% else %}
-                {# Utilisateur non connecté : afficher Connexion et Inscription #}
                 <a href="{{ path('app_login') }}" class="nav-link">Connexion</a>
                 <a href="{{ path('app_register') }}" class="nav-link primary">Inscription</a>
             {% endif %}
@@ -42,32 +308,105 @@
     <section class="hero">
         <h1>Trouvez l'emplacement parfait pour votre activité éphémère</h1>
         <p>La plateforme qui connecte centres commerciaux et entrepreneurs</p>
-        
+
+        <!-- Bouton Recherche avec carte -->
+        <div style="margin: 20px 0;">
+            <a href="{{ path('recherche_carte') }}" class="btn-carte-recherche">
+                🗺️ Rechercher avec la carte
+            </a>
+        </div>
+
         <!-- Search Box -->
         <div class="search-box">
-            <form class="search-form" action="#" method="get">
+            <form class="search-form" action="{{ path('app_home_page') }}" method="get" id="searchForm">
                 <div class="form-group">
                     <label>Où</label>
-                    <input type="text" name="location" placeholder="Ville, code postal, centre commercial...">
+                    <input type="text" name="search" placeholder="Ville, code postal, centre commercial..." value="{{ search }}">
                 </div>
                 <div class="form-group">
                     <label>Du</label>
-                    <input type="date" name="date_debut">
+                    <input type="date" name="date_debut" value="{{ dateDebut }}">
                 </div>
                 <div class="form-group">
                     <label>Au</label>
-                    <input type="date" name="date_fin">
+                    <input type="date" name="date_fin" value="{{ dateFin }}">
                 </div>
                 <button type="submit" class="btn-search">Rechercher</button>
+
+                <!-- Bouton Plus de filtres -->
+                <button type="button" class="btn-plus-filtres" onclick="toggleFiltres()">
+                    🔍 Plus de filtres
+                </button>
             </form>
+
+            <!-- Filtres avancés (cachés par défaut) -->
+            <div class="filtres-avances" id="filtresAvances" style="display: {% if surfaceMin or surfaceMax or prixMin or prixMax or type %}block{% else %}none{% endif %};">
+                <div class="filtres-grid">
+                    <div class="filtre-group">
+                        <label>Surface minimum (m²)</label>
+                        <input type="number" name="surface_min" form="searchForm" placeholder="Ex: 10" value="{{ surfaceMin }}">
+                    </div>
+                    <div class="filtre-group">
+                        <label>Surface maximum (m²)</label>
+                        <input type="number" name="surface_max" form="searchForm" placeholder="Ex: 50" value="{{ surfaceMax }}">
+                    </div>
+                    <div class="filtre-group">
+                        <label>Prix minimum (€/jour)</label>
+                        <input type="number" name="prix_min" form="searchForm" placeholder="Ex: 50" value="{{ prixMin }}">
+                    </div>
+                    <div class="filtre-group">
+                        <label>Prix maximum (€/jour)</label>
+                        <input type="number" name="prix_max" form="searchForm" placeholder="Ex: 500" value="{{ prixMax }}">
+                    </div>
+                    <div class="filtre-group">
+                        <label>Type d'emplacement</label>
+                        <select name="type" form="searchForm">
+                            <option value="">Tous les types</option>
+                            <option value="stand" {{ type == 'stand' ? 'selected' : '' }}>Stand</option>
+                            <option value="kiosque" {{ type == 'kiosque' ? 'selected' : '' }}>Kiosque</option>
+                            <option value="boutique" {{ type == 'boutique' ? 'selected' : '' }}>Boutique</option>
+                            <option value="corner" {{ type == 'corner' ? 'selected' : '' }}>Corner</option>
+                        </select>
+                    </div>
+                    <div class="filtre-group">
+                        <label>&nbsp;</label>
+                        <button type="button" class="btn-reset-filtres" onclick="resetFiltres()">
+                            Réinitialiser
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
+    <!-- Emplacements Grid -->
+    {% if search %}
+        <section class="emplacements-section" id="emplacements">
+            <h2 style="font-size: 28px; font-weight: 700; margin-bottom: 10px;">Résultats de recherche</h2>
+            <p style="color: #666; margin-bottom: 30px;">{{ emplacements|length }} emplacement{% if emplacements|length > 1 %}s{% endif %} trouvé{% if emplacements|length > 1 %}s{% endif %} pour "{{ search }}"</p>
+
+            <div class="emplacements-grid" id="emplacementsGrid">
+                {% include 'home_page/_emplacements_grid.html.twig' %}
+            </div>
+
+            {% if emplacements|length < total %}
+                <div class="voir-plus-container">
+                    <button type="button" class="btn-voir-plus" id="btnVoirPlus" onclick="chargerPlusEmplacements()">
+                        Voir plus d'emplacements
+                    </button>
+                    <div class="emplacements-count">
+                        Affichage de <span id="currentCount">{{ emplacements|length }}</span> sur {{ total }} emplacements
+                    </div>
+                </div>
+            {% endif %}
+        </section>
+    {% endif %}
+
     <!-- How it works -->
-    <div class="container" id="comment-ca-marche">
+    <div class="container" id="comment-ca-marche" style="margin-top: 80px;">
         <h2 class="section-title">Comment ça marche ?</h2>
         <p class="section-subtitle">Réservez votre emplacement en 3 étapes simples</p>
-        
+
         <div class="steps">
             <div class="step">
                 <div class="step-number">1</div>
@@ -87,150 +426,472 @@
         </div>
     </div>
 
-    <!-- Popular Locations -->
-    <div class="container" id="emplacements">
-        <h2 class="section-title">Emplacements populaires</h2>
-        <p class="section-subtitle">Découvrez les centres commerciaux les plus demandés</p>
-        
-        <div class="locations">
-            <div class="location-card">
-                <div class="location-image">[Photo centre commercial]</div>
-                <div class="location-info">
-                    <h3 class="location-title">Centre Atlantis</h3>
-                    <p class="location-details">📍 Saint-Herblain • 25 emplacements disponibles</p>
-                    <p class="location-price">150€ <span>/ jour</span></p>
-                </div>
-            </div>
-            
-            <div class="location-card">
-                <div class="location-image">[Photo centre commercial]</div>
-                <div class="location-info">
-                    <h3 class="location-title">Beaulieu</h3>
-                    <p class="location-details">📍 Nantes Centre • 18 emplacements disponibles</p>
-                    <p class="location-price">180€ <span>/ jour</span></p>
-                </div>
-            </div>
-            
-            <div class="location-card">
-                <div class="location-image">[Photo centre commercial]</div>
-                <div class="location-info">
-                    <h3 class="location-title">Paridis</h3>
-                    <p class="location-details">📍 La Rochelle • 12 emplacements disponibles</p>
-                    <p class="location-price">120€ <span>/ jour</span></p>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!-- Emplacements populaires (Carousel) -->
+    <section class="emplacements-populaires" id="emplacements">
+        <div class="container" style="padding-top: 0;">
+            <h2 class="section-title">Emplacements les plus populaires</h2>
+            <p class="section-subtitle">Les emplacements les plus réservés par nos utilisateurs</p>
 
-    <!-- Benefits -->
-    <div class="container">
-        <h2 class="section-title">Pourquoi choisir Références Evénements ?</h2>
-        <p class="section-subtitle">Une solution complète pour vos locations éphémères</p>
-        
-        <div class="benefits">
-            <div class="benefits-grid">
-                <div class="benefit-item">
-                    <div class="benefit-icon">⚡</div>
-                    <div class="benefit-content">
-                        <h3>Réservation instantanée</h3>
-                        <p>Réservez votre emplacement en quelques clics et recevez une confirmation immédiate</p>
-                    </div>
-                </div>
-                
-                <div class="benefit-item">
-                    <div class="benefit-icon">🔒</div>
-                    <div class="benefit-content">
-                        <h3>Paiement sécurisé</h3>
-                        <p>Transactions protégées et cryptées pour votre sécurité et votre tranquillité d'esprit</p>
-                    </div>
-                </div>
-                
-                <div class="benefit-item">
-                    <div class="benefit-icon">📱</div>
-                    <div class="benefit-content">
-                        <h3>Gestion simplifiée</h3>
-                        <p>Suivez toutes vos réservations depuis votre tableau de bord personnel</p>
-                    </div>
-                </div>
-                
-                <div class="benefit-item">
-                    <div class="benefit-icon">💬</div>
-                    <div class="benefit-content">
-                        <h3>Support dédié</h3>
-                        <p>Une équipe disponible 7j/7 pour répondre à toutes vos questions</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+            <div class="carousel-wrapper">
+                <button class="carousel-btn carousel-btn-prev" onclick="deplacerCarousel(-1)" aria-label="Précédent">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                </button>
 
-    <!-- CTA Section -->
-    <div class="container">
-        <div class="cta-section">
-            <h2>Prêt à développer votre activité ?</h2>
-            <p>Rejoignez des centaines d'entrepreneurs qui font confiance à Références Evénements</p>
-            <div class="cta-buttons">
-                {% if app.user %}
-                    {# Si connecté, bouton vers la recherche #}
-                    <a href="#" class="btn-cta primary">Rechercher un emplacement</a>
-                    <a href="{{ path('app_my_account') }}" class="btn-cta secondary">Mon compte</a>
-                {% else %}
-                    {# Si non connecté, bouton vers l'inscription #}
-                    <a href="{{ path('app_register') }}" class="btn-cta primary">Créer un compte</a>
-                    <a href="#comment-ca-marche" class="btn-cta secondary">En savoir plus</a>
-                {% endif %}
+                <div class="carousel-container">
+                    <div class="carousel-track" id="carouselTrack">
+                        {% for emplacement in emplacementsPopulaires %}
+                            <a href="{{ path('emplacement_detail', {id: emplacement.id}) }}" class="carousel-card">
+                                <div class="carousel-card-image">
+                                    {% if emplacement.photos is not empty %}
+                                        <img src="{{ asset(emplacement.photos|first.cheminFichier) }}" alt="{{ emplacement.titreAnnonce }}">
+                                    {% else %}
+                                        <div style="display: flex; align-items: center; justify-content: center; height: 100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; font-size: 48px;">
+                                            📍
+                                        </div>
+                                    {% endif %}
+                                    <div class="carousel-card-badge">⭐ Populaire</div>
+                                </div>
+                                <div class="carousel-card-content">
+                                    <div class="carousel-card-title">{{ emplacement.centreCommercial.nomCentre }}</div>
+                                    <div class="carousel-card-location">
+                                        📍 {{ emplacement.centreCommercial.ville }} • {{ emplacement.surface }} m²
+                                    </div>
+                                    <div class="carousel-card-info">{{ emplacement.typeEmplacement|capitalize }}</div>
+                                    <div class="carousel-card-price">
+                                        {{ emplacement.tarifJour }}€
+                                        <span class="carousel-card-price-label">/ jour</span>
+                                    </div>
+                                </div>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <button class="carousel-btn carousel-btn-next" onclick="deplacerCarousel(1)" aria-label="Suivant">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </button>
             </div>
+
+            <div class="carousel-dots" id="carouselDots"></div>
         </div>
-    </div>
+    </section>
+
+    <style>
+        /* Carousel Styles */
+        .emplacements-populaires {
+            background: #f8f9fa;
+            padding: 60px 0;
+            margin-top: 60px;
+        }
+
+        .carousel-wrapper {
+            position: relative;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 60px;
+        }
+
+        .carousel-container {
+            overflow: hidden;
+            border-radius: 12px;
+        }
+
+        .carousel-track {
+            display: flex;
+            gap: 24px;
+            transition: transform 0.5s ease;
+        }
+
+        .carousel-card {
+            min-width: calc((100% - 96px) / 5);
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #e5e5e5;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .carousel-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+
+        .carousel-card-image {
+            width: 100%;
+            height: 180px;
+            background: #f0f0f0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .carousel-card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .carousel-card-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(255, 255, 255, 0.95);
+            color: #1a1a1a;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .carousel-card-content {
+            padding: 16px;
+        }
+
+        .carousel-card-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1a1a1a;
+        }
+
+        .carousel-card-location {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .carousel-card-info {
+            font-size: 13px;
+            color: #999;
+            margin-bottom: 12px;
+        }
+
+        .carousel-card-price {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+
+        .carousel-card-price-label {
+            font-size: 14px;
+            color: #666;
+            font-weight: 400;
+        }
+
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: white;
+            border: 2px solid #1a1a1a;
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            z-index: 10;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .carousel-btn:hover {
+            background: #1a1a1a;
+            color: white;
+        }
+
+        .carousel-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .carousel-btn-prev {
+            left: 0;
+        }
+
+        .carousel-btn-next {
+            right: 0;
+        }
+
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 24px;
+        }
+
+        .carousel-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #d5d5d5;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .carousel-dot.active {
+            background: #1a1a1a;
+            width: 24px;
+            border-radius: 5px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1400px) {
+            .carousel-card {
+                min-width: calc((100% - 72px) / 4);
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .carousel-card {
+                min-width: calc((100% - 48px) / 3);
+            }
+            .carousel-wrapper {
+                padding: 0 50px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .carousel-card {
+                min-width: calc((100% - 24px) / 2);
+            }
+            .carousel-wrapper {
+                padding: 0 40px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .carousel-card {
+                min-width: 100%;
+            }
+            .carousel-wrapper {
+                padding: 0 40px;
+            }
+        }
+    </style>
+
+    <script>
+        let currentOffset = {{ emplacements|length }};
+        const totalEmplacements = {{ total }};
+        const searchQuery = '{{ search }}';
+
+        function chargerPlusEmplacements() {
+            const btn = document.getElementById('btnVoirPlus');
+            btn.disabled = true;
+            btn.textContent = 'Chargement...';
+
+            // Récupérer les valeurs des filtres
+            const surfaceMin = document.querySelector('input[name="surface_min"]')?.value || '';
+            const surfaceMax = document.querySelector('input[name="surface_max"]')?.value || '';
+            const prixMin = document.querySelector('input[name="prix_min"]')?.value || '';
+            const prixMax = document.querySelector('input[name="prix_max"]')?.value || '';
+            const type = document.querySelector('select[name="type"]')?.value || '';
+
+            let url = `{{ path('emplacements_charger_plus') }}?offset=${currentOffset}&search=${encodeURIComponent(searchQuery)}`;
+
+            if (surfaceMin) url += `&surface_min=${encodeURIComponent(surfaceMin)}`;
+            if (surfaceMax) url += `&surface_max=${encodeURIComponent(surfaceMax)}`;
+            if (prixMin) url += `&prix_min=${encodeURIComponent(prixMin)}`;
+            if (prixMax) url += `&prix_max=${encodeURIComponent(prixMax)}`;
+            if (type) url += `&type=${encodeURIComponent(type)}`;
+
+            fetch(url)
+                .then(response => response.text())
+                .then(html => {
+                    const grid = document.getElementById('emplacementsGrid');
+                    grid.insertAdjacentHTML('beforeend', html);
+
+                    // Compter les nouvelles cards ajoutées
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    const newCards = doc.querySelectorAll('.emplacement-card').length;
+
+                    currentOffset += newCards;
+                    document.getElementById('currentCount').textContent = currentOffset;
+
+                    btn.disabled = false;
+                    btn.textContent = 'Voir plus d\'emplacements';
+
+                    // Masquer le bouton si tous les emplacements sont chargés
+                    if (currentOffset >= totalEmplacements) {
+                        btn.parentElement.style.display = 'none';
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                    btn.disabled = false;
+                    btn.textContent = 'Voir plus d\'emplacements';
+                });
+        }
+
+        function toggleFiltres() {
+            const filtres = document.getElementById('filtresAvances');
+            const btn = document.querySelector('.btn-plus-filtres');
+
+            if (filtres.style.display === 'none') {
+                filtres.style.display = 'block';
+                btn.textContent = '🔼 Masquer les filtres';
+            } else {
+                filtres.style.display = 'none';
+                btn.textContent = '🔍 Plus de filtres';
+            }
+        }
+
+        function resetFiltres() {
+            document.querySelectorAll('.filtre-group input, .filtre-group select').forEach(input => {
+                input.value = '';
+            });
+            document.getElementById('searchForm').submit();
+        }
+
+        // Initialiser le texte du bouton au chargement de la page
+        document.addEventListener('DOMContentLoaded', function() {
+            const filtres = document.getElementById('filtresAvances');
+            const btn = document.querySelector('.btn-plus-filtres');
+
+            if (filtres && btn) {
+                if (filtres.style.display !== 'none') {
+                    btn.textContent = '🔼 Masquer les filtres';
+                }
+            }
+
+            // Initialiser le carousel
+            initCarousel();
+        });
+
+        // Carousel JavaScript
+        let carouselPosition = 0;
+        let cardsVisibles = 5;
+
+        function initCarousel() {
+            const track = document.getElementById('carouselTrack');
+            if (!track) return;
+
+            const totalCards = track.children.length;
+
+            // Calculer le nombre de cards visibles selon la largeur de l'écran
+            updateCardsVisibles();
+            window.addEventListener('resize', updateCardsVisibles);
+
+            // Créer les dots
+            createCarouselDots(totalCards);
+
+            // Mettre à jour les boutons
+            updateCarouselButtons();
+        }
+
+        function updateCardsVisibles() {
+            const width = window.innerWidth;
+            if (width <= 480) {
+                cardsVisibles = 1;
+            } else if (width <= 768) {
+                cardsVisibles = 2;
+            } else if (width <= 1024) {
+                cardsVisibles = 3;
+            } else if (width <= 1400) {
+                cardsVisibles = 4;
+            } else {
+                cardsVisibles = 5;
+            }
+        }
+
+        function createCarouselDots(totalCards) {
+            const dotsContainer = document.getElementById('carouselDots');
+            if (!dotsContainer) return;
+
+            dotsContainer.innerHTML = '';
+            const totalPages = Math.ceil(totalCards / cardsVisibles);
+
+            for (let i = 0; i < totalPages; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'carousel-dot';
+                if (i === 0) dot.classList.add('active');
+                dot.onclick = () => allerALaPage(i);
+                dotsContainer.appendChild(dot);
+            }
+        }
+
+        function deplacerCarousel(direction) {
+            const track = document.getElementById('carouselTrack');
+            if (!track) return;
+
+            const totalCards = track.children.length;
+            const maxPosition = Math.ceil(totalCards / cardsVisibles) - 1;
+
+            carouselPosition += direction;
+
+            if (carouselPosition < 0) {
+                carouselPosition = 0;
+            } else if (carouselPosition > maxPosition) {
+                carouselPosition = maxPosition;
+            }
+
+            const cardWidth = track.children[0].offsetWidth;
+            const gap = 24;
+            const moveAmount = (cardWidth + gap) * cardsVisibles;
+
+            track.style.transform = `translateX(-${carouselPosition * moveAmount}px)`;
+
+            updateCarouselButtons();
+            updateCarouselDots();
+        }
+
+        function allerALaPage(pageIndex) {
+            const track = document.getElementById('carouselTrack');
+            if (!track) return;
+
+            carouselPosition = pageIndex;
+
+            const cardWidth = track.children[0].offsetWidth;
+            const gap = 24;
+            const moveAmount = (cardWidth + gap) * cardsVisibles;
+
+            track.style.transform = `translateX(-${carouselPosition * moveAmount}px)`;
+
+            updateCarouselButtons();
+            updateCarouselDots();
+        }
+
+        function updateCarouselButtons() {
+            const track = document.getElementById('carouselTrack');
+            if (!track) return;
+
+            const totalCards = track.children.length;
+            const maxPosition = Math.ceil(totalCards / cardsVisibles) - 1;
+
+            const prevBtn = document.querySelector('.carousel-btn-prev');
+            const nextBtn = document.querySelector('.carousel-btn-next');
+
+            if (prevBtn) prevBtn.disabled = carouselPosition === 0;
+            if (nextBtn) nextBtn.disabled = carouselPosition >= maxPosition;
+        }
+
+        function updateCarouselDots() {
+            const dots = document.querySelectorAll('.carousel-dot');
+            dots.forEach((dot, index) => {
+                if (index === carouselPosition) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
+        }
+    </script>
 
     <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-column">
-                <h4>À propos</h4>
-                <ul>
-                    <li><a href="#">Notre histoire</a></li>
-                    <li><a href="#">L'équipe</a></li>
-                    <li><a href="#">Presse</a></li>
-                    <li><a href="#">Carrières</a></li>
-                </ul>
-            </div>
-            
-            <div class="footer-column">
-                <h4>Pour les locataires</h4>
-                <ul>
-                    <li><a href="#">Comment réserver</a></li>
-                    <li><a href="#">Tarifs</a></li>
-                    <li><a href="#">FAQ Locataires</a></li>
-                    <li><a href="#">Blog</a></li>
-                </ul>
-            </div>
-            
-            <div class="footer-column">
-                <h4>Pour les centres</h4>
-                <ul>
-                    <li><a href="#">Publier une annonce</a></li>
-                    <li><a href="#">Tarifs & commissions</a></li>
-                    <li><a href="#">FAQ Centres</a></li>
-                    <li><a href="#">Support technique</a></li>
-                </ul>
-            </div>
-            
-            <div class="footer-column">
-                <h4>Légal</h4>
-                <ul>
-                    <li><a href="#">Mentions légales</a></li>
-                    <li><a href="#">CGU</a></li>
-                    <li><a href="#">CGV</a></li>
-                    <li><a href="#">Confidentialité</a></li>
-                </ul>
-            </div>
-        </div>
-        
-        <div class="footer-bottom">
-            <p>© 2025 Références Evénements - Tous droits réservés</p>
-        </div>
-    </footer>
+    {% include 'partials/_footer.html.twig' %}
 
 </body>
 </html>

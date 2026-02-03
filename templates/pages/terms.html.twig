@@ -1,0 +1,355 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Conditions Générales d'Utilisation - Références Événements{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/pages.css') }}">
+    <style>
+        .legal-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .legal-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .legal-header h1 {
+            font-size: 36px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 12px;
+        }
+
+        .legal-header p {
+            font-size: 16px;
+            color: #666;
+        }
+
+        .legal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .legal-section {
+            margin-bottom: 40px;
+        }
+
+        .legal-section h2 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #6366f1;
+        }
+
+        .legal-section h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin: 20px 0 12px 0;
+        }
+
+        .legal-section p {
+            font-size: 15px;
+            line-height: 1.7;
+            color: #444;
+            margin-bottom: 12px;
+        }
+
+        .legal-section ul {
+            margin-left: 20px;
+            margin-bottom: 12px;
+        }
+
+        .legal-section li {
+            font-size: 15px;
+            line-height: 1.7;
+            color: #444;
+            margin-bottom: 8px;
+        }
+
+        .info-box {
+            background: #f8f9fa;
+            border-left: 4px solid #6366f1;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        @media (max-width: 768px) {
+            .legal-content {
+                padding: 24px;
+            }
+
+            .legal-header h1 {
+                font-size: 28px;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    {% include 'partials/_navbar.html.twig' %}
+
+    <div class="legal-container">
+        <div class="legal-header">
+            <h1>Conditions Générales d'Utilisation</h1>
+            <p>Dernière mise à jour : {{ "now"|date("d/m/Y") }}</p>
+        </div>
+
+        <div class="legal-content">
+            <div class="warning-box">
+                <p><strong>Important :</strong> En utilisant la plateforme Références Événements, vous acceptez les présentes Conditions Générales d'Utilisation. Si vous n'acceptez pas ces conditions, veuillez ne pas utiliser notre plateforme.</p>
+            </div>
+
+            <div class="legal-section">
+                <h2>1. Objet</h2>
+                <p>
+                    Les présentes Conditions Générales d'Utilisation (CGU) définissent les règles d'accès et d'utilisation de la plateforme
+                    Références Événements, accessible à l'adresse www.references-evenements.fr.
+                </p>
+                <p>
+                    La plateforme a pour objet de mettre en relation des centres commerciaux (ci-après "Centres") disposant d'espaces
+                    temporaires avec des entrepreneurs (ci-après "Locataires") souhaitant louer ces espaces pour des événements,
+                    boutiques éphémères ou animations commerciales.
+                </p>
+            </div>
+
+            <div class="legal-section">
+                <h2>2. Définitions</h2>
+                <ul>
+                    <li><strong>Plateforme :</strong> le site internet www.references-evenements.fr et ses services associés</li>
+                    <li><strong>Utilisateur :</strong> toute personne physique ou morale utilisant la Plateforme</li>
+                    <li><strong>Centre :</strong> centre commercial proposant des emplacements à la location</li>
+                    <li><strong>Locataire :</strong> entrepreneur louant un emplacement via la Plateforme</li>
+                    <li><strong>Emplacement :</strong> espace temporaire proposé à la location par un Centre</li>
+                    <li><strong>Réservation :</strong> demande de location d'un Emplacement effectuée par un Locataire</li>
+                </ul>
+            </div>
+
+            <div class="legal-section">
+                <h2>3. Inscription et compte utilisateur</h2>
+
+                <h3>3.1 Conditions d'inscription</h3>
+                <p>
+                    L'inscription sur la Plateforme est réservée aux personnes majeures et capables juridiquement.
+                    Pour les personnes morales, l'inscription doit être effectuée par une personne habilitée à engager l'entité.
+                </p>
+
+                <h3>3.2 Informations requises</h3>
+                <p>Lors de l'inscription, vous devez fournir des informations exactes, complètes et à jour :</p>
+                <ul>
+                    <li>Pour les Locataires : nom, prénom, email, téléphone, adresse, SIRET</li>
+                    <li>Pour les Centres : nom du centre, SIRET, numéro TVA, adresse, téléphone, IBAN</li>
+                </ul>
+
+                <h3>3.3 Sécurité du compte</h3>
+                <p>
+                    Vous êtes responsable de la confidentialité de vos identifiants de connexion et de toutes les activités
+                    effectuées via votre compte. Vous vous engagez à nous informer immédiatement de toute utilisation non autorisée.
+                </p>
+            </div>
+
+            <div class="legal-section">
+                <h2>4. Services proposés</h2>
+
+                <h3>4.1 Pour les Centres</h3>
+                <ul>
+                    <li>Publication et gestion d'annonces d'emplacements</li>
+                    <li>Réception et validation/refus des demandes de réservation</li>
+                    <li>Gestion des périodes d'indisponibilité</li>
+                    <li>Messagerie avec les Locataires</li>
+                    <li>Suivi des paiements et génération de documents</li>
+                </ul>
+
+                <h3>4.2 Pour les Locataires</h3>
+                <ul>
+                    <li>Recherche d'emplacements disponibles</li>
+                    <li>Demande de réservation en ligne</li>
+                    <li>Paiement sécurisé</li>
+                    <li>Messagerie avec les Centres</li>
+                    <li>Consultation des documents (contrats, factures, devis)</li>
+                    <li>Publication d'avis sur les emplacements loués</li>
+                </ul>
+            </div>
+
+            <div class="legal-section">
+                <h2>5. Publication d'annonces (Centres)</h2>
+                <p>
+                    Les Centres s'engagent à publier des annonces conformes à la réalité, avec des informations exactes
+                    concernant l'emplacement, ses caractéristiques, son prix et sa disponibilité.
+                </p>
+                <p>
+                    Les photos publiées doivent correspondre à l'emplacement proposé et être récentes.
+                </p>
+                <p>
+                    Références Événements se réserve le droit de refuser ou de retirer toute annonce qui ne respecterait pas
+                    les présentes CGU ou qui serait contraire à la loi.
+                </p>
+            </div>
+
+            <div class="legal-section">
+                <h2>6. Réservations et paiements</h2>
+
+                <h3>6.1 Processus de réservation</h3>
+                <p>
+                    Lorsqu'un Locataire effectue une demande de réservation, celle-ci doit être validée par le Centre.
+                    La réservation n'est définitive qu'après validation par le Centre et paiement par le Locataire.
+                </p>
+
+                <h3>6.2 Paiement</h3>
+                <p>
+                    Le paiement s'effectue en ligne via des moyens de paiement sécurisés. Le montant total comprend :
+                </p>
+                <ul>
+                    <li>Le montant de la location</li>
+                    <li>La commission de la plateforme</li>
+                    <li>La caution (le cas échéant)</li>
+                </ul>
+
+                <h3>6.3 Commission</h3>
+                <p>
+                    Références Événements prélève une commission sur chaque réservation confirmée. Le montant de la commission
+                    est clairement indiqué lors de la réservation et sur les factures.
+                </p>
+
+                <h3>6.4 Annulation</h3>
+                <p>
+                    Les conditions d'annulation dépendent du délai de prévenance :
+                </p>
+                <ul>
+                    <li>Plus de 30 jours avant le début : remboursement intégral</li>
+                    <li>Entre 15 et 30 jours : 50% du montant remboursé</li>
+                    <li>Moins de 15 jours : aucun remboursement</li>
+                </ul>
+            </div>
+
+            <div class="legal-section">
+                <h2>7. Obligations des utilisateurs</h2>
+
+                <h3>7.1 Obligations générales</h3>
+                <p>Vous vous engagez à :</p>
+                <ul>
+                    <li>Respecter les lois et règlements en vigueur</li>
+                    <li>Fournir des informations exactes et à jour</li>
+                    <li>Ne pas usurper l'identité d'autrui</li>
+                    <li>Ne pas perturber le fonctionnement de la Plateforme</li>
+                    <li>Ne pas tenter d'accéder aux données d'autres Utilisateurs</li>
+                    <li>Respecter les droits de propriété intellectuelle</li>
+                </ul>
+
+                <h3>7.2 Obligations des Centres</h3>
+                <ul>
+                    <li>Garantir la disponibilité des emplacements publiés</li>
+                    <li>Maintenir les emplacements en bon état</li>
+                    <li>Répondre aux demandes de réservation dans un délai raisonnable</li>
+                    <li>Respecter les engagements pris lors de la validation d'une réservation</li>
+                </ul>
+
+                <h3>7.3 Obligations des Locataires</h3>
+                <ul>
+                    <li>Utiliser l'emplacement conformément à sa destination</li>
+                    <li>Respecter le règlement intérieur du centre commercial</li>
+                    <li>Souscrire une assurance responsabilité civile professionnelle</li>
+                    <li>Restituer l'emplacement dans son état initial</li>
+                </ul>
+            </div>
+
+            <div class="legal-section">
+                <h2>8. Avis et notation</h2>
+                <p>
+                    Les Locataires peuvent publier des avis sur les emplacements qu'ils ont loués. Les avis doivent être
+                    objectifs, honnêtes et conformes à la réalité.
+                </p>
+                <p>
+                    Références Événements se réserve le droit de modérer ou supprimer tout avis :
+                </p>
+                <ul>
+                    <li>Contenant des propos diffamatoires, injurieux ou discriminatoires</li>
+                    <li>Manifestement faux ou trompeur</li>
+                    <li>Publié par une personne n'ayant pas effectué de réservation</li>
+                    <li>Contenant des données personnelles</li>
+                </ul>
+            </div>
+
+            <div class="legal-section">
+                <h2>9. Responsabilité</h2>
+                <p>
+                    Références Événements agit en qualité d'intermédiaire entre les Centres et les Locataires. La plateforme
+                    ne peut être tenue responsable :
+                </p>
+                <ul>
+                    <li>De la non-conformité d'un emplacement par rapport à son annonce</li>
+                    <li>Des litiges entre Centres et Locataires</li>
+                    <li>Des dommages causés pendant l'occupation d'un emplacement</li>
+                    <li>De la perte ou du vol de biens</li>
+                    <li>Des interruptions de service non imputables à Références Événements</li>
+                </ul>
+            </div>
+
+            <div class="legal-section">
+                <h2>10. Protection des données personnelles</h2>
+                <p>
+                    Le traitement de vos données personnelles est effectué conformément à notre
+                    <a href="{{ path('page_privacy') }}" style="color: #6366f1; text-decoration: underline;">Politique de confidentialité</a>
+                    et au RGPD.
+                </p>
+            </div>
+
+            <div class="legal-section">
+                <h2>11. Modification des CGU</h2>
+                <p>
+                    Références Événements se réserve le droit de modifier les présentes CGU à tout moment. Les Utilisateurs
+                    seront informés de toute modification significative par email ou via une notification sur la Plateforme.
+                </p>
+                <p>
+                    La poursuite de l'utilisation de la Plateforme après modification des CGU vaut acceptation des nouvelles conditions.
+                </p>
+            </div>
+
+            <div class="legal-section">
+                <h2>12. Résiliation</h2>
+                <p>
+                    Vous pouvez à tout moment fermer votre compte en nous contactant. Références Événements peut également
+                    suspendre ou fermer votre compte en cas de violation des présentes CGU.
+                </p>
+            </div>
+
+            <div class="legal-section">
+                <h2>13. Droit applicable et juridiction</h2>
+                <p>
+                    Les présentes CGU sont régies par le droit français. En cas de litige, et à défaut d'accord amiable,
+                    les tribunaux français seront seuls compétents.
+                </p>
+            </div>
+
+            <div class="legal-section">
+                <h2>14. Contact</h2>
+                <p>
+                    Pour toute question concernant les CGU, vous pouvez nous contacter :
+                </p>
+                <ul>
+                    <li>Par email : <a href="mailto:legal@references-evenements.fr" style="color: #6366f1;">legal@references-evenements.fr</a></li>
+                    <li>Via notre <a href="{{ path('page_contact') }}" style="color: #6366f1; text-decoration: underline;">formulaire de contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    {% include 'partials/_footer.html.twig' %}
+{% endblock %}

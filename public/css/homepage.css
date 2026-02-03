@@ -165,15 +165,16 @@ body {
     background: white;
     border-radius: 12px;
     padding: 24px;
-    max-width: 1000px;
+    max-width: 1400px;
     margin: 0 auto;
     box-shadow: 0 8px 24px rgba(0,0,0,0.15);
 }
 
 .search-form {
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr 140px;
-    gap: 12px;
+    grid-template-columns: 2fr 0.9fr 0.9fr 130px 150px;
+    gap: 10px;
+    align-items: flex-end;
 }
 
 .form-group {
@@ -197,6 +198,7 @@ body {
     border-radius: 6px;
     font-size: 15px;
     transition: all 0.2s;
+    height: 47px;
 }
 
 .form-group input:focus,
@@ -213,13 +215,32 @@ body {
     font-size: 15px;
     font-weight: 600;
     cursor: pointer;
-    align-self: flex-end;
-    padding: 12px;
+    padding: 12px 14px;
     transition: all 0.2s;
+    height: 47px;
 }
 
 .btn-search:hover {
     background: #000;
+}
+
+.btn-plus-filtres {
+    background: white;
+    color: #1a1a1a;
+    border: 1px solid #e5e5e5;
+    padding: 11px 14px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+    height: 47px;
+}
+
+.btn-plus-filtres:hover {
+    background: #f8f9fa;
+    border-color: #1a1a1a;
 }
 
 /* ===================================
@@ -523,52 +544,77 @@ body {
    RESPONSIVE
    =================================== */
 
+@media (max-width: 1200px) {
+    .search-form {
+        grid-template-columns: 1.5fr 0.9fr 0.9fr 120px 140px;
+        gap: 10px;
+    }
+}
+
+@media (max-width: 900px) {
+    .search-form {
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+    }
+
+    .btn-search,
+    .btn-plus-filtres {
+        grid-column: 1 / -1;
+    }
+}
+
 @media (max-width: 768px) {
     .search-form {
         grid-template-columns: 1fr;
     }
-    
+
+    .btn-search,
+    .btn-plus-filtres {
+        grid-column: 1;
+        width: 100%;
+    }
+
     .steps,
     .locations,
     .benefits-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .hero h1 {
         font-size: 32px;
     }
-    
+
     .footer-content {
         grid-template-columns: repeat(2, 1fr);
     }
-    
+
     .cta-buttons {
         flex-direction: column;
     }
-    
+
     .header {
         padding: 16px 20px;
     }
-    
+
     .nav {
         gap: 4px;
     }
-    
+
     .nav-link {
         padding: 6px 12px;
         font-size: 13px;
     }
-    
+
     /* Menu utilisateur en responsive */
     .user-name {
         display: none;
     }
-    
+
     .user-menu {
         padding: 6px;
         margin-left: 4px;
     }
-    
+
     .user-menu::after {
         display: none;
     }

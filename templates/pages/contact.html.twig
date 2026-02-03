@@ -1,0 +1,424 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Contact - Références Événements{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/pages.css') }}">
+    <style>
+        .contact-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .contact-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .contact-header h1 {
+            font-size: 42px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 16px;
+        }
+
+        .contact-header p {
+            font-size: 18px;
+            color: #666;
+        }
+
+        .contact-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .contact-info {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .contact-info h2 {
+            font-size: 28px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 30px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: start;
+            margin-bottom: 24px;
+        }
+
+        .info-icon {
+            font-size: 24px;
+            margin-right: 16px;
+            min-width: 32px;
+        }
+
+        .info-text h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 4px;
+        }
+
+        .info-text p {
+            font-size: 15px;
+            color: #666;
+            margin: 0;
+        }
+
+        .info-text a {
+            color: #6366f1;
+            text-decoration: none;
+        }
+
+        .info-text a:hover {
+            text-decoration: underline;
+        }
+
+        .contact-form {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .contact-form h2 {
+            font-size: 28px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .form-label .required {
+            color: #ef4444;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            font-size: 15px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        textarea.form-control {
+            min-height: 150px;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 14px 24px;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .alert {
+            padding: 16px 20px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            font-size: 15px;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .faq-section {
+            margin-top: 60px;
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .faq-section h2 {
+            font-size: 28px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .faq-item {
+            margin-bottom: 24px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .faq-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .faq-question {
+            font-size: 17px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+        }
+
+        .faq-answer {
+            font-size: 15px;
+            line-height: 1.6;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .contact-content {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-header h1 {
+                font-size: 32px;
+            }
+
+            .contact-form,
+            .contact-info,
+            .faq-section {
+                padding: 24px;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    {% include 'partials/_navbar.html.twig' %}
+
+    <div class="contact-container">
+        <div class="contact-header">
+            <h1>Contactez-nous</h1>
+            <p>Nous sommes là pour répondre à toutes vos questions</p>
+        </div>
+
+        <div class="contact-content">
+            <div class="contact-info">
+                <h2>Nos coordonnées</h2>
+
+                <div class="info-item">
+                    <div class="info-icon">📍</div>
+                    <div class="info-text">
+                        <h3>Adresse</h3>
+                        <p>123 Avenue des Champs-Élysées<br>75008 Paris, France</p>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-icon">📧</div>
+                    <div class="info-text">
+                        <h3>Email</h3>
+                        <p><a href="mailto:contact@references-evenements.fr">contact@references-evenements.fr</a></p>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-icon">📞</div>
+                    <div class="info-text">
+                        <h3>Téléphone</h3>
+                        <p>+33 1 XX XX XX XX<br>Du lundi au vendredi, 9h-18h</p>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-icon">⏰</div>
+                    <div class="info-text">
+                        <h3>Horaires</h3>
+                        <p>
+                            Lundi - Vendredi : 9h00 - 18h00<br>
+                            Samedi - Dimanche : Fermé
+                        </p>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-icon">💬</div>
+                    <div class="info-text">
+                        <h3>Réseaux sociaux</h3>
+                        <p>
+                            Suivez-nous sur nos réseaux sociaux pour rester informé de nos actualités et nouveautés.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="contact-form">
+                <h2>Envoyez-nous un message</h2>
+
+                {% if success %}
+                    <div class="alert alert-success">
+                        ✓ Votre message a été envoyé avec succès ! Nous vous répondrons dans les plus brefs délais.
+                    </div>
+                {% endif %}
+
+                {% if error %}
+                    <div class="alert alert-error">
+                        ✗ {{ error }}
+                    </div>
+                {% endif %}
+
+                {% if not success %}
+                    <form method="POST">
+                        <div class="form-group">
+                            <label class="form-label">
+                                Nom complet <span class="required">*</span>
+                            </label>
+                            <input type="text"
+                                   name="nom"
+                                   class="form-control"
+                                   placeholder="Votre nom et prénom"
+                                   value="{{ app.request.get('nom') }}"
+                                   required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">
+                                Adresse email <span class="required">*</span>
+                            </label>
+                            <input type="email"
+                                   name="email"
+                                   class="form-control"
+                                   placeholder="votre@email.com"
+                                   value="{{ app.request.get('email') }}"
+                                   required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">
+                                Sujet <span class="required">*</span>
+                            </label>
+                            <input type="text"
+                                   name="sujet"
+                                   class="form-control"
+                                   placeholder="Objet de votre message"
+                                   value="{{ app.request.get('sujet') }}"
+                                   required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">
+                                Message <span class="required">*</span>
+                            </label>
+                            <textarea name="message"
+                                      class="form-control"
+                                      placeholder="Décrivez votre demande en détail..."
+                                      required>{{ app.request.get('message') }}</textarea>
+                        </div>
+
+                        <button type="submit" class="btn-submit">
+                            Envoyer le message
+                        </button>
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="faq-section">
+            <h2>Questions fréquentes</h2>
+
+            <div class="faq-item">
+                <div class="faq-question">Comment créer un compte ?</div>
+                <div class="faq-answer">
+                    Cliquez sur "Inscription" en haut de page et choisissez votre type de compte (Locataire ou Centre commercial).
+                    Remplissez le formulaire avec vos informations et validez votre email.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">Comment réserver un emplacement ?</div>
+                <div class="faq-answer">
+                    Recherchez l'emplacement qui vous intéresse, cliquez sur "Réserver", choisissez vos dates et suivez
+                    les étapes de réservation. Le Centre doit valider votre demande avant qu'elle soit confirmée.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">Quels sont les moyens de paiement acceptés ?</div>
+                <div class="faq-answer">
+                    Nous acceptons les cartes bancaires (Visa, Mastercard, American Express) et les virements bancaires
+                    pour les montants importants.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">Puis-je annuler ma réservation ?</div>
+                <div class="faq-answer">
+                    Oui, selon les conditions d'annulation : plus de 30 jours avant = remboursement intégral,
+                    15-30 jours = 50% remboursé, moins de 15 jours = aucun remboursement.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">Comment publier mon emplacement ?</div>
+                <div class="faq-answer">
+                    Après avoir créé un compte Centre commercial, accédez à votre dashboard et cliquez sur "Ajouter un emplacement".
+                    Remplissez les informations et ajoutez des photos de qualité.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">Vous n'avez pas trouvé la réponse à votre question ?</div>
+                <div class="faq-answer">
+                    N'hésitez pas à nous contacter via le formulaire ci-dessus ou par email à
+                    <a href="mailto:contact@references-evenements.fr">contact@references-evenements.fr</a>.
+                    Nous vous répondrons sous 24h ouvrées.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include 'partials/_footer.html.twig' %}
+{% endblock %}

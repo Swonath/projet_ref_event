@@ -1,0 +1,267 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion Réservations - Admin{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
+    <style>
+        body {
+            background: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .admin-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .admin-header {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .admin-header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+        }
+
+        .admin-nav {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .admin-nav-link {
+            padding: 12px 24px;
+            border-radius: 8px;
+            background: #f8f9fa;
+            color: #1a1a1a;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .admin-nav-link:hover,
+        .admin-nav-link.active {
+            background: #6366f1;
+            color: white;
+        }
+
+        .filters {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            background: #f8f9fa;
+            color: #1a1a1a;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: #6366f1;
+            color: white;
+        }
+
+        .reservations-table {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #f8f9fa;
+        }
+
+        th {
+            padding: 16px;
+            text-align: left;
+            font-weight: 600;
+            color: #1a1a1a;
+            border-bottom: 2px solid #e5e5e5;
+        }
+
+        td {
+            padding: 16px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .reservation-status {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .reservation-status.en_attente {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .reservation-status.validee {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .reservation-status.en_cours {
+            background: #cce5ff;
+            color: #004085;
+        }
+
+        .reservation-status.terminee {
+            background: #e2e3e5;
+            color: #383d41;
+        }
+
+        .reservation-status.refusee,
+        .reservation-status.annulee {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        @media (max-width: 768px) {
+            .reservations-table {
+                overflow-x: auto;
+            }
+
+            table {
+                min-width: 1000px;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    {% include 'partials/_navbar.html.twig' %}
+
+    <div class="admin-container">
+        <div class="admin-header">
+            <h1>Gestion des Réservations 📅</h1>
+        </div>
+
+        <div class="admin-nav">
+            <a href="{{ path('admin_dashboard') }}" class="admin-nav-link">Vue d'ensemble</a>
+            <a href="{{ path('admin_locataires') }}" class="admin-nav-link">Locataires</a>
+            <a href="{{ path('admin_centres') }}" class="admin-nav-link">Centres</a>
+            <a href="{{ path('admin_reservations') }}" class="admin-nav-link active">Réservations</a>
+            <a href="{{ path('app_home_page') }}" class="admin-nav-link">Retour au site</a>
+        </div>
+
+        <div class="filters">
+            <a href="{{ path('admin_reservations', {filtre: 'toutes'}) }}" class="filter-btn {{ filtre == 'toutes' ? 'active' : '' }}">
+                Toutes
+            </a>
+            <a href="{{ path('admin_reservations', {filtre: 'en_attente'}) }}" class="filter-btn {{ filtre == 'en_attente' ? 'active' : '' }}">
+                En attente
+            </a>
+            <a href="{{ path('admin_reservations', {filtre: 'validee'}) }}" class="filter-btn {{ filtre == 'validee' ? 'active' : '' }}">
+                Validées
+            </a>
+            <a href="{{ path('admin_reservations', {filtre: 'en_cours'}) }}" class="filter-btn {{ filtre == 'en_cours' ? 'active' : '' }}">
+                En cours
+            </a>
+            <a href="{{ path('admin_reservations', {filtre: 'terminee'}) }}" class="filter-btn {{ filtre == 'terminee' ? 'active' : '' }}">
+                Terminées
+            </a>
+            <a href="{{ path('admin_reservations', {filtre: 'refusee'}) }}" class="filter-btn {{ filtre == 'refusee' ? 'active' : '' }}">
+                Refusées
+            </a>
+            <a href="{{ path('admin_reservations', {filtre: 'annulee'}) }}" class="filter-btn {{ filtre == 'annulee' ? 'active' : '' }}">
+                Annulées
+            </a>
+        </div>
+
+        <div class="reservations-table">
+            {% if reservations is empty %}
+                <div style="padding: 60px; text-align: center; color: #666;">
+                    Aucune réservation trouvée
+                </div>
+            {% else %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Locataire</th>
+                            <th>Centre</th>
+                            <th>Emplacement</th>
+                            <th>Dates</th>
+                            <th>Montant</th>
+                            <th>Statut</th>
+                            <th>Date création</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for reservation in reservations %}
+                            <tr>
+                                <td>{{ reservation.id }}</td>
+                                <td style="font-weight: 600;">{{ reservation.locataire.nom }}</td>
+                                <td>{{ reservation.emplacement.centreCommercial.nomCentre }}</td>
+                                <td>{{ reservation.emplacement.titreAnnonce }}</td>
+                                <td>
+                                    {{ reservation.dateDebut|date('d/m/Y') }}<br>
+                                    au {{ reservation.dateFin|date('d/m/Y') }}
+                                </td>
+                                <td style="font-weight: 600;">{{ reservation.montantLocation }}€</td>
+                                <td>
+                                    <span class="reservation-status {{ reservation.statut }}">
+                                        {% if reservation.statut == 'en_attente' %}
+                                            En attente
+                                        {% elseif reservation.statut == 'validee' %}
+                                            Validée
+                                        {% elseif reservation.statut == 'en_cours' %}
+                                            En cours
+                                        {% elseif reservation.statut == 'terminee' %}
+                                            Terminée
+                                        {% elseif reservation.statut == 'refusee' %}
+                                            Refusée
+                                        {% elseif reservation.statut == 'annulee' %}
+                                            Annulée
+                                        {% else %}
+                                            {{ reservation.statut }}
+                                        {% endif %}
+                                    </span>
+                                </td>
+                                <td>{{ reservation.dateDemande|date('d/m/Y H:i') }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

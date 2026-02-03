@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Mon espace - Références Événements{% endblock %}
+{% block title %}Mon centre - Références Événements{% endblock %}
 
 {% block stylesheets %}
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
@@ -14,26 +14,25 @@
 <header class="header">
     <a href="{{ path('app_home_page') }}" class="logo">Références Événements</a>
     <div class="header-right">
-        <a href="{{ path('app_home_page') }}" class="btn-search">🔍 Rechercher un emplacement</a>
         <div class="user-menu">
             <div class="user-avatar">
                 {% if app.user.photoProfile %}
                     <img src="{{ asset('uploads/profiles/' ~ app.user.photoProfile) }}" alt="Photo de profil" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover;">
                 {% else %}
-                    {{ app.user.nom|slice(0, 2)|upper }}
+                    {{ app.user.nomCentre|slice(0, 2)|upper }}
                 {% endif %}
             </div>
-            <span style="font-size: 14px; font-weight: 500;">{{ app.user.nom }}</span>
+            <span style="font-size: 14px; font-weight: 500;">{{ app.user.nomCentre }}</span>
         </div>
     </div>
 </header>
 
 <!-- Main Layout -->
 <div class="main-layout">
-    
+
     <!-- Sidebar -->
-    {% include 'partials/_sidebar_locataire.html.twig' %}
-    
+    {% include 'partials/_sidebar_centre.html.twig' %}
+
     <!-- Main Content -->
     <div class="main-content">
         {% block dashboard_content %}{% endblock %}

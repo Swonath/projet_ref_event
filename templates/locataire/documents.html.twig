@@ -12,17 +12,17 @@
 <!-- Statistiques documents -->
 <div class="stats-grid stats-grid-3">
     <div class="stat-card">
-        <div class="stat-icon">📑</div>
+        <div class="stat-icon" style="background: #e3f2fd; color: #1976d2;">📝</div>
         <div class="stat-value">{{ stats.contrats }}</div>
         <div class="stat-label">Contrats</div>
     </div>
     <div class="stat-card">
-        <div class="stat-icon">📄</div>
+        <div class="stat-icon" style="background: #f3e5f5; color: #7b1fa2;">💼</div>
         <div class="stat-value">{{ stats.factures }}</div>
         <div class="stat-label">Factures</div>
     </div>
     <div class="stat-card">
-        <div class="stat-icon">📋</div>
+        <div class="stat-icon" style="background: #e8f5e9; color: #388e3c;">📊</div>
         <div class="stat-value">{{ stats.devis }}</div>
         <div class="stat-label">Devis</div>
     </div>
@@ -53,13 +53,13 @@
         <div class="documents-list">
             {% for document in documents %}
                 <div class="document-card">
-                    <div class="document-icon {{ document.typeDocument }}">
+                    <div class="document-icon {{ document.typeDocument }}" style="{% if document.typeDocument == 'contrat' %}background: #e3f2fd; color: #1976d2;{% elseif document.typeDocument == 'facture' %}background: #f3e5f5; color: #7b1fa2;{% else %}background: #e8f5e9; color: #388e3c;{% endif %} font-size: 28px; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; border-radius: 12px;">
                         {% if document.typeDocument == 'contrat' %}
-                            📑
+                            📝
                         {% elseif document.typeDocument == 'facture' %}
-                            📄
+                            💼
                         {% else %}
-                            📋
+                            📊
                         {% endif %}
                     </div>
                     <div class="document-info">
@@ -90,14 +90,14 @@
                             </span>
                         </div>
                     </div>
-                    <div class="document-actions">
+                    <div class="document-actions" style="display: flex; gap: 8px;">
                         <a href="{{ path('locataire_reservation_detail', {id: document.reservation.id}) }}"
-                           class="btn-icon" title="Voir la réservation">
-                            👁️
+                           class="btn-icon" title="Voir la réservation" style="background: #e3f2fd; color: #1976d2; padding: 10px 14px; border-radius: 8px; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s;">
+                            👁️ Voir
                         </a>
                         <a href="{{ asset('uploads/documents/' ~ document.cheminFichier) }}"
-                           class="btn-icon" title="Télécharger" target="_blank" download>
-                            ⬇️
+                           class="btn-icon" title="Télécharger" target="_blank" download style="background: #e8f5e9; color: #388e3c; padding: 10px 14px; border-radius: 8px; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s;">
+                            ⬇️ Télécharger
                         </a>
                     </div>
                 </div>

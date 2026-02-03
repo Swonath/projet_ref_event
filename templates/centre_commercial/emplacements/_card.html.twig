@@ -1,0 +1,30 @@
+<div class="reservation-card">
+    <div class="reservation-image">
+        {% if emplacement.photos|length > 0 %}
+            <img src="{{ asset('uploads/photos/' ~ emplacement.photos[0].cheminFichier) }}" alt="{{ emplacement.titreAnnonce }}">
+        {% else %}
+            <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; background:#f5f5f5; color:#999;">📷</div>
+        {% endif %}
+    </div>
+
+    <div class="reservation-info">
+        <h3>{{ emplacement.titreAnnonce }}</h3>
+        <div class="reservation-details">
+            {{ emplacement.typeEmplacement }} - {{ emplacement.surface }} m²
+        </div>
+        <div class="reservation-details">
+            {{ emplacement.localisationPrecise }}
+        </div>
+        <span class="reservation-status status-{{ emplacement.statutAnnonce == 'active' ? 'validee' : 'inactive' }}">
+            {{ emplacement.statutAnnonce == 'active' ? '✅ Active' : '⏸️ Inactive' }}
+        </span>
+    </div>
+
+    <div class="reservation-actions">
+        <div class="reservation-price">{{ emplacement.tarifJour }} €/jour</div>
+        <div class="buttons-row" style="display: flex; gap: 10px; margin-top: 12px;">
+            <a href="{{ path('centre_emplacements_detail', {id: emplacement.id}) }}" class="btn-small btn-primary-small" style="flex: 1;">Voir détail</a>
+            <a href="{{ path('centre_emplacements_modifier', {id: emplacement.id}) }}" class="btn-small btn-secondary-small" style="flex: 1;">Modifier</a>
+        </div>
+    </div>
+</div>
