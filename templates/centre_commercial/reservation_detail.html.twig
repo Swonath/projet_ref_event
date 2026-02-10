@@ -6,7 +6,7 @@
 
 <div class="page-header">
     <h1 class="page-title">Détail de la réservation #{{ reservation.id }}</h1>
-    <a href="{{ path('centre_reservations_index') }}" class="btn-secondary">← Retour</a>
+    <a href="{{ path('centre_reservations_index') }}" class="btn-secondary" style="width: auto; padding: 12px 24px;">← Retour</a>
 </div>
 
 <!-- Flash messages -->
@@ -93,7 +93,7 @@
             <strong>Surface:</strong> {{ reservation.emplacement.surface }} m²
         </div>
     </div>
-    <a href="{{ path('centre_emplacements_detail', {id: reservation.emplacement.id}) }}" class="btn-secondary" style="margin-top: 12px; display: inline-block; max-width: 250px;">
+    <a href="{{ path('centre_emplacements_detail', {id: reservation.emplacement.id}) }}" class="btn-secondary" style="margin-top: 12px; display: inline-block; width: auto; padding: 12px 24px;">
         Voir l'emplacement
     </a>
 </div>

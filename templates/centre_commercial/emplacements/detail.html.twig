@@ -6,9 +6,9 @@
 
 <div class="page-header">
     <h1 class="page-title">{{ emplacement.titreAnnonce }}</h1>
-    <div>
-        <a href="{{ path('centre_emplacements_modifier', {id: emplacement.id}) }}" class="btn-primary">✏️ Modifier</a>
-        <a href="{{ path('centre_emplacements_index') }}" class="btn-secondary">← Retour à la liste</a>
+    <div style="display: flex; gap: 12px;">
+        <a href="{{ path('centre_emplacements_index') }}" class="btn-secondary" style="width: auto; padding: 12px 24px;">← Retour à la liste</a>
+        <a href="{{ path('centre_emplacements_modifier', {id: emplacement.id}) }}" class="btn-primary" style="width: auto; padding: 12px 24px;">✏️ Modifier</a>
     </div>
 </div>
 
@@ -176,7 +176,7 @@
                 {{ form_label(periodeForm.motif) }}
                 {{ form_widget(periodeForm.motif, {'attr': {'class': 'form-control'}}) }}
             </div>
-            <button type="submit" class="btn-primary">Ajouter</button>
+            <button type="submit" class="btn-primary" style="width: auto; padding: 12px 24px;">Ajouter</button>
         {{ form_end(periodeForm) }}
     </div>
 </div>

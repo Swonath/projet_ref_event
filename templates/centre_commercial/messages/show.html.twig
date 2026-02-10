@@ -11,23 +11,23 @@
         {% endif %}
         Conversation avec {{ conversation.locataire.nom }}
     </h1>
-    <div>
+    <div style="display: flex; gap: 12px;">
+        <a href="{{ conversation.estArchivee ? path('centre_messages_archives') : path('centre_messages_index') }}" class="btn-secondary" style="width: auto; padding: 12px 24px;">← Retour à la liste</a>
         {% if conversation.estArchivee %}
-            <form method="POST" action="{{ path('centre_messages_unarchive', {id: conversation.id}) }}" style="display: inline;">
+            <form method="POST" action="{{ path('centre_messages_unarchive', {id: conversation.id}) }}" style="margin: 0;">
                 <input type="hidden" name="_token" value="{{ csrf_token('unarchive_conversation_' ~ conversation.id) }}">
-                <button type="submit" class="btn-secondary">
+                <button type="submit" class="btn-secondary" style="width: auto; padding: 12px 24px;">
                     ↩️ Restaurer
                 </button>
             </form>
         {% else %}
-            <form method="POST" action="{{ path('centre_messages_archive', {id: conversation.id}) }}" style="display: inline;">
+            <form method="POST" action="{{ path('centre_messages_archive', {id: conversation.id}) }}" style="margin: 0;">
                 <input type="hidden" name="_token" value="{{ csrf_token('archive_conversation_' ~ conversation.id) }}">
-                <button type="submit" class="btn-secondary" onclick="return confirm('Archiver cette conversation ?')">
+                <button type="submit" class="btn-secondary" onclick="return confirm('Archiver cette conversation ?')" style="width: auto; padding: 12px 24px;">
                     📦 Archiver
                 </button>
             </form>
         {% endif %}
-        <a href="{{ conversation.estArchivee ? path('centre_messages_archives') : path('centre_messages_index') }}" class="btn-secondary">← Retour</a>
     </div>
 </div>
 

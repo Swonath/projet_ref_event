@@ -6,7 +6,7 @@
 
 <div class="page-header">
     <h1 class="page-title">Mes emplacements</h1>
-    <a href="{{ path('centre_emplacements_creer') }}" class="btn-primary">+ Créer un emplacement</a>
+    <a href="{{ path('centre_emplacements_creer') }}" class="btn-primary" style="width: auto; padding: 12px 24px;">+ Créer un emplacement</a>
 </div>
 
 <!-- Stats -->
@@ -60,7 +60,7 @@
 </div>
 
 {% if totalEmplacements > 12 %}
-    <button id="btn-afficher-plus-emplacements" class="btn-secondary" onclick="chargerPlusEmplacements()">
+    <button id="btn-afficher-plus-emplacements" class="btn-secondary" onclick="chargerPlusEmplacements()" style="width: auto; padding: 12px 24px; display: block; margin: 20px auto 0;">
         Afficher plus
     </button>
 {% endif %}

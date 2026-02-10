@@ -141,21 +141,21 @@
                 {% endif %}
 
                 <!-- Actions -->
-                <div style="display: flex; gap: 12px; margin-top: 16px; flex-wrap: wrap;">
+                <div style="display: flex; gap: 12px; margin-top: 16px; flex-wrap: wrap; align-items: center;">
                     {% if not avisItem.reponse %}
-                        <button class="btn-primary" onclick="document.getElementById('form-reponse-{{ avisItem.id }}').style.display='block'" style="min-width: 140px;">
+                        <button class="btn-primary" onclick="document.getElementById('form-reponse-{{ avisItem.id }}').style.display='block'" style="width: auto; padding: 10px 20px;">
                             💬 Répondre
                         </button>
                     {% endif %}
 
-                    <form method="POST" action="{{ path('centre_avis_moderer', {id: avisItem.id}) }}" style="display: inline;">
+                    <form method="POST" action="{{ path('centre_avis_moderer', {id: avisItem.id}) }}" style="margin: 0;">
                         <input type="hidden" name="_token" value="{{ csrf_token('moderer_avis_' ~ avisItem.id) }}">
-                        <button type="submit" class="btn-secondary" style="min-width: 140px;">
+                        <button type="submit" class="btn-secondary" style="width: auto; padding: 10px 20px;">
                             {{ avisItem.estPublie ? '👁️ Masquer' : '✅ Publier' }}
                         </button>
                     </form>
 
-                    <a href="{{ path('centre_reservations_detail', {id: avisItem.reservation.id}) }}" class="btn-secondary" style="min-width: 180px; display: inline-flex; align-items: center; justify-content: center; text-decoration: none;">
+                    <a href="{{ path('centre_reservations_detail', {id: avisItem.reservation.id}) }}" class="btn-secondary" style="width: auto; padding: 10px 20px; display: inline-flex; align-items: center; justify-content: center; text-decoration: none;">
                         📄 Voir la réservation
                     </a>
                 </div>

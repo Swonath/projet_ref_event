@@ -6,7 +6,7 @@
 
 <div class="page-header">
     <h1 class="page-title">Messages archivés 📦</h1>
-    <a href="{{ path('locataire_messages_index') }}" class="btn-secondary">← Retour aux messages</a>
+    <a href="{{ path('locataire_messages_index') }}" class="btn-secondary" style="width: auto; padding: 12px 24px;">← Retour aux messages</a>
 </div>
 
 <!-- Flash messages -->
@@ -23,7 +23,7 @@
             <div class="empty-icon">📦</div>
             <div class="empty-title">Aucune conversation archivée</div>
             <div class="empty-text">Les conversations que vous archivez apparaîtront ici</div>
-            <a href="{{ path('locataire_messages_index') }}" class="btn-primary">Retour aux messages</a>
+            <a href="{{ path('locataire_messages_index') }}" class="btn-primary" style="width: auto; padding: 12px 24px;">Retour aux messages</a>
         </div>
     {% else %}
         <div class="conversations-list">

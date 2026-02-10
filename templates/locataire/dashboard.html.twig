@@ -101,9 +101,10 @@
             
             <div class="reservation-actions">
                 <div class="reservation-price">{{ reservation.montantTotal }}€</div>
-                <a href="{{ path('locataire_reservation_detail', {id: reservation.id}) }}" 
-                   class="btn-small btn-primary-small">Voir détails</a>
-                <a href="#" class="btn-small btn-secondary-small">Contacter</a>
+                <a href="{{ path('locataire_reservation_detail', {id: reservation.id}) }}"
+                   class="btn-small btn-primary-small" style="width: 100%;">Voir détails</a>
+                <a href="{{ path('locataire_messages_new', {reservation: reservation.id}) }}"
+                   class="btn-small btn-secondary-small" style="width: 100%;">Contacter</a>
             </div>
         </div>
         {% endfor %}

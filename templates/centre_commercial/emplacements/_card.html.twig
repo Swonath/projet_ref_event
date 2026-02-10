@@ -23,7 +23,7 @@
     <div class="reservation-actions">
         <div class="reservation-price">{{ emplacement.tarifJour }} €/jour</div>
         <div class="buttons-row" style="display: flex; gap: 10px; margin-top: 12px;">
-            <a href="{{ path('centre_emplacements_detail', {id: emplacement.id}) }}" class="btn-small btn-primary-small" style="flex: 1;">Voir détail</a>
+            <a href="{{ path('centre_emplacements_detail', {id: emplacement.id}) }}" class="btn-small btn-primary-small" style="flex: 1; white-space: nowrap;">Voir détails</a>
             <a href="{{ path('centre_emplacements_modifier', {id: emplacement.id}) }}" class="btn-small btn-secondary-small" style="flex: 1;">Modifier</a>
         </div>
     </div>

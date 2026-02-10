@@ -64,8 +64,8 @@
             <div class="reservation-actions">
                 <div class="reservation-price">{{ emplacement.tarifJour }}€/jour</div>
                 <a href="{{ path('emplacement_detail', {id: emplacement.id}) }}"
-                   class="btn-small btn-primary-small">Voir détails</a>
-                <button class="btn-small btn-secondary-small"
+                   class="btn-small btn-primary-small" style="width: 100%;">Voir détails</a>
+                <button class="btn-small btn-secondary-small" style="width: 100%;"
                         onclick="retirerDesFavoris({{ emplacement.id }}, this)"
                         data-delete-url="{{ path('locataire_favoris_retirer', {'id': emplacement.id}) }}"
                         title="Retirer des favoris">
@@ -79,10 +79,11 @@
 {# Bouton Afficher Plus #}
 {% if totalFavoris > 12 %}
 <div id="load-more-container" style="text-align: center; margin-top: 30px;">
-    <button id="btn-load-more" 
-            class="btn-primary" 
+    <button id="btn-load-more"
+            class="btn-primary"
             onclick="chargerPlusFavoris()"
-            data-load-url="{{ path('locataire_favoris_charger_plus') }}">
+            data-load-url="{{ path('locataire_favoris_charger_plus') }}"
+            style="width: auto; padding: 12px 24px;">
         Afficher plus (<span id="favoris-affiches">12</span>/{{ totalFavoris }})
     </button>
 </div>
