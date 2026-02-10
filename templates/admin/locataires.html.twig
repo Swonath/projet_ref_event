@@ -166,6 +166,117 @@
             background: #dc2626;
         }
 
+        .btn-password {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .btn-password:hover {
+            background: #d97706;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 30px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+
+        .modal-header {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #1a1a1a;
+        }
+
+        .modal-close {
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            color: #999;
+            cursor: pointer;
+            line-height: 20px;
+        }
+
+        .modal-close:hover {
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e5e5e5;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #6366f1;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-top: 24px;
+        }
+
+        .btn-submit {
+            padding: 12px 24px;
+            background: #6366f1;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-submit:hover {
+            background: #4f46e5;
+        }
+
+        .btn-cancel {
+            padding: 12px 24px;
+            background: #f3f4f6;
+            color: #1a1a1a;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-cancel:hover {
+            background: #e5e7eb;
+        }
+
         .alert {
             padding: 16px;
             border-radius: 8px;
@@ -271,6 +382,10 @@
                                         </button>
                                     </form>
 
+                                    <button type="button" class="btn-action btn-password" onclick="openPasswordModal({{ locataire.id }}, '{{ locataire.nom }}')">
+                                        🔒 Mot de passe
+                                    </button>
+
                                     <form method="POST" action="{{ path('admin_locataires_supprimer', {id: locataire.id}) }}"
                                           style="display: inline;"
                                           onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce locataire ?');">
@@ -287,4 +402,77 @@
             {% endif %}
         </div>
     </div>
+
+    <!-- Modal Changement de mot de passe -->
+    <div id="passwordModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closePasswordModal()">&times;</span>
+            <div class="modal-header">Changer le mot de passe</div>
+            <p style="color: #666; margin-bottom: 24px;">Modifier le mot de passe de <strong id="modal-user-name"></strong></p>
+
+            <form id="passwordForm" method="POST">
+                <input type="hidden" name="_token" id="csrf-token" value="">
+
+                <div class="form-group">
+                    <label class="form-label">Nouveau mot de passe *</label>
+                    <input type="password" name="nouveau_mdp" class="form-control"
+                           placeholder="Minimum 6 caractères" required minlength="6">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Confirmer le mot de passe *</label>
+                    <input type="password" id="confirm-password" class="form-control"
+                           placeholder="Retapez le mot de passe" required minlength="6">
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" onclick="closePasswordModal()">Annuler</button>
+                    <button type="submit" class="btn-submit">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function openPasswordModal(userId, userName) {
+            const modal = document.getElementById('passwordModal');
+            const form = document.getElementById('passwordForm');
+            const csrfToken = document.getElementById('csrf-token');
+            const userNameElement = document.getElementById('modal-user-name');
+
+            // Mettre à jour l'action du formulaire et le token CSRF
+            form.action = '{{ path('admin_locataires_changer_mdp', {id: '__ID__'}) }}'.replace('__ID__', userId);
+            csrfToken.value = '{{ csrf_token('changer_mdp_locataire___ID__') }}'.replace('__ID__', userId);
+            userNameElement.textContent = userName;
+
+            // Réinitialiser le formulaire
+            form.reset();
+
+            modal.style.display = 'block';
+        }
+
+        function closePasswordModal() {
+            document.getElementById('passwordModal').style.display = 'none';
+        }
+
+        // Fermer le modal si on clique en dehors
+        window.onclick = function(event) {
+            const modal = document.getElementById('passwordModal');
+            if (event.target == modal) {
+                closePasswordModal();
+            }
+        }
+
+        // Validation: vérifier que les deux mots de passe correspondent
+        document.getElementById('passwordForm').addEventListener('submit', function(e) {
+            const password = this.querySelector('input[name="nouveau_mdp"]').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+
+            if (password !== confirmPassword) {
+                e.preventDefault();
+                alert('Les deux mots de passe ne correspondent pas');
+                return false;
+            }
+        });
+    </script>
 {% endblock %}

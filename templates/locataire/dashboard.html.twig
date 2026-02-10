@@ -103,7 +103,7 @@
                 <div class="reservation-price">{{ reservation.montantTotal }}€</div>
                 <a href="{{ path('locataire_reservation_detail', {id: reservation.id}) }}"
                    class="btn-small btn-primary-small" style="width: 100%;">Voir détails</a>
-                <a href="{{ path('locataire_messages_new', {reservation: reservation.id}) }}"
+                <a href="{{ path('locataire_messages_new', {emplacementId: reservation.emplacement.id}) }}"
                    class="btn-small btn-secondary-small" style="width: 100%;">Contacter</a>
             </div>
         </div>

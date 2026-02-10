@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 #[Route('/admin', name: 'admin_')]
 #[IsGranted('ROLE_ADMIN')]
@@ -159,6 +160,46 @@ class DashboardController extends AbstractController
     }
 
     /**
+     * Changer le mot de passe d'un locataire
+     */
+    #[Route('/locataires/{id}/changer-mot-de-passe', name: 'locataires_changer_mdp', methods: ['POST'])]
+    public function changerMotDePasseLocataire(
+        int $id,
+        Request $request,
+        LocataireRepository $locataireRepo,
+        UserPasswordHasherInterface $passwordHasher,
+        EntityManagerInterface $em
+    ): Response {
+        $token = $request->request->get('_token');
+        if (!$this->isCsrfTokenValid('changer_mdp_locataire_' . $id, $token)) {
+            $this->addFlash('error', 'Token CSRF invalide');
+            return $this->redirectToRoute('admin_locataires');
+        }
+
+        $locataire = $locataireRepo->find($id);
+        if (!$locataire) {
+            throw $this->createNotFoundException('Locataire non trouvé');
+        }
+
+        $nouveauMdp = $request->request->get('nouveau_mdp');
+        if (!$nouveauMdp || strlen($nouveauMdp) < 6) {
+            $this->addFlash('error', 'Le mot de passe doit contenir au moins 6 caractères');
+            return $this->redirectToRoute('admin_locataires');
+        }
+
+        $hashedPassword = $passwordHasher->hashPassword($locataire, $nouveauMdp);
+        $locataire->setPassword($hashedPassword);
+        $em->flush();
+
+        $this->addFlash('success', sprintf(
+            'Le mot de passe de %s a été modifié avec succès',
+            $locataire->getNom()
+        ));
+
+        return $this->redirectToRoute('admin_locataires');
+    }
+
+    /**
      * Gestion des centres commerciaux
      */
     #[Route('/centres', name: 'centres')]
@@ -264,6 +305,46 @@ class DashboardController extends AbstractController
         $em->flush();
 
         $this->addFlash('success', sprintf('Le compte de %s a été supprimé', $nom));
+
+        return $this->redirectToRoute('admin_centres');
+    }
+
+    /**
+     * Changer le mot de passe d'un centre commercial
+     */
+    #[Route('/centres/{id}/changer-mot-de-passe', name: 'centres_changer_mdp', methods: ['POST'])]
+    public function changerMotDePasseCentre(
+        int $id,
+        Request $request,
+        CentreCommercialRepository $centreRepo,
+        UserPasswordHasherInterface $passwordHasher,
+        EntityManagerInterface $em
+    ): Response {
+        $token = $request->request->get('_token');
+        if (!$this->isCsrfTokenValid('changer_mdp_centre_' . $id, $token)) {
+            $this->addFlash('error', 'Token CSRF invalide');
+            return $this->redirectToRoute('admin_centres');
+        }
+
+        $centre = $centreRepo->find($id);
+        if (!$centre) {
+            throw $this->createNotFoundException('Centre non trouvé');
+        }
+
+        $nouveauMdp = $request->request->get('nouveau_mdp');
+        if (!$nouveauMdp || strlen($nouveauMdp) < 6) {
+            $this->addFlash('error', 'Le mot de passe doit contenir au moins 6 caractères');
+            return $this->redirectToRoute('admin_centres');
+        }
+
+        $hashedPassword = $passwordHasher->hashPassword($centre, $nouveauMdp);
+        $centre->setPassword($hashedPassword);
+        $em->flush();
+
+        $this->addFlash('success', sprintf(
+            'Le mot de passe de %s a été modifié avec succès',
+            $centre->getNomCentre()
+        ));
 
         return $this->redirectToRoute('admin_centres');
     }
