@@ -39,23 +39,25 @@
         <h2 class="section-title">Historique des paiements</h2>
     </div>
 
-    <div class="tabs">
-        <a href="{{ path('locataire_paiements_index', {statut: 'tous'}) }}"
-           class="tab {{ filtre == 'tous' ? 'active' : '' }}">
-            Tous ({{ stats.total_paiements }})
-        </a>
-        <a href="{{ path('locataire_paiements_index', {statut: 'accepte'}) }}"
-           class="tab {{ filtre == 'accepte' ? 'active' : '' }}">
-            Acceptés ({{ stats.accepte.count }})
-        </a>
-        <a href="{{ path('locataire_paiements_index', {statut: 'en_attente'}) }}"
-           class="tab {{ filtre == 'en_attente' ? 'active' : '' }}">
-            En attente ({{ stats.en_attente.count }})
-        </a>
-        <a href="{{ path('locataire_paiements_index', {statut: 'rembourse'}) }}"
-           class="tab {{ filtre == 'rembourse' ? 'active' : '' }}">
-            Remboursés ({{ stats.rembourse.count }})
-        </a>
+    <div class="filters-group">
+        <div class="filters">
+            <a href="{{ path('locataire_paiements_index', {statut: 'tous'}) }}"
+               class="filter-btn {{ filtre == 'tous' ? 'active' : '' }}">
+                Tous ({{ stats.total_paiements }})
+            </a>
+            <a href="{{ path('locataire_paiements_index', {statut: 'accepte'}) }}"
+               class="filter-btn {{ filtre == 'accepte' ? 'active' : '' }}">
+                ✅ Acceptés ({{ stats.accepte.count }})
+            </a>
+            <a href="{{ path('locataire_paiements_index', {statut: 'en_attente'}) }}"
+               class="filter-btn {{ filtre == 'en_attente' ? 'active' : '' }}">
+                ⏳ En attente ({{ stats.en_attente.count }})
+            </a>
+            <a href="{{ path('locataire_paiements_index', {statut: 'rembourse'}) }}"
+               class="filter-btn {{ filtre == 'rembourse' ? 'active' : '' }}">
+                ↩️ Remboursés ({{ stats.rembourse.count }})
+            </a>
+        </div>
     </div>
 
     {% if paiements|length > 0 %}
@@ -122,16 +124,20 @@
                                 {% endif %}
                             </td>
                             <td class="actions-cell">
-                                <a href="{{ path('locataire_reservation_detail', {id: paiement.reservation.id}) }}"
-                                   class="btn-icon" title="Voir la réservation">
-                                    👁️
-                                </a>
-                                {% if paiement.transactionId %}
-                                    <button class="btn-icon" title="Copier l'ID de transaction"
-                                            onclick="copyToClipboard('{{ paiement.transactionId }}')">
-                                        📋
-                                    </button>
-                                {% endif %}
+                                <div style="display: flex; gap: 8px; justify-content: center;">
+                                    <a href="{{ path('locataire_reservation_detail', {id: paiement.reservation.id}) }}"
+                                       class="btn-icon" title="Voir la réservation"
+                                       style="background: #f3f4f6; padding: 8px 12px; border-radius: 6px; text-decoration: none; font-size: 14px; transition: all 0.2s; display: inline-flex; align-items: center; gap: 6px;">
+                                        👁️ Voir
+                                    </a>
+                                    {% if paiement.transactionId %}
+                                        <button class="btn-icon" title="Copier l'ID de transaction"
+                                                onclick="copyToClipboard('{{ paiement.transactionId }}')"
+                                                style="background: #f3f4f6; padding: 8px 12px; border-radius: 6px; border: none; cursor: pointer; font-size: 14px; transition: all 0.2s; display: inline-flex; align-items: center; gap: 6px;">
+                                            📋 Copier
+                                        </button>
+                                    {% endif %}
+                                </div>
                             </td>
                         </tr>
                     {% endfor %}

@@ -30,23 +30,25 @@
 
 <!-- Filtres -->
 <div class="section">
-    <div class="tabs">
-        <a href="{{ path('locataire_documents', {type: 'tous'}) }}"
-           class="tab {{ filtre == 'tous' ? 'active' : '' }}">
-            Tous ({{ documents|length }})
-        </a>
-        <a href="{{ path('locataire_documents', {type: 'contrat'}) }}"
-           class="tab {{ filtre == 'contrat' ? 'active' : '' }}">
-            Contrats ({{ stats.contrats }})
-        </a>
-        <a href="{{ path('locataire_documents', {type: 'facture'}) }}"
-           class="tab {{ filtre == 'facture' ? 'active' : '' }}">
-            Factures ({{ stats.factures }})
-        </a>
-        <a href="{{ path('locataire_documents', {type: 'devis'}) }}"
-           class="tab {{ filtre == 'devis' ? 'active' : '' }}">
-            Devis ({{ stats.devis }})
-        </a>
+    <div class="filters-group">
+        <div class="filters">
+            <a href="{{ path('locataire_documents', {type: 'tous'}) }}"
+               class="filter-btn {{ filtre == 'tous' ? 'active' : '' }}">
+                Tous ({{ documents|length }})
+            </a>
+            <a href="{{ path('locataire_documents', {type: 'contrat'}) }}"
+               class="filter-btn {{ filtre == 'contrat' ? 'active' : '' }}">
+                📝 Contrats ({{ stats.contrats }})
+            </a>
+            <a href="{{ path('locataire_documents', {type: 'facture'}) }}"
+               class="filter-btn {{ filtre == 'facture' ? 'active' : '' }}">
+                💼 Factures ({{ stats.factures }})
+            </a>
+            <a href="{{ path('locataire_documents', {type: 'devis'}) }}"
+               class="filter-btn {{ filtre == 'devis' ? 'active' : '' }}">
+                📊 Devis ({{ stats.devis }})
+            </a>
+        </div>
     </div>
 
     {% if documents|length > 0 %}
@@ -90,13 +92,13 @@
                             </span>
                         </div>
                     </div>
-                    <div class="document-actions" style="display: flex; gap: 8px;">
+                    <div class="document-actions" style="display: flex; gap: 8px; align-items: center;">
                         <a href="{{ path('locataire_reservation_detail', {id: document.reservation.id}) }}"
-                           class="btn-icon" title="Voir la réservation" style="background: #e3f2fd; color: #1976d2; padding: 10px 14px; border-radius: 8px; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s;">
+                           class="btn-document-action" title="Voir la réservation" style="background: #e3f2fd; color: #1976d2; padding: 10px 16px; border-radius: 8px; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s; font-size: 14px; font-weight: 500; white-space: nowrap;">
                             👁️ Voir
                         </a>
                         <a href="{{ asset('uploads/documents/' ~ document.cheminFichier) }}"
-                           class="btn-icon" title="Télécharger" target="_blank" download style="background: #e8f5e9; color: #388e3c; padding: 10px 14px; border-radius: 8px; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s;">
+                           class="btn-document-action" title="Télécharger" target="_blank" download style="background: #e8f5e9; color: #388e3c; padding: 10px 16px; border-radius: 8px; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s; font-size: 14px; font-weight: 500; white-space: nowrap;">
                             ⬇️ Télécharger
                         </a>
                     </div>
@@ -135,6 +137,12 @@
 .tag-en_attente {
     background: #fff3cd;
     color: #856404;
+}
+
+/* Boutons d'action documents */
+.btn-document-action:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Responsive */
