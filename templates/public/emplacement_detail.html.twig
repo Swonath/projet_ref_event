@@ -72,7 +72,7 @@
             <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px;">
                 {% for photo in emplacement.photos %}
                     <div style="aspect-ratio: 4/3; background: #f0f0f0; border-radius: 12px; overflow: hidden;">
-                        <img src="{{ asset(photo.cheminFichier) }}" alt="{{ photo.legende }}" style="width: 100%; height: 100%; object-fit: cover;">
+                        <img src="{{ asset('uploads/photos/' ~ photo.cheminFichier) }}" alt="{{ photo.legende }}" style="width: 100%; height: 100%; object-fit: cover;">
                     </div>
                 {% endfor %}
             </div>
