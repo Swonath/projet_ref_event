@@ -152,11 +152,7 @@
 
                 <div style="margin-bottom: 20px;">
                     <div style="font-size: 32px; font-weight: 700; color: #1a1a1a;">
-                        {% if app.user and app.user.siret is defined and app.user.siret %}
-                            {{ (emplacement.tarifJour * 1.25)|number_format(2, ',', ' ') }} €
-                        {% else %}
-                            {{ emplacement.tarifJour }} €
-                        {% endif %}
+                        {{ (emplacement.tarifJour * 1.25)|number_format(2, ',', ' ') }} €
                     </div>
                     <div style="color: #666;">par jour</div>
                 </div>
@@ -164,11 +160,7 @@
                 {% if emplacement.tarifSemaine %}
                     <div style="padding: 12px; background: #f8f9fa; border-radius: 8px; margin-bottom: 10px;">
                         <div style="font-weight: 600;">
-                            {% if app.user and app.user.siret is defined and app.user.siret %}
-                                {{ (emplacement.tarifSemaine * 1.25)|number_format(2, ',', ' ') }} €
-                            {% else %}
-                                {{ emplacement.tarifSemaine }} €
-                            {% endif %}
+                            {{ (emplacement.tarifSemaine * 1.25)|number_format(2, ',', ' ') }} €
                         </div>
                         <div style="color: #666; font-size: 14px;">par semaine</div>
                     </div>
@@ -177,11 +169,7 @@
                 {% if emplacement.tarifMois %}
                     <div style="padding: 12px; background: #f8f9fa; border-radius: 8px; margin-bottom: 10px;">
                         <div style="font-weight: 600;">
-                            {% if app.user and app.user.siret is defined and app.user.siret %}
-                                {{ (emplacement.tarifMois * 1.25)|number_format(2, ',', ' ') }} €
-                            {% else %}
-                                {{ emplacement.tarifMois }} €
-                            {% endif %}
+                            {{ (emplacement.tarifMois * 1.25)|number_format(2, ',', ' ') }} €
                         </div>
                         <div style="color: #666; font-size: 14px;">par mois</div>
                     </div>
@@ -192,14 +180,12 @@
                     <div style="color: #666; font-size: 14px;">caution</div>
                 </div>
 
-                {% if app.user and app.user.siret is defined and app.user.siret %}
-                    <div style="padding: 12px; background: #e3f2fd; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #1976d2;">
-                        <div style="font-size: 12px; color: #1976d2; font-weight: 600; margin-bottom: 4px;">💼 Tarif entreprise</div>
-                        <div style="font-size: 13px; color: #333;">
-                            Prix affiché TTC incluant votre commission de 25%
-                        </div>
+                <div style="padding: 12px; background: #e3f2fd; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #1976d2;">
+                    <div style="font-size: 12px; color: #1976d2; font-weight: 600; margin-bottom: 4px;">ℹ️ Information tarif</div>
+                    <div style="font-size: 13px; color: #333;">
+                        Prix TTC incluant la commission de service de 25%
                     </div>
-                {% endif %}
+                </div>
 
                 <!-- Boutons d'action -->
                 {% if isLocataire %}

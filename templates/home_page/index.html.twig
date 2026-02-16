@@ -484,11 +484,7 @@
                                     </div>
                                     <div class="carousel-card-info">{{ emplacement.typeEmplacement|capitalize }}</div>
                                     <div class="carousel-card-price">
-                                        {% if app.user and app.user.siret is defined and app.user.siret %}
-                                            {{ (emplacement.tarifJour * 1.25)|number_format(2, ',', ' ') }}€
-                                        {% else %}
-                                            {{ emplacement.tarifJour }}€
-                                        {% endif %}
+                                        {{ (emplacement.tarifJour * 1.25)|number_format(2, ',', ' ') }}€
                                         <span class="carousel-card-price-label">/ jour</span>
                                     </div>
                                 </div>
