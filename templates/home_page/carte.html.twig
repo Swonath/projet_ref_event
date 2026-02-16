@@ -289,12 +289,18 @@
                          data-ville="{{ emplacement.centreCommercial.ville|lower }}"
                          data-centre="{{ emplacement.centreCommercial.nomCentre|lower }}"
                          data-type="{{ emplacement.typeEmplacement|lower }}"
-                         data-prix="{{ emplacement.tarifJour }}"
+                         data-prix="{% if app.user and app.user.siret is defined and app.user.siret %}{{ (emplacement.tarifJour * 1.25)|number_format(2, '.', '') }}{% else %}{{ emplacement.tarifJour }}{% endif %}"
                          data-surface="{{ emplacement.surface }}">
                         <h4>{{ emplacement.centreCommercial.nomCentre }}</h4>
                         <p>📍 {{ emplacement.centreCommercial.ville }} ({{ emplacement.centreCommercial.codePostal }})</p>
                         <p>{{ emplacement.typeEmplacement|capitalize }} • {{ emplacement.surface }} m²</p>
-                        <div class="carte-emplacement-price">{{ emplacement.tarifJour }}€/jour</div>
+                        <div class="carte-emplacement-price">
+                            {% if app.user and app.user.siret is defined and app.user.siret %}
+                                {{ (emplacement.tarifJour * 1.25)|number_format(2, ',', ' ') }}€/jour
+                            {% else %}
+                                {{ emplacement.tarifJour }}€/jour
+                            {% endif %}
+                        </div>
                     </div>
                 {% endfor %}
             </div>
@@ -320,7 +326,7 @@
                 codePostal: "{{ emplacement.centreCommercial.codePostal|e('js') }}",
                 type: "{{ emplacement.typeEmplacement|e('js') }}",
                 surface: {{ emplacement.surface }},
-                prix: {{ emplacement.tarifJour }},
+                prix: {% if app.user and app.user.siret is defined and app.user.siret %}{{ (emplacement.tarifJour * 1.25)|number_format(2, '.', '') }}{% else %}{{ emplacement.tarifJour }}{% endif %},
                 // Coordonnées approximatives basées sur le code postal (à améliorer)
                 lat: {% if emplacement.centreCommercial.latitude is defined and emplacement.centreCommercial.latitude %}{{ emplacement.centreCommercial.latitude }}{% else %}46.603354 + (Math.random() * 5 - 2.5){% endif %},
                 lng: {% if emplacement.centreCommercial.longitude is defined and emplacement.centreCommercial.longitude %}{{ emplacement.centreCommercial.longitude }}{% else %}1.888334 + (Math.random() * 5 - 2.5){% endif %},

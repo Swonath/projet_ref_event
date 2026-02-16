@@ -62,7 +62,13 @@
             </div>
             
             <div class="reservation-actions">
-                <div class="reservation-price">{{ emplacement.tarifJour }}€/jour</div>
+                <div class="reservation-price">
+                    {% if app.user and app.user.siret is defined and app.user.siret %}
+                        {{ (emplacement.tarifJour * 1.25)|number_format(2, ',', ' ') }}€/jour
+                    {% else %}
+                        {{ emplacement.tarifJour }}€/jour
+                    {% endif %}
+                </div>
                 <a href="{{ path('emplacement_detail', {id: emplacement.id}) }}"
                    class="btn-small btn-primary-small" style="width: 100%;">Voir détails</a>
                 <button class="btn-small btn-secondary-small" style="width: 100%;"

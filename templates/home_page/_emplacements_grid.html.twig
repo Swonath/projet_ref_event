@@ -16,7 +16,11 @@
             </div>
             <div class="emplacement-card-info">{{ emplacement.typeEmplacement|capitalize }}</div>
             <div class="emplacement-card-price">
-                {{ emplacement.tarifJour }}€
+                {% if app.user and app.user.siret is defined and app.user.siret %}
+                    {{ (emplacement.tarifJour * 1.25)|number_format(2, ',', ' ') }}€
+                {% else %}
+                    {{ emplacement.tarifJour }}€
+                {% endif %}
                 <span class="emplacement-card-price-label">/ jour</span>
             </div>
         </div>
