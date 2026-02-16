@@ -289,13 +289,13 @@
                          data-ville="{{ emplacement.centreCommercial.ville|lower }}"
                          data-centre="{{ emplacement.centreCommercial.nomCentre|lower }}"
                          data-type="{{ emplacement.typeEmplacement|lower }}"
-                         data-prix="{{ (emplacement.tarifJour * 1.25)|number_format(2, '.', '') }}"
+                         data-prix="{{ (emplacement.tarifJour * 1.25 * 1.20)|number_format(2, '.', '') }}"
                          data-surface="{{ emplacement.surface }}">
                         <h4>{{ emplacement.centreCommercial.nomCentre }}</h4>
                         <p>📍 {{ emplacement.centreCommercial.ville }} ({{ emplacement.centreCommercial.codePostal }})</p>
                         <p>{{ emplacement.typeEmplacement|capitalize }} • {{ emplacement.surface }} m²</p>
                         <div class="carte-emplacement-price">
-                            {{ (emplacement.tarifJour * 1.25)|number_format(2, ',', ' ') }}€/jour
+                            {{ (emplacement.tarifJour * 1.25 * 1.20)|number_format(2, ',', ' ') }}€/jour
                         </div>
                     </div>
                 {% endfor %}
@@ -322,7 +322,7 @@
                 codePostal: "{{ emplacement.centreCommercial.codePostal|e('js') }}",
                 type: "{{ emplacement.typeEmplacement|e('js') }}",
                 surface: {{ emplacement.surface }},
-                prix: {{ (emplacement.tarifJour * 1.25)|number_format(2, '.', '') }},
+                prix: {{ (emplacement.tarifJour * 1.25 * 1.20)|number_format(2, '.', '') }},
                 // Coordonnées approximatives basées sur le code postal (à améliorer)
                 lat: {% if emplacement.centreCommercial.latitude is defined and emplacement.centreCommercial.latitude %}{{ emplacement.centreCommercial.latitude }}{% else %}46.603354 + (Math.random() * 5 - 2.5){% endif %},
                 lng: {% if emplacement.centreCommercial.longitude is defined and emplacement.centreCommercial.longitude %}{{ emplacement.centreCommercial.longitude }}{% else %}1.888334 + (Math.random() * 5 - 2.5){% endif %},

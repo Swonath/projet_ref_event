@@ -63,7 +63,7 @@
             
             <div class="reservation-actions">
                 <div class="reservation-price">
-                    {{ (emplacement.tarifJour * 1.25)|number_format(2, ',', ' ') }}€/jour
+                    {{ (emplacement.tarifJour * 1.25 * 1.20)|number_format(2, ',', ' ') }}€/jour
                 </div>
                 <a href="{{ path('emplacement_detail', {id: emplacement.id}) }}"
                    class="btn-small btn-primary-small" style="width: 100%;">Voir détails</a>
