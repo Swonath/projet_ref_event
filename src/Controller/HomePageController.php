@@ -34,7 +34,7 @@ class HomePageController extends AbstractController
         $qb = $emplacementRepo->createQueryBuilder('e')
             ->join('e.centreCommercial', 'c')
             ->where('e.statutAnnonce = :statut')
-            ->setParameter('statut', 'publiee')
+            ->setParameter('statut', 'active')
             ->orderBy('e.dateCreation', 'DESC');
 
         // Appliquer les filtres de recherche
@@ -85,7 +85,7 @@ class HomePageController extends AbstractController
         $totalCount = $emplacementRepo->createQueryBuilder('e')
             ->select('COUNT(e.id)')
             ->where('e.statutAnnonce = :statut')
-            ->setParameter('statut', 'publiee');
+            ->setParameter('statut', 'active');
 
         if (!empty($search)) {
             $totalCount->join('e.centreCommercial', 'c')
@@ -106,7 +106,7 @@ class HomePageController extends AbstractController
         $emplacementsPopulaires = $emplacementRepo->createQueryBuilder('e')
             ->leftJoin('e.reservations', 'r')
             ->where('e.statutAnnonce = :statut')
-            ->setParameter('statut', 'publiee')
+            ->setParameter('statut', 'active')
             ->groupBy('e.id')
             ->orderBy('COUNT(r.id)', 'DESC')
             ->addOrderBy('e.dateCreation', 'DESC')
@@ -148,7 +148,7 @@ class HomePageController extends AbstractController
         $qb = $emplacementRepo->createQueryBuilder('e')
             ->join('e.centreCommercial', 'c')
             ->where('e.statutAnnonce = :statut')
-            ->setParameter('statut', 'publiee')
+            ->setParameter('statut', 'active')
             ->orderBy('e.dateCreation', 'DESC')
             ->setFirstResult($offset)
             ->setMaxResults(50);
@@ -242,11 +242,11 @@ class HomePageController extends AbstractController
     #[Route('/recherche-carte', name: 'recherche_carte')]
     public function rechercheCarte(EmplacementRepository $emplacementRepo): Response
     {
-        // Récupérer tous les emplacements publiés avec leurs centres commerciaux
+        // Récupérer tous les emplacements actifs avec leurs centres commerciaux
         $emplacements = $emplacementRepo->createQueryBuilder('e')
             ->join('e.centreCommercial', 'c')
             ->where('e.statutAnnonce = :statut')
-            ->setParameter('statut', 'publiee')
+            ->setParameter('statut', 'active')
             ->orderBy('e.dateCreation', 'DESC')
             ->getQuery()
             ->getResult();
