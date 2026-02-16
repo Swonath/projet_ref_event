@@ -24,8 +24,8 @@ class EmplacementPublicController extends AbstractController
             throw $this->createNotFoundException('Emplacement non trouvé');
         }
 
-        // Vérifier que l'emplacement est publié
-        if ($emplacement->getStatutAnnonce() !== 'publiee') {
+        // Vérifier que l'emplacement est actif
+        if ($emplacement->getStatutAnnonce() !== 'active') {
             throw $this->createNotFoundException('Cet emplacement n\'est pas disponible');
         }
 
