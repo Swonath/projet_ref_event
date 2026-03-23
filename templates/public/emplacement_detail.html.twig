@@ -191,16 +191,21 @@
 
                 <!-- Boutons d'action -->
                 {% if isLocataire %}
-                    <a href="{{ path('locataire_messages_new', {emplacementId: emplacement.id}) }}"
+                    <a href="{{ path('locataire_reservation_new', {id: emplacement.id}) }}"
                        class="btn-primary"
-                       style="display: block; text-align: center; padding: 16px; background: #1a1a1a; color: white; border-radius: 8px; text-decoration: none; font-weight: 600; margin-bottom: 10px;">
+                       style="display: block; text-align: center; padding: 16px; background: #1976d2; color: white; border-radius: 8px; text-decoration: none; font-weight: 600; margin-bottom: 10px;">
+                        📅 Réserver maintenant
+                    </a>
+                    <a href="{{ path('locataire_messages_new', {emplacementId: emplacement.id}) }}"
+                       class="btn-secondary"
+                       style="display: block; text-align: center; padding: 16px; background: white; color: #1a1a1a; border: 1px solid #e5e5e5; border-radius: 8px; text-decoration: none; font-weight: 600;">
                         💬 Contacter le centre
                     </a>
                 {% else %}
                     <a href="{{ path('app_login') }}"
                        class="btn-primary"
                        style="display: block; text-align: center; padding: 16px; background: #1a1a1a; color: white; border-radius: 8px; text-decoration: none; font-weight: 600; margin-bottom: 10px;">
-                        Se connecter pour contacter
+                        Se connecter pour réserver
                     </a>
                 {% endif %}
 

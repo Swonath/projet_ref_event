@@ -1,0 +1,411 @@
+{% extends 'locataire/base_dashboard.html.twig' %}
+
+{% block title %}Réserver {{ emplacement.titreAnnonce }} - Références Événements{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .reservation-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .emplacement-summary {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+
+        .emplacement-summary-image {
+            width: 200px;
+            height: 150px;
+            border-radius: 8px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .emplacement-summary-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .emplacement-summary-info h2 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .emplacement-summary-details {
+            color: #666;
+            margin-bottom: 4px;
+        }
+
+        .reservation-form-card {
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 24px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1a1a1a;
+        }
+
+        .form-group input {
+            padding: 12px;
+            border: 1px solid #e5e5e5;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #1976d2;
+        }
+
+        .price-breakdown {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 24px;
+            margin-top: 24px;
+            display: none;
+        }
+
+        .price-breakdown.show {
+            display: block;
+        }
+
+        .price-breakdown h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .price-line {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            color: #666;
+        }
+
+        .price-line.total {
+            border-top: 2px solid #e5e5e5;
+            margin-top: 12px;
+            padding-top: 16px;
+            font-size: 18px;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 16px;
+            background: #1976d2;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 24px;
+        }
+
+        .btn-submit:hover {
+            background: #1565c0;
+        }
+
+        .btn-submit:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .error-message {
+            color: #d32f2f;
+            background: #ffebee;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #1976d2;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+        }
+
+        .info-box p {
+            margin: 0;
+            color: #1565c0;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .emplacement-summary {
+                flex-direction: column;
+            }
+
+            .emplacement-summary-image {
+                width: 100%;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block dashboard_content %}
+
+<div class="reservation-container">
+    <div class="page-header" style="margin-bottom: 24px;">
+        <h1 class="page-title">Réserver un emplacement</h1>
+        <p class="page-subtitle">Sélectionnez vos dates de location</p>
+    </div>
+
+    <!-- Résumé de l'emplacement -->
+    <div class="emplacement-summary">
+        <div class="emplacement-summary-image">
+            {% if emplacement.photos is not empty %}
+                <img src="{{ asset('uploads/photos/' ~ emplacement.photos|first.cheminFichier) }}" alt="{{ emplacement.titreAnnonce }}">
+            {% else %}
+                <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; background:#f5f5f5; color:#999;">
+                    📷
+                </div>
+            {% endif %}
+        </div>
+        <div class="emplacement-summary-info">
+            <h2>{{ emplacement.titreAnnonce }}</h2>
+            <div class="emplacement-summary-details">
+                📍 {{ emplacement.centreCommercial.nomCentre }} - {{ emplacement.centreCommercial.ville }}
+            </div>
+            <div class="emplacement-summary-details">
+                {{ emplacement.typeEmplacement|capitalize }} • {{ emplacement.surface }} m²
+            </div>
+            <div class="emplacement-summary-details" style="margin-top: 8px; color: #1976d2; font-weight: 600;">
+                À partir de {{ (emplacement.tarifJour * 1.25 * 1.20)|number_format(2, ',', ' ') }}€ / jour
+            </div>
+        </div>
+    </div>
+
+    <!-- Informations de durée -->
+    {% if emplacement.dureeMinLocation or emplacement.dureeMaxLocation %}
+        <div class="info-box">
+            <p>
+                {% if emplacement.dureeMinLocation %}
+                    Durée minimum : {{ emplacement.dureeMinLocation }} jour(s)
+                {% endif %}
+                {% if emplacement.dureeMinLocation and emplacement.dureeMaxLocation %} • {% endif %}
+                {% if emplacement.dureeMaxLocation %}
+                    Durée maximum : {{ emplacement.dureeMaxLocation }} jour(s)
+                {% endif %}
+            </p>
+        </div>
+    {% endif %}
+
+    <!-- Formulaire de réservation -->
+    <div class="reservation-form-card">
+        <h3 style="font-size: 20px; font-weight: 700; margin-bottom: 20px;">Choisissez vos dates</h3>
+
+        {% if form.vars.errors|length > 0 %}
+            <div class="error-message">
+                {% for error in form.vars.errors %}
+                    {{ error.message }}<br>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {{ form_start(form) }}
+
+        <div class="form-row">
+            <div class="form-group">
+                {{ form_label(form.dateDebut) }}
+                {{ form_widget(form.dateDebut) }}
+                {{ form_errors(form.dateDebut) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.dateFin) }}
+                {{ form_widget(form.dateFin) }}
+                {{ form_errors(form.dateFin) }}
+            </div>
+        </div>
+
+        <!-- Affichage du prix calculé -->
+        <div id="price-breakdown" class="price-breakdown">
+            <h3>Récapitulatif du prix</h3>
+            <div class="price-line">
+                <span>Durée de location :</span>
+                <span id="price-days">-</span>
+            </div>
+            <div class="price-line">
+                <span>Montant de location (HT) :</span>
+                <span id="price-location">-</span>
+            </div>
+            <div class="price-line">
+                <span>Commission plateforme (25%) :</span>
+                <span id="price-commission">-</span>
+            </div>
+            <div class="price-line">
+                <span>TVA (20%) :</span>
+                <span id="price-tva">-</span>
+            </div>
+            <div class="price-line">
+                <span>Caution :</span>
+                <span id="price-caution">-</span>
+            </div>
+            <div class="price-line total">
+                <span>Total à payer :</span>
+                <span id="price-total">-</span>
+            </div>
+        </div>
+
+        <button type="submit" class="btn-submit" id="submit-btn" disabled>
+            Continuer vers le paiement
+        </button>
+
+        {{ form_end(form) }}
+
+        <div style="text-align: center; margin-top: 16px;">
+            <a href="{{ path('emplacement_detail', {id: emplacement.id}) }}" style="color: #666; text-decoration: none;">
+                ← Retour à l'annonce
+            </a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        console.log('Script de réservation chargé');
+
+        // Périodes indisponibles depuis le serveur
+        const unavailablePeriods = {{ unavailablePeriods|json_encode|raw }};
+        const emplacementId = {{ emplacement.id }};
+
+        // Attendre que le DOM soit prêt
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM prêt, initialisation...');
+
+            const dateDebutInput = document.querySelector('#reservation_dateDebut');
+            const dateFinInput = document.querySelector('#reservation_dateFin');
+
+            console.log('Champs trouvés:', dateDebutInput, dateFinInput);
+
+            // Ajouter les événements de changement
+            if (dateDebutInput) {
+                dateDebutInput.addEventListener('change', calculatePrice);
+                dateDebutInput.addEventListener('blur', calculatePrice);
+            }
+
+            if (dateFinInput) {
+                dateFinInput.addEventListener('change', calculatePrice);
+                dateFinInput.addEventListener('blur', calculatePrice);
+            }
+
+            // Calculer le prix si les dates sont déjà remplies
+            if (dateDebutInput && dateFinInput && dateDebutInput.value && dateFinInput.value) {
+                calculatePrice();
+            }
+        });
+
+        // Fonction pour calculer et afficher le prix
+        function calculatePrice() {
+            console.log('calculatePrice() appelée');
+
+            const dateDebut = document.querySelector('#reservation_dateDebut').value;
+            const dateFin = document.querySelector('#reservation_dateFin').value;
+
+            console.log('Dates:', dateDebut, dateFin);
+
+            if (!dateDebut || !dateFin) {
+                hidePriceBreakdown();
+                return;
+            }
+
+            // Vérifier que la date de fin est après la date de début
+            if (dateFin <= dateDebut) {
+                hidePriceBreakdown();
+                return;
+            }
+
+            // Appel AJAX pour calculer le prix
+            fetch('{{ path('locataire_reservation_calculate_price') }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    emplacementId: emplacementId,
+                    dateDebut: dateDebut,
+                    dateFin: dateFin
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.available && data.prices) {
+                    showPriceBreakdown(data.prices);
+                    document.getElementById('submit-btn').disabled = false;
+                } else {
+                    hidePriceBreakdown();
+                    if (data.message) {
+                        alert(data.message);
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+                hidePriceBreakdown();
+            });
+        }
+
+        // Afficher le récapitulatif du prix
+        function showPriceBreakdown(prices) {
+            document.getElementById('price-days').textContent = prices.days + ' jour(s)';
+            document.getElementById('price-location').textContent = formatPrice(prices.montantLocation);
+            document.getElementById('price-commission').textContent = formatPrice(prices.montantCommission);
+            document.getElementById('price-tva').textContent = formatPrice(prices.montantTVA);
+            document.getElementById('price-caution').textContent = formatPrice(prices.caution);
+            document.getElementById('price-total').textContent = formatPrice(prices.montantTotalAvecCaution);
+
+            document.getElementById('price-breakdown').classList.add('show');
+        }
+
+        // Cacher le récapitulatif du prix
+        function hidePriceBreakdown() {
+            document.getElementById('price-breakdown').classList.remove('show');
+            document.getElementById('submit-btn').disabled = true;
+        }
+
+        // Formater le prix avec espace et €
+        function formatPrice(price) {
+            return new Intl.NumberFormat('fr-FR', {
+                style: 'currency',
+                currency: 'EUR'
+            }).format(price);
+        }
+    </script>
+{% endblock %}

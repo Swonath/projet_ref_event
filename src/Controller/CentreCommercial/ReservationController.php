@@ -5,7 +5,9 @@ namespace App\Controller\CentreCommercial;
 use App\Entity\CentreCommercial;
 use App\Enum\StatutReservation;
 use App\Repository\ReservationRepository;
+use App\Service\StripeService;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,6 +20,12 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 #[IsGranted('ROLE_CENTRE')]
 class ReservationController extends AbstractController
 {
+    public function __construct(
+        private readonly StripeService $stripeService,
+        private readonly LoggerInterface $logger
+    ) {
+    }
+
     #[Route('', name: 'index')]
     public function index(
         Request $request,
@@ -184,9 +192,44 @@ class ReservationController extends AbstractController
         $reservation->setStatut(StatutReservation::REFUSEE);
         $reservation->setMotifRefus($motifRefus);
         $reservation->setDateValidation(new \DateTime());
-        $entityManager->flush();
 
-        $this->addFlash('success', 'Réservation refusée.');
+        // Si la réservation a été payée, créer un remboursement automatique
+        if ($reservation->getPaiement() && $reservation->getPaiement()->getTransactionId()) {
+            try {
+                $refund = $this->stripeService->createRefund(
+                    $reservation->getPaiement()->getTransactionId()
+                );
+
+                // Mettre à jour le paiement avec les informations de remboursement
+                $paiement = $reservation->getPaiement();
+                $paiement->setDateRemboursement(new \DateTime());
+                $paiement->setMontantRembourse($paiement->getMontant());
+                $paiement->setStatut('rembourse');
+
+                $this->logger->info('Remboursement automatique effectué', [
+                    'reservation_id' => $reservation->getId(),
+                    'payment_intent_id' => $paiement->getTransactionId(),
+                    'montant' => $paiement->getMontant(),
+                ]);
+
+                $entityManager->flush();
+
+                $this->addFlash('success', 'Réservation refusée et paiement remboursé automatiquement au locataire.');
+            } catch (\Exception $e) {
+                $this->logger->error('Erreur remboursement automatique', [
+                    'reservation_id' => $reservation->getId(),
+                    'error' => $e->getMessage(),
+                ]);
+
+                $entityManager->flush();
+
+                $this->addFlash('warning', 'Réservation refusée mais une erreur est survenue lors du remboursement automatique. Veuillez contacter le support technique.');
+            }
+        } else {
+            $entityManager->flush();
+            $this->addFlash('success', 'Réservation refusée.');
+        }
+
         return $this->redirectToRoute('centre_reservations_index');
     }
 
