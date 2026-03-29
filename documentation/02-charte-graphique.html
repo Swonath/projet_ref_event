@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Références Événements - Charte Graphique</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+            background: #fff;
+            padding: 40px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .cover {
+            text-align: center;
+            padding: 80px 40px;
+            background: linear-gradient(135deg, #1a1a1a 0%, #333 100%);
+            color: white;
+            border-radius: 12px;
+            margin-bottom: 50px;
+            page-break-after: always;
+        }
+
+        .cover h1 {
+            font-size: 42px;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .cover .subtitle {
+            font-size: 24px;
+            opacity: 0.9;
+            margin-bottom: 40px;
+        }
+
+        .cover .meta {
+            font-size: 14px;
+            opacity: 0.7;
+            margin-top: 60px;
+        }
+
+        h1 {
+            font-size: 28px;
+            color: #1a1a1a;
+            border-bottom: 3px solid #1a1a1a;
+            padding-bottom: 10px;
+            margin: 40px 0 20px 0;
+        }
+
+        h2 {
+            font-size: 22px;
+            color: #333;
+            margin: 30px 0 15px 0;
+            padding-left: 15px;
+            border-left: 4px solid #1a1a1a;
+        }
+
+        h3 {
+            font-size: 18px;
+            color: #555;
+            margin: 20px 0 10px 0;
+        }
+
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        .page-break {
+            page-break-before: always;
+        }
+
+        /* Couleurs */
+        .color-palette {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .color-card {
+            border: 1px solid #e5e5e5;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .color-swatch {
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .color-info {
+            padding: 15px;
+            background: #fff;
+        }
+
+        .color-info h4 {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .color-info p {
+            font-size: 13px;
+            color: #666;
+            margin: 0;
+        }
+
+        .color-info code {
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        /* Status colors */
+        .status-colors {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .status-card {
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .status-card h4 {
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .status-card code {
+            display: block;
+            font-size: 11px;
+            margin-top: 8px;
+            opacity: 0.8;
+        }
+
+        /* Typography */
+        .typo-sample {
+            border: 1px solid #e5e5e5;
+            border-radius: 8px;
+            padding: 25px;
+            margin: 15px 0;
+        }
+
+        .typo-sample .label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Spacing */
+        .spacing-demo {
+            display: flex;
+            gap: 15px;
+            align-items: flex-end;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .spacing-box {
+            background: #1a1a1a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+        }
+
+        /* Components */
+        .component-demo {
+            border: 1px solid #e5e5e5;
+            border-radius: 8px;
+            padding: 25px;
+            margin: 15px 0;
+            background: #fafafa;
+        }
+
+        .btn-demo {
+            display: inline-block;
+            padding: 12px 32px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            margin: 5px;
+        }
+
+        .btn-primary {
+            background: #1a1a1a;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #f5f5f5;
+            color: #1a1a1a;
+            border: 1px solid #e5e5e5;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #1a1a1a;
+            border: 2px solid #1a1a1a;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        /* Input demo */
+        .input-demo {
+            display: block;
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #e5e5e5;
+            border-radius: 8px;
+            font-size: 14px;
+            margin: 10px 0;
+            font-family: inherit;
+        }
+
+        .input-demo:focus {
+            outline: none;
+            border-color: #1a1a1a;
+        }
+
+        .label-demo {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 6px;
+            color: #333;
+        }
+
+        /* Card demo */
+        .card-demo {
+            background: white;
+            border: 1px solid #e5e5e5;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+
+        .card-demo:hover {
+            border-color: #1a1a1a;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Badge demo */
+        .badge-demo {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        th {
+            background: #1a1a1a;
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        /* Code block */
+        .code-block {
+            background: #1a1a1a;
+            color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 13px;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+
+        .code-block .comment {
+            color: #6a9955;
+        }
+
+        .code-block .property {
+            color: #9cdcfe;
+        }
+
+        .code-block .value {
+            color: #ce9178;
+        }
+
+        /* Highlight box */
+        .highlight-box {
+            background: #f5f5f5;
+            border-left: 4px solid #1a1a1a;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        @media print {
+            body {
+                padding: 20px;
+            }
+
+            .cover {
+                padding: 100px 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Page de couverture -->
+    <div class="cover">
+        <h1>Références Événements</h1>
+        <p class="subtitle">Plateforme de Location d'Emplacements Commerciaux</p>
+        <p style="font-size: 18px; margin-top: 30px;">CHARTE GRAPHIQUE</p>
+        <p class="meta">
+            Document généré le 22 janvier 2026<br>
+            Version 1.0
+        </p>
+    </div>
+
+    <!-- Identité visuelle -->
+    <h1>1. Identité Visuelle</h1>
+
+    <h2>Philosophie du Design</h2>
+    <p>
+        La charte graphique de <strong>Références Événements</strong> repose sur une esthétique <strong>minimaliste et professionnelle</strong>. Le design privilégie la sobriété avec une palette de couleurs neutres dominée par le noir et les nuances de gris, permettant aux contenus (photos d'emplacements, données) de rester au premier plan.
+    </p>
+
+    <div class="highlight-box">
+        <strong>Mots-clés du design :</strong> Professionnel, Épuré, Moderne, Accessible, Fiable
+    </div>
+
+    <h2>Valeurs transmises</h2>
+    <ul>
+        <li><strong>Confiance</strong> - Couleurs sobres et professionnelles</li>
+        <li><strong>Clarté</strong> - Hiérarchie visuelle claire, espaces aérés</li>
+        <li><strong>Modernité</strong> - Design flat, coins arrondis, animations subtiles</li>
+        <li><strong>Efficacité</strong> - Interface intuitive, actions visibles</li>
+    </ul>
+
+    <!-- Palette de couleurs -->
+    <h1 class="page-break">2. Palette de Couleurs</h1>
+
+    <h2>Couleurs Principales</h2>
+    <div class="color-palette">
+        <div class="color-card">
+            <div class="color-swatch" style="background: #1a1a1a; color: white;">
+                Texte blanc sur fond primaire
+            </div>
+            <div class="color-info">
+                <h4>Primary Dark</h4>
+                <p>Couleur principale pour les éléments importants</p>
+                <p><code>HEX: #1a1a1a</code> <code>RGB: 26, 26, 26</code></p>
+            </div>
+        </div>
+        <div class="color-card">
+            <div class="color-swatch" style="background: #333333; color: white;">
+                Variante secondaire
+            </div>
+            <div class="color-info">
+                <h4>Primary Medium</h4>
+                <p>Pour les dégradés et variations</p>
+                <p><code>HEX: #333333</code> <code>RGB: 51, 51, 51</code></p>
+            </div>
+        </div>
+        <div class="color-card">
+            <div class="color-swatch" style="background: #f5f5f5; color: #1a1a1a;">
+                Texte sombre sur fond clair
+            </div>
+            <div class="color-info">
+                <h4>Background Light</h4>
+                <p>Fond des sections, cartes secondaires</p>
+                <p><code>HEX: #f5f5f5</code> <code>RGB: 245, 245, 245</code></p>
+            </div>
+        </div>
+        <div class="color-card">
+            <div class="color-swatch" style="background: #fafafa; color: #1a1a1a; border: 1px solid #e5e5e5;">
+                Fond très léger
+            </div>
+            <div class="color-info">
+                <h4>Background Extra Light</h4>
+                <p>Fond principal des pages</p>
+                <p><code>HEX: #fafafa</code> <code>RGB: 250, 250, 250</code></p>
+            </div>
+        </div>
+    </div>
+
+    <h2>Couleurs de Texte</h2>
+    <div class="color-palette">
+        <div class="color-card">
+            <div class="color-swatch" style="background: #1a1a1a; color: white;">
+                Aa
+            </div>
+            <div class="color-info">
+                <h4>Text Primary</h4>
+                <p>Titres et texte important</p>
+                <p><code>HEX: #1a1a1a</code></p>
+            </div>
+        </div>
+        <div class="color-card">
+            <div class="color-swatch" style="background: #6b6b6b; color: white;">
+                Aa
+            </div>
+            <div class="color-info">
+                <h4>Text Secondary</h4>
+                <p>Texte secondaire, descriptions</p>
+                <p><code>HEX: #6b6b6b</code></p>
+            </div>
+        </div>
+        <div class="color-card">
+            <div class="color-swatch" style="background: #888888; color: white;">
+                Aa
+            </div>
+            <div class="color-info">
+                <h4>Text Muted</h4>
+                <p>Texte désactivé, placeholders</p>
+                <p><code>HEX: #888888</code></p>
+            </div>
+        </div>
+        <div class="color-card">
+            <div class="color-swatch" style="background: #e5e5e5; color: #1a1a1a;">
+                Bordure
+            </div>
+            <div class="color-info">
+                <h4>Border Color</h4>
+                <p>Bordures, séparateurs</p>
+                <p><code>HEX: #e5e5e5</code></p>
+            </div>
+        </div>
+    </div>
+
+    <h2>Couleurs d'Action</h2>
+    <div class="color-palette">
+        <div class="color-card">
+            <div class="color-swatch" style="background: #2563eb; color: white;">
+                Lien actif
+            </div>
+            <div class="color-info">
+                <h4>Link Blue</h4>
+                <p>Liens, actions interactives</p>
+                <p><code>HEX: #2563eb</code></p>
+            </div>
+        </div>
+        <div class="color-card">
+            <div class="color-swatch" style="background: #ff6b6b; color: white;">
+                Favori actif
+            </div>
+            <div class="color-info">
+                <h4>Favorite Red</h4>
+                <p>Coeur des favoris</p>
+                <p><code>HEX: #ff6b6b</code></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Couleurs de statut -->
+    <h1 class="page-break">3. Couleurs de Statut</h1>
+
+    <p>Les statuts de réservation utilisent un code couleur cohérent pour une identification rapide :</p>
+
+    <div class="status-colors">
+        <div class="status-card" style="background: #fff3cd; color: #856404;">
+            <h4>En attente</h4>
+            <span class="badge-demo" style="background: #ffeaa7; color: #856404;">En attente</span>
+            <code>BG: #fff3cd | Badge: #ffeaa7</code>
+        </div>
+        <div class="status-card" style="background: #d4edda; color: #155724;">
+            <h4>Validée</h4>
+            <span class="badge-demo" style="background: #c3e6cb; color: #155724;">Validée</span>
+            <code>BG: #d4edda | Badge: #c3e6cb</code>
+        </div>
+        <div class="status-card" style="background: #cce5ff; color: #004085;">
+            <h4>En cours</h4>
+            <span class="badge-demo" style="background: #99c9ff; color: #004085;">En cours</span>
+            <code>BG: #cce5ff | Badge: #99c9ff</code>
+        </div>
+        <div class="status-card" style="background: #e2e3e5; color: #383d41;">
+            <h4>Terminée</h4>
+            <span class="badge-demo" style="background: #c6c8ca; color: #383d41;">Terminée</span>
+            <code>BG: #e2e3e5 | Badge: #c6c8ca</code>
+        </div>
+        <div class="status-card" style="background: #f8d7da; color: #721c24;">
+            <h4>Refusée</h4>
+            <span class="badge-demo" style="background: #f1b0b7; color: #721c24;">Refusée</span>
+            <code>BG: #f8d7da | Badge: #f1b0b7</code>
+        </div>
+        <div class="status-card" style="background: #f8d7da; color: #721c24;">
+            <h4>Annulée</h4>
+            <span class="badge-demo" style="background: #e8a3ab; color: #721c24;">Annulée</span>
+            <code>BG: #f8d7da | Badge: #e8a3ab</code>
+        </div>
+    </div>
+
+    <h2>Code CSS des Statuts</h2>
+    <div class="code-block">
+<span class="comment">/* Statut En attente */</span>
+.<span class="property">status-en-attente</span> {
+    <span class="property">background</span>: <span class="value">#ffeaa7</span>;
+    <span class="property">color</span>: <span class="value">#856404</span>;
+}
+
+<span class="comment">/* Statut Validée */</span>
+.<span class="property">status-validee</span> {
+    <span class="property">background</span>: <span class="value">#c3e6cb</span>;
+    <span class="property">color</span>: <span class="value">#155724</span>;
+}
+
+<span class="comment">/* Statut En cours (avec animation) */</span>
+.<span class="property">status-en-cours</span> {
+    <span class="property">background</span>: <span class="value">#99c9ff</span>;
+    <span class="property">color</span>: <span class="value">#004085</span>;
+    <span class="property">animation</span>: <span class="value">pulse-blue 2s infinite</span>;
+}
+
+<span class="comment">/* Statut Terminée */</span>
+.<span class="property">status-terminee</span> {
+    <span class="property">background</span>: <span class="value">#c6c8ca</span>;
+    <span class="property">color</span>: <span class="value">#383d41</span>;
+}
+
+<span class="comment">/* Statut Refusée / Annulée */</span>
+.<span class="property">status-refusee</span>, .<span class="property">status-annulee</span> {
+    <span class="property">background</span>: <span class="value">#f1b0b7</span>;
+    <span class="property">color</span>: <span class="value">#721c24</span>;
+}
+    </div>
+
+    <!-- Typographie -->
+    <h1 class="page-break">4. Typographie</h1>
+
+    <h2>Police Principale</h2>
+    <div class="highlight-box">
+        <p style="font-size: 24px; margin-bottom: 10px;"><strong>Segoe UI</strong></p>
+        <p>Fallback : Tahoma, Geneva, Verdana, sans-serif</p>
+    </div>
+
+    <div class="code-block">
+<span class="property">font-family</span>: <span class="value">'Segoe UI', Tahoma, Geneva, Verdana, sans-serif</span>;
+    </div>
+
+    <h2>Hiérarchie des Titres</h2>
+
+    <div class="typo-sample">
+        <p class="label">H1 - Titre Principal</p>
+        <p style="font-size: 28px; font-weight: 600; color: #1a1a1a;">Mes Réservations</p>
+        <p style="font-size: 12px; color: #888; margin-top: 10px;">font-size: 28px | font-weight: 600 | color: #1a1a1a</p>
+    </div>
+
+    <div class="typo-sample">
+        <p class="label">H2 - Titre de Section</p>
+        <p style="font-size: 22px; font-weight: 600; color: #333;">Statistiques du mois</p>
+        <p style="font-size: 12px; color: #888; margin-top: 10px;">font-size: 22px | font-weight: 600 | color: #333</p>
+    </div>
+
+    <div class="typo-sample">
+        <p class="label">H3 - Sous-titre</p>
+        <p style="font-size: 18px; font-weight: 600; color: #555;">Détails de la réservation</p>
+        <p style="font-size: 12px; color: #888; margin-top: 10px;">font-size: 18px | font-weight: 600 | color: #555</p>
+    </div>
+
+    <div class="typo-sample">
+        <p class="label">Texte de Corps</p>
+        <p style="font-size: 14px; line-height: 1.6; color: #1a1a1a;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        <p style="font-size: 12px; color: #888; margin-top: 10px;">font-size: 14px | line-height: 1.6 | color: #1a1a1a</p>
+    </div>
+
+    <div class="typo-sample">
+        <p class="label">Texte Secondaire</p>
+        <p style="font-size: 13px; line-height: 1.5; color: #6b6b6b;">Information complémentaire ou description secondaire</p>
+        <p style="font-size: 12px; color: #888; margin-top: 10px;">font-size: 13px | line-height: 1.5 | color: #6b6b6b</p>
+    </div>
+
+    <div class="typo-sample">
+        <p class="label">Texte Small / Caption</p>
+        <p style="font-size: 12px; color: #888;">Dernière mise à jour : 22/01/2026</p>
+        <p style="font-size: 12px; color: #888; margin-top: 10px;">font-size: 12px | color: #888</p>
+    </div>
+
+    <!-- Espacements -->
+    <h1 class="page-break">5. Espacements et Grille</h1>
+
+    <h2>Unités d'Espacement</h2>
+    <p>Le système utilise une base de 4px pour les espacements :</p>
+
+    <div class="spacing-demo">
+        <div>
+            <div class="spacing-box" style="width: 16px; height: 16px;">4</div>
+            <p style="font-size: 11px; text-align: center; margin-top: 5px;">4px</p>
+        </div>
+        <div>
+            <div class="spacing-box" style="width: 24px; height: 24px;">8</div>
+            <p style="font-size: 11px; text-align: center; margin-top: 5px;">8px</p>
+        </div>
+        <div>
+            <div class="spacing-box" style="width: 32px; height: 32px;">12</div>
+            <p style="font-size: 11px; text-align: center; margin-top: 5px;">12px</p>
+        </div>
+        <div>
+            <div class="spacing-box" style="width: 40px; height: 40px;">16</div>
+            <p style="font-size: 11px; text-align: center; margin-top: 5px;">16px</p>
+        </div>
+        <div>
+            <div class="spacing-box" style="width: 52px; height: 52px;">20</div>
+            <p style="font-size: 11px; text-align: center; margin-top: 5px;">20px</p>
+        </div>
+        <div>
+            <div class="spacing-box" style="width: 64px; height: 64px;">24</div>
+            <p style="font-size: 11px; text-align: center; margin-top: 5px;">24px</p>
+        </div>
+        <div>
+            <div class="spacing-box" style="width: 80px; height: 80px;">32</div>
+            <p style="font-size: 11px; text-align: center; margin-top: 5px;">32px</p>
+        </div>
+    </div>
+
+    <h2>Rayons de Bordure</h2>
+    <table>
+        <tr>
+            <th>Utilisation</th>
+            <th>Valeur</th>
+            <th>Exemple</th>
+        </tr>
+        <tr>
+            <td>Boutons, inputs</td>
+            <td>8px</td>
+            <td style="background: #1a1a1a; color: white; padding: 8px 16px; border-radius: 8px; display: inline-block;">Button</td>
+        </tr>
+        <tr>
+            <td>Cartes</td>
+            <td>12px</td>
+            <td style="background: #f5f5f5; padding: 8px 16px; border-radius: 12px; border: 1px solid #e5e5e5; display: inline-block;">Card</td>
+        </tr>
+        <tr>
+            <td>Badges de statut</td>
+            <td>20px</td>
+            <td><span class="badge-demo" style="background: #cce5ff; color: #004085;">Badge</span></td>
+        </tr>
+        <tr>
+            <td>Images</td>
+            <td>8px</td>
+            <td style="background: #ddd; width: 60px; height: 40px; border-radius: 8px; display: inline-block;"></td>
+        </tr>
+        <tr>
+            <td>Messages chat</td>
+            <td>16px</td>
+            <td style="background: #2563eb; color: white; padding: 8px 16px; border-radius: 16px; display: inline-block;">Message</td>
+        </tr>
+    </table>
+
+    <h2>Ombres</h2>
+    <div class="code-block">
+<span class="comment">/* Ombre légère (hover sur cartes) */</span>
+<span class="property">box-shadow</span>: <span class="value">0 2px 8px rgba(0, 0, 0, 0.1)</span>;
+
+<span class="comment">/* Ombre moyenne (modals, dropdowns) */</span>
+<span class="property">box-shadow</span>: <span class="value">0 4px 20px rgba(0, 0, 0, 0.15)</span>;
+
+<span class="comment">/* Ombre sidebar fixe */</span>
+<span class="property">box-shadow</span>: <span class="value">2px 0 10px rgba(0, 0, 0, 0.05)</span>;
+    </div>
+
+    <!-- Composants -->
+    <h1 class="page-break">6. Composants UI</h1>
+
+    <h2>Boutons</h2>
+    <div class="component-demo">
+        <button class="btn-demo btn-primary">Bouton Principal</button>
+        <button class="btn-demo btn-secondary">Bouton Secondaire</button>
+        <button class="btn-demo btn-outline">Bouton Outline</button>
+        <button class="btn-demo btn-danger">Bouton Danger</button>
+    </div>
+
+    <div class="code-block">
+<span class="comment">/* Bouton Principal */</span>
+.<span class="property">btn-primary</span> {
+    <span class="property">background</span>: <span class="value">#1a1a1a</span>;
+    <span class="property">color</span>: <span class="value">white</span>;
+    <span class="property">padding</span>: <span class="value">12px 32px</span>;
+    <span class="property">border-radius</span>: <span class="value">8px</span>;
+    <span class="property">font-weight</span>: <span class="value">600</span>;
+    <span class="property">font-size</span>: <span class="value">14px</span>;
+    <span class="property">border</span>: <span class="value">none</span>;
+    <span class="property">cursor</span>: <span class="value">pointer</span>;
+    <span class="property">transition</span>: <span class="value">all 0.2s ease</span>;
+}
+
+.<span class="property">btn-primary</span>:<span class="property">hover</span> {
+    <span class="property">background</span>: <span class="value">#333</span>;
+}
+    </div>
+
+    <h2>Champs de Formulaire</h2>
+    <div class="component-demo">
+        <label class="label-demo">Adresse email</label>
+        <input type="email" class="input-demo" placeholder="exemple@email.com">
+
+        <label class="label-demo" style="margin-top: 15px;">Message</label>
+        <textarea class="input-demo" rows="3" placeholder="Votre message..."></textarea>
+    </div>
+
+    <div class="code-block">
+<span class="comment">/* Input / Textarea */</span>
+.<span class="property">form-input</span> {
+    <span class="property">width</span>: <span class="value">100%</span>;
+    <span class="property">padding</span>: <span class="value">12px 14px</span>;
+    <span class="property">border</span>: <span class="value">1px solid #e5e5e5</span>;
+    <span class="property">border-radius</span>: <span class="value">8px</span>;
+    <span class="property">font-size</span>: <span class="value">14px</span>;
+    <span class="property">font-family</span>: <span class="value">inherit</span>;
+    <span class="property">transition</span>: <span class="value">border-color 0.2s</span>;
+}
+
+.<span class="property">form-input</span>:<span class="property">focus</span> {
+    <span class="property">outline</span>: <span class="value">none</span>;
+    <span class="property">border-color</span>: <span class="value">#1a1a1a</span>;
+}
+
+<span class="comment">/* Label */</span>
+.<span class="property">form-label</span> {
+    <span class="property">display</span>: <span class="value">block</span>;
+    <span class="property">font-size</span>: <span class="value">14px</span>;
+    <span class="property">font-weight</span>: <span class="value">500</span>;
+    <span class="property">margin-bottom</span>: <span class="value">6px</span>;
+    <span class="property">color</span>: <span class="value">#333</span>;
+}
+    </div>
+
+    <h2>Cartes</h2>
+    <div class="card-demo">
+        <h4 style="margin-bottom: 10px;">Titre de la carte</h4>
+        <p style="color: #6b6b6b; font-size: 14px;">Description du contenu de la carte avec des informations pertinentes.</p>
+    </div>
+
+    <div class="code-block">
+<span class="comment">/* Card */</span>
+.<span class="property">card</span> {
+    <span class="property">background</span>: <span class="value">white</span>;
+    <span class="property">border</span>: <span class="value">1px solid #e5e5e5</span>;
+    <span class="property">border-radius</span>: <span class="value">12px</span>;
+    <span class="property">padding</span>: <span class="value">20px</span>;
+    <span class="property">transition</span>: <span class="value">all 0.2s ease</span>;
+}
+
+.<span class="property">card</span>:<span class="property">hover</span> {
+    <span class="property">border-color</span>: <span class="value">#1a1a1a</span>;
+    <span class="property">box-shadow</span>: <span class="value">0 2px 8px rgba(0, 0, 0, 0.1)</span>;
+}
+    </div>
+
+    <!-- Animations -->
+    <h1 class="page-break">7. Animations</h1>
+
+    <h2>Transitions Standards</h2>
+    <div class="code-block">
+<span class="comment">/* Transition par défaut */</span>
+<span class="property">transition</span>: <span class="value">all 0.2s ease</span>;
+
+<span class="comment">/* Transition pour hover */</span>
+<span class="property">transition</span>: <span class="value">background-color 0.2s, border-color 0.2s, box-shadow 0.2s</span>;
+    </div>
+
+    <h2>Animation Pulse (Statut En cours)</h2>
+    <div class="code-block">
+@<span class="property">keyframes</span> pulse-blue {
+    0%, 100% {
+        <span class="property">box-shadow</span>: <span class="value">0 0 0 0 rgba(153, 201, 255, 0.7)</span>;
+    }
+    50% {
+        <span class="property">box-shadow</span>: <span class="value">0 0 0 8px rgba(153, 201, 255, 0)</span>;
+    }
+}
+
+.<span class="property">status-en-cours</span> {
+    <span class="property">animation</span>: <span class="value">pulse-blue 2s infinite</span>;
+}
+    </div>
+
+    <h2>Animation Heartbeat (Favoris)</h2>
+    <div class="code-block">
+@<span class="property">keyframes</span> heartBeat {
+    0% { <span class="property">transform</span>: <span class="value">scale(1)</span>; }
+    25% { <span class="property">transform</span>: <span class="value">scale(1.3)</span>; }
+    50% { <span class="property">transform</span>: <span class="value">scale(1)</span>; }
+    75% { <span class="property">transform</span>: <span class="value">scale(1.3)</span>; }
+    100% { <span class="property">transform</span>: <span class="value">scale(1)</span>; }
+}
+
+.<span class="property">favorite-icon</span>.<span class="property">active</span> {
+    <span class="property">animation</span>: <span class="value">heartBeat 0.6s ease-in-out</span>;
+}
+    </div>
+
+    <h2>Animation de Suppression</h2>
+    <div class="code-block">
+@<span class="property">keyframes</span> slideOut {
+    <span class="property">from</span> {
+        <span class="property">opacity</span>: <span class="value">1</span>;
+        <span class="property">transform</span>: <span class="value">translateX(0)</span>;
+    }
+    <span class="property">to</span> {
+        <span class="property">opacity</span>: <span class="value">0</span>;
+        <span class="property">transform</span>: <span class="value">translateX(-100%)</span>;
+    }
+}
+    </div>
+
+    <!-- Breakpoints -->
+    <h1 class="page-break">8. Responsive Design</h1>
+
+    <h2>Breakpoints</h2>
+    <table>
+        <tr>
+            <th>Appareil</th>
+            <th>Breakpoint</th>
+            <th>Adaptations</th>
+        </tr>
+        <tr>
+            <td>Desktop Large</td>
+            <td>> 1200px</td>
+            <td>Layout complet, sidebar fixe</td>
+        </tr>
+        <tr>
+            <td>Desktop</td>
+            <td>992px - 1200px</td>
+            <td>Grids 3 colonnes → 2 colonnes</td>
+        </tr>
+        <tr>
+            <td>Tablet</td>
+            <td>768px - 991px</td>
+            <td>Sidebar cachée, hamburger menu</td>
+        </tr>
+        <tr>
+            <td>Mobile</td>
+            <td>< 768px</td>
+            <td>Layout 1 colonne, navigation bottom</td>
+        </tr>
+    </table>
+
+    <h2>Code CSS Media Queries</h2>
+    <div class="code-block">
+<span class="comment">/* Tablet */</span>
+@<span class="property">media</span> (<span class="property">max-width</span>: <span class="value">1200px</span>) {
+    .<span class="property">stats-grid</span> {
+        <span class="property">grid-template-columns</span>: <span class="value">repeat(2, 1fr)</span>;
+    }
+}
+
+<span class="comment">/* Mobile */</span>
+@<span class="property">media</span> (<span class="property">max-width</span>: <span class="value">768px</span>) {
+    .<span class="property">sidebar</span> {
+        <span class="property">transform</span>: <span class="value">translateX(-100%)</span>;
+    }
+
+    .<span class="property">main-content</span> {
+        <span class="property">margin-left</span>: <span class="value">0</span>;
+    }
+
+    .<span class="property">stats-grid</span> {
+        <span class="property">grid-template-columns</span>: <span class="value">1fr</span>;
+    }
+}
+    </div>
+
+    <!-- Icônes -->
+    <h1 class="page-break">9. Iconographie</h1>
+
+    <h2>Émojis comme Icônes</h2>
+    <p>Le projet utilise des émojis natifs pour les icônes, garantissant une compatibilité universelle :</p>
+
+    <table>
+        <tr>
+            <th>Emoji</th>
+            <th>Utilisation</th>
+            <th>Contexte</th>
+        </tr>
+        <tr>
+            <td style="font-size: 24px;">📋</td>
+            <td>Réservations</td>
+            <td>Menu sidebar, statistiques</td>
+        </tr>
+        <tr>
+            <td style="font-size: 24px;">💬</td>
+            <td>Messages</td>
+            <td>Menu sidebar, compteur</td>
+        </tr>
+        <tr>
+            <td style="font-size: 24px;">❤️</td>
+            <td>Favoris</td>
+            <td>Menu sidebar, bouton favori</td>
+        </tr>
+        <tr>
+            <td style="font-size: 24px;">📄</td>
+            <td>Documents</td>
+            <td>Menu sidebar</td>
+        </tr>
+        <tr>
+            <td style="font-size: 24px;">💳</td>
+            <td>Paiements</td>
+            <td>Menu sidebar</td>
+        </tr>
+        <tr>
+            <td style="font-size: 24px;">👤</td>
+            <td>Profil</td>
+            <td>Menu sidebar</td>
+        </tr>
+        <tr>
+            <td style="font-size: 24px;">⏳</td>
+            <td>En attente</td>
+            <td>Statut réservation</td>
+        </tr>
+        <tr>
+            <td style="font-size: 24px;">✅</td>
+            <td>Validée</td>
+            <td>Statut réservation</td>
+        </tr>
+        <tr>
+            <td style="font-size: 24px;">🔄</td>
+            <td>En cours</td>
+            <td>Statut réservation</td>
+        </tr>
+        <tr>
+            <td style="font-size: 24px;">✔️</td>
+            <td>Terminée</td>
+            <td>Statut réservation</td>
+        </tr>
+        <tr>
+            <td style="font-size: 24px;">❌</td>
+            <td>Refusée</td>
+            <td>Statut réservation</td>
+        </tr>
+        <tr>
+            <td style="font-size: 24px;">🚫</td>
+            <td>Annulée</td>
+            <td>Statut réservation</td>
+        </tr>
+    </table>
+
+    <!-- Résumé -->
+    <h1 class="page-break">10. Résumé des Variables CSS</h1>
+
+    <p>Voici les variables CSS recommandées pour maintenir la cohérence du design :</p>
+
+    <div class="code-block">
+:<span class="property">root</span> {
+    <span class="comment">/* Couleurs principales */</span>
+    <span class="property">--color-primary</span>: <span class="value">#1a1a1a</span>;
+    <span class="property">--color-primary-light</span>: <span class="value">#333333</span>;
+    <span class="property">--color-secondary</span>: <span class="value">#f5f5f5</span>;
+    <span class="property">--color-background</span>: <span class="value">#fafafa</span>;
+    <span class="property">--color-white</span>: <span class="value">#ffffff</span>;
+
+    <span class="comment">/* Couleurs de texte */</span>
+    <span class="property">--color-text-primary</span>: <span class="value">#1a1a1a</span>;
+    <span class="property">--color-text-secondary</span>: <span class="value">#6b6b6b</span>;
+    <span class="property">--color-text-muted</span>: <span class="value">#888888</span>;
+
+    <span class="comment">/* Couleurs d'interface */</span>
+    <span class="property">--color-border</span>: <span class="value">#e5e5e5</span>;
+    <span class="property">--color-link</span>: <span class="value">#2563eb</span>;
+    <span class="property">--color-favorite</span>: <span class="value">#ff6b6b</span>;
+    <span class="property">--color-danger</span>: <span class="value">#dc3545</span>;
+
+    <span class="comment">/* Couleurs de statut */</span>
+    <span class="property">--color-status-pending</span>: <span class="value">#ffeaa7</span>;
+    <span class="property">--color-status-validated</span>: <span class="value">#c3e6cb</span>;
+    <span class="property">--color-status-active</span>: <span class="value">#99c9ff</span>;
+    <span class="property">--color-status-completed</span>: <span class="value">#c6c8ca</span>;
+    <span class="property">--color-status-rejected</span>: <span class="value">#f1b0b7</span>;
+
+    <span class="comment">/* Typographie */</span>
+    <span class="property">--font-family</span>: <span class="value">'Segoe UI', Tahoma, Geneva, Verdana, sans-serif</span>;
+    <span class="property">--font-size-xs</span>: <span class="value">12px</span>;
+    <span class="property">--font-size-sm</span>: <span class="value">13px</span>;
+    <span class="property">--font-size-base</span>: <span class="value">14px</span>;
+    <span class="property">--font-size-lg</span>: <span class="value">18px</span>;
+    <span class="property">--font-size-xl</span>: <span class="value">22px</span>;
+    <span class="property">--font-size-2xl</span>: <span class="value">28px</span>;
+
+    <span class="comment">/* Espacements */</span>
+    <span class="property">--spacing-xs</span>: <span class="value">4px</span>;
+    <span class="property">--spacing-sm</span>: <span class="value">8px</span>;
+    <span class="property">--spacing-md</span>: <span class="value">16px</span>;
+    <span class="property">--spacing-lg</span>: <span class="value">24px</span>;
+    <span class="property">--spacing-xl</span>: <span class="value">32px</span>;
+
+    <span class="comment">/* Bordures */</span>
+    <span class="property">--border-radius-sm</span>: <span class="value">4px</span>;
+    <span class="property">--border-radius-md</span>: <span class="value">8px</span>;
+    <span class="property">--border-radius-lg</span>: <span class="value">12px</span>;
+    <span class="property">--border-radius-pill</span>: <span class="value">20px</span>;
+    <span class="property">--border-radius-full</span>: <span class="value">50%</span>;
+
+    <span class="comment">/* Ombres */</span>
+    <span class="property">--shadow-sm</span>: <span class="value">0 2px 8px rgba(0, 0, 0, 0.1)</span>;
+    <span class="property">--shadow-md</span>: <span class="value">0 4px 20px rgba(0, 0, 0, 0.15)</span>;
+
+    <span class="comment">/* Transitions */</span>
+    <span class="property">--transition-fast</span>: <span class="value">0.15s ease</span>;
+    <span class="property">--transition-normal</span>: <span class="value">0.2s ease</span>;
+    <span class="property">--transition-slow</span>: <span class="value">0.3s ease</span>;
+
+    <span class="comment">/* Layout */</span>
+    <span class="property">--sidebar-width</span>: <span class="value">280px</span>;
+    <span class="property">--header-height</span>: <span class="value">70px</span>;
+}
+    </div>
+
+    <hr style="margin: 50px 0; border: none; border-top: 2px solid #e5e5e5;">
+
+    <p style="text-align: center; color: #666; font-size: 14px;">
+        <em>Charte Graphique - Références Événements v1.0</em><br>
+        <em>Pour convertir en PDF : Ouvrir dans un navigateur > Ctrl+P > Enregistrer en PDF</em>
+    </p>
+</body>
+</html>

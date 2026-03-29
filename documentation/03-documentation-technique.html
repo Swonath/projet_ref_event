@@ -1,0 +1,1632 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Références Événements - Documentation Technique</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+            background: #fff;
+            padding: 40px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .cover {
+            text-align: center;
+            padding: 80px 40px;
+            background: linear-gradient(135deg, #1a1a1a 0%, #333 100%);
+            color: white;
+            border-radius: 12px;
+            margin-bottom: 50px;
+            page-break-after: always;
+        }
+
+        .cover h1 {
+            font-size: 42px;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .cover .subtitle {
+            font-size: 24px;
+            opacity: 0.9;
+            margin-bottom: 40px;
+        }
+
+        .cover .meta {
+            font-size: 14px;
+            opacity: 0.7;
+            margin-top: 60px;
+        }
+
+        h1 {
+            font-size: 28px;
+            color: #1a1a1a;
+            border-bottom: 3px solid #1a1a1a;
+            padding-bottom: 10px;
+            margin: 40px 0 20px 0;
+        }
+
+        h2 {
+            font-size: 22px;
+            color: #333;
+            margin: 30px 0 15px 0;
+            padding-left: 15px;
+            border-left: 4px solid #1a1a1a;
+        }
+
+        h3 {
+            font-size: 18px;
+            color: #555;
+            margin: 20px 0 10px 0;
+        }
+
+        h4 {
+            font-size: 16px;
+            color: #666;
+            margin: 15px 0 8px 0;
+        }
+
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        .page-break {
+            page-break-before: always;
+        }
+
+        .highlight-box {
+            background: #f5f5f5;
+            border-left: 4px solid #1a1a1a;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .highlight-box.info {
+            background: #e3f2fd;
+            border-left-color: #2196f3;
+        }
+
+        .highlight-box.warning {
+            background: #fff3e0;
+            border-left-color: #ff9800;
+        }
+
+        .highlight-box.success {
+            background: #e8f5e9;
+            border-left-color: #4caf50;
+        }
+
+        ul, ol {
+            margin: 15px 0 15px 30px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 13px;
+        }
+
+        th, td {
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        th {
+            background: #1a1a1a;
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        code {
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 13px;
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 12px;
+            overflow-x: auto;
+            margin: 15px 0;
+            white-space: pre;
+            line-height: 1.5;
+        }
+
+        .code-block .comment { color: #6a9955; }
+        .code-block .keyword { color: #569cd6; }
+        .code-block .string { color: #ce9178; }
+        .code-block .function { color: #dcdcaa; }
+        .code-block .variable { color: #9cdcfe; }
+        .code-block .class { color: #4ec9b0; }
+        .code-block .annotation { color: #dcdcaa; }
+        .code-block .number { color: #b5cea8; }
+
+        .file-path {
+            background: #2d2d2d;
+            color: #9cdcfe;
+            padding: 8px 15px;
+            border-radius: 4px 4px 0 0;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 12px;
+            display: inline-block;
+            margin-bottom: -1px;
+        }
+
+        .toc {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 8px;
+            margin: 30px 0;
+        }
+
+        .toc h2 {
+            margin-top: 0;
+            border-left: none;
+            padding-left: 0;
+        }
+
+        .toc ol {
+            margin-left: 20px;
+        }
+
+        .toc ol ol {
+            margin-top: 5px;
+            margin-bottom: 10px;
+        }
+
+        .diagram {
+            background: #f8f9fa;
+            border: 1px solid #e5e5e5;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            font-family: 'Consolas', monospace;
+            font-size: 13px;
+            white-space: pre;
+            overflow-x: auto;
+        }
+
+        @media print {
+            body {
+                padding: 20px;
+            }
+
+            .cover {
+                padding: 100px 40px;
+            }
+
+            .code-block {
+                font-size: 10px;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Page de couverture -->
+    <div class="cover">
+        <h1>Références Événements</h1>
+        <p class="subtitle">Plateforme de Location d'Emplacements Commerciaux</p>
+        <p style="font-size: 18px; margin-top: 30px;">DOCUMENTATION TECHNIQUE</p>
+        <p class="meta">
+            Document généré le 22 janvier 2026<br>
+            Version 1.0 | Symfony 7.x | PHP 8.1+
+        </p>
+    </div>
+
+    <!-- Table des matières -->
+    <div class="toc">
+        <h2>Table des matières</h2>
+        <ol>
+            <li>Architecture Générale
+                <ol>
+                    <li>Structure des dossiers</li>
+                    <li>Pattern MVC</li>
+                </ol>
+            </li>
+            <li>Modèle de Données
+                <ol>
+                    <li>Système d'héritage utilisateur</li>
+                    <li>Entités principales</li>
+                    <li>Relations entre entités</li>
+                </ol>
+            </li>
+            <li>Contrôleurs et Routes
+                <ol>
+                    <li>Routes publiques</li>
+                    <li>Routes authentifiées</li>
+                    <li>Routes AJAX</li>
+                </ol>
+            </li>
+            <li>Système d'Authentification</li>
+            <li>Système de Messagerie</li>
+            <li>Gestion des Réservations</li>
+            <li>Système de Favoris</li>
+            <li>Templates Twig</li>
+            <li>JavaScript et AJAX</li>
+            <li>Fixtures et Données de Test</li>
+        </ol>
+    </div>
+
+    <!-- Section 1 : Architecture -->
+    <h1>1. Architecture Générale</h1>
+
+    <h2>1.1 Structure des Dossiers</h2>
+
+    <div class="diagram">
+references-evenements/
+├── config/                    <span style="color: #6a9955;"># Configuration Symfony</span>
+│   ├── packages/              <span style="color: #6a9955;"># Config des bundles</span>
+│   ├── routes/                <span style="color: #6a9955;"># Définition des routes</span>
+│   └── services.yaml          <span style="color: #6a9955;"># Services et injection</span>
+├── migrations/                <span style="color: #6a9955;"># Migrations Doctrine</span>
+├── public/                    <span style="color: #6a9955;"># Point d'entrée web</span>
+│   ├── css/                   <span style="color: #6a9955;"># Styles CSS</span>
+│   ├── js/                    <span style="color: #6a9955;"># Scripts JavaScript</span>
+│   └── uploads/               <span style="color: #6a9955;"># Fichiers uploadés</span>
+├── src/                       <span style="color: #6a9955;"># Code source PHP</span>
+│   ├── Controller/            <span style="color: #6a9955;"># Contrôleurs</span>
+│   │   ├── Locataire/         <span style="color: #6a9955;"># Contrôleurs locataire</span>
+│   │   └── *.php              <span style="color: #6a9955;"># Contrôleurs généraux</span>
+│   ├── Entity/                <span style="color: #6a9955;"># Entités Doctrine</span>
+│   ├── Enum/                  <span style="color: #6a9955;"># Énumérations PHP</span>
+│   ├── Form/                  <span style="color: #6a9955;"># Types de formulaires</span>
+│   ├── Repository/            <span style="color: #6a9955;"># Repositories Doctrine</span>
+│   └── DataFixtures/          <span style="color: #6a9955;"># Données de test</span>
+├── templates/                 <span style="color: #6a9955;"># Templates Twig</span>
+│   ├── locataire/             <span style="color: #6a9955;"># Pages dashboard locataire</span>
+│   ├── partials/              <span style="color: #6a9955;"># Composants réutilisables</span>
+│   └── *.html.twig            <span style="color: #6a9955;"># Templates de base</span>
+└── var/                       <span style="color: #6a9955;"># Cache et logs</span>
+    </div>
+
+    <h2>1.2 Pattern MVC</h2>
+
+    <p>L'application suit le pattern Model-View-Controller de Symfony :</p>
+
+    <div class="diagram">
+┌─────────────────────────────────────────────────────────────────┐
+│                         REQUÊTE HTTP                             │
+└─────────────────────────────────────────────────────────────────┘
+                                │
+                                ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                     SYMFONY KERNEL                               │
+│  • Routing (config/routes.yaml)                                  │
+│  • Security (firewall, access_control)                          │
+└─────────────────────────────────────────────────────────────────┘
+                                │
+                                ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                      CONTROLLER                                  │
+│  • Reçoit la requête                                            │
+│  • Interagit avec les Repositories                              │
+│  • Retourne une Response                                        │
+└─────────────────────────────────────────────────────────────────┘
+            │                                       │
+            ▼                                       ▼
+┌───────────────────────┐               ┌─────────────────────────┐
+│       REPOSITORY       │               │      TWIG TEMPLATE      │
+│  • Requêtes Doctrine   │               │  • Génère le HTML       │
+│  • Accès aux Entity    │               │  • Utilise les données  │
+└───────────────────────┘               └─────────────────────────┘
+            │                                       │
+            ▼                                       │
+┌───────────────────────┐                          │
+│        ENTITY          │                          │
+│  • Modèle de données   │                          │
+│  • Relations ORM       │                          │
+└───────────────────────┘                          │
+                                                    ▼
+                               ┌─────────────────────────────────┐
+                               │        RÉPONSE HTTP             │
+                               └─────────────────────────────────┘
+    </div>
+
+    <!-- Section 2 : Modèle de données -->
+    <h1 class="page-break">2. Modèle de Données</h1>
+
+    <h2>2.1 Système d'Héritage Utilisateur</h2>
+
+    <p>Le projet utilise l'héritage de table Doctrine avec la stratégie <code>JOINED</code>. Cela signifie que chaque classe a sa propre table, avec une clé étrangère vers la table parent.</p>
+
+    <div class="diagram">
+                    ┌─────────────────────────────┐
+                    │           USER              │
+                    │  (Classe abstraite)         │
+                    ├─────────────────────────────┤
+                    │  id (PK)                    │
+                    │  email (unique)             │
+                    │  password                   │
+                    │  roles (JSON)               │
+                    │  discr (discriminator)      │
+                    └──────────────┬──────────────┘
+                                   │
+           ┌───────────────────────┼───────────────────────┐
+           │                       │                       │
+           ▼                       ▼                       ▼
+┌─────────────────────┐ ┌─────────────────────┐ ┌─────────────────────┐
+│     LOCATAIRE       │ │  CENTRE_COMMERCIAL  │ │   ADMINISTRATEUR    │
+├─────────────────────┤ ├─────────────────────┤ ├─────────────────────┤
+│ id (FK → user.id)   │ │ id (FK → user.id)   │ │ id (FK → user.id)   │
+│ nom                 │ │ nomCentre           │ │ nom                 │
+│ siret               │ │ siret               │ │ prenom              │
+│ typeActivite        │ │ numeroTva           │ │ telephone           │
+│ adresseFacturation  │ │ adresse             │ └─────────────────────┘
+│ codePostal          │ │ codePostal          │
+│ ville               │ │ ville               │
+│ telephone           │ │ telephone           │
+│ statutCompte        │ │ description         │
+│ photoProfile        │ │ iban                │
+└─────────────────────┘ │ statutCompte        │
+                        │ photoProfile        │
+                        └─────────────────────┘
+    </div>
+
+    <h3>Code de l'Entité User (parent)</h3>
+
+    <div class="file-path">src/Entity/User.php</div>
+    <div class="code-block"><span class="annotation">#[ORM\Entity(repositoryClass: UserRepository::class)]</span>
+<span class="annotation">#[ORM\Table(name: '`user`')]</span>
+<span class="annotation">#[ORM\InheritanceType('JOINED')]</span>
+<span class="annotation">#[ORM\DiscriminatorColumn(name: 'discr', type: 'string')]</span>
+<span class="annotation">#[ORM\DiscriminatorMap([</span>
+<span class="annotation">    'locataire' => Locataire::class,</span>
+<span class="annotation">    'centre' => CentreCommercial::class,</span>
+<span class="annotation">    'admin' => Administrateur::class</span>
+<span class="annotation">])]</span>
+<span class="keyword">abstract class</span> <span class="class">User</span> <span class="keyword">implements</span> UserInterface, PasswordAuthenticatedUserInterface
+{
+    <span class="annotation">#[ORM\Id]</span>
+    <span class="annotation">#[ORM\GeneratedValue]</span>
+    <span class="annotation">#[ORM\Column]</span>
+    <span class="keyword">private</span> ?<span class="class">int</span> <span class="variable">$id</span> = <span class="keyword">null</span>;
+
+    <span class="annotation">#[ORM\Column(length: 180, unique: true)]</span>
+    <span class="keyword">private</span> ?<span class="class">string</span> <span class="variable">$email</span> = <span class="keyword">null</span>;
+
+    <span class="annotation">#[ORM\Column]</span>
+    <span class="keyword">private</span> <span class="class">array</span> <span class="variable">$roles</span> = [];
+
+    <span class="annotation">#[ORM\Column]</span>
+    <span class="keyword">private</span> ?<span class="class">string</span> <span class="variable">$password</span> = <span class="keyword">null</span>;
+
+    <span class="comment">// Getters et setters...</span>
+}</div>
+
+    <h3>Code de l'Entité Locataire (enfant)</h3>
+
+    <div class="file-path">src/Entity/Locataire.php</div>
+    <div class="code-block"><span class="annotation">#[ORM\Entity(repositoryClass: LocataireRepository::class)]</span>
+<span class="keyword">class</span> <span class="class">Locataire</span> <span class="keyword">extends</span> <span class="class">User</span>
+{
+    <span class="annotation">#[ORM\Column(length: 255)]</span>
+    <span class="keyword">private</span> ?<span class="class">string</span> <span class="variable">$nom</span> = <span class="keyword">null</span>;
+
+    <span class="annotation">#[ORM\Column(length: 14, nullable: true)]</span>
+    <span class="keyword">private</span> ?<span class="class">string</span> <span class="variable">$siret</span> = <span class="keyword">null</span>;
+
+    <span class="annotation">#[ORM\Column(length: 255)]</span>
+    <span class="keyword">private</span> ?<span class="class">string</span> <span class="variable">$typeActivite</span> = <span class="keyword">null</span>;
+
+    <span class="comment">// Relations OneToMany</span>
+    <span class="annotation">#[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'locataire')]</span>
+    <span class="keyword">private</span> <span class="class">Collection</span> <span class="variable">$reservations</span>;
+
+    <span class="annotation">#[ORM\OneToMany(targetEntity: Favori::class, mappedBy: 'locataire', orphanRemoval: true)]</span>
+    <span class="keyword">private</span> <span class="class">Collection</span> <span class="variable">$favoris</span>;
+
+    <span class="annotation">#[ORM\OneToMany(targetEntity: Conversation::class, mappedBy: 'locataire')]</span>
+    <span class="keyword">private</span> <span class="class">Collection</span> <span class="variable">$conversations</span>;
+
+    <span class="comment">// Constructeur initialisant les collections</span>
+    <span class="keyword">public function</span> <span class="function">__construct</span>()
+    {
+        <span class="variable">$this</span>->reservations = <span class="keyword">new</span> <span class="class">ArrayCollection</span>();
+        <span class="variable">$this</span>->favoris = <span class="keyword">new</span> <span class="class">ArrayCollection</span>();
+        <span class="variable">$this</span>->conversations = <span class="keyword">new</span> <span class="class">ArrayCollection</span>();
+    }
+}</div>
+
+    <h2 class="page-break">2.2 Entités Principales</h2>
+
+    <h3>Entité Emplacement</h3>
+    <p>L'entité centrale du système métier, représentant un espace commercial à louer.</p>
+
+    <div class="file-path">src/Entity/Emplacement.php</div>
+    <div class="code-block"><span class="annotation">#[ORM\Entity(repositoryClass: EmplacementRepository::class)]</span>
+<span class="keyword">class</span> <span class="class">Emplacement</span>
+{
+    <span class="annotation">#[ORM\Id]</span>
+    <span class="annotation">#[ORM\GeneratedValue]</span>
+    <span class="annotation">#[ORM\Column]</span>
+    <span class="keyword">private</span> ?<span class="class">int</span> <span class="variable">$id</span> = <span class="keyword">null</span>;
+
+    <span class="annotation">#[ORM\Column(length: 255)]</span>
+    <span class="keyword">private</span> ?<span class="class">string</span> <span class="variable">$titreAnnonce</span> = <span class="keyword">null</span>;
+
+    <span class="annotation">#[ORM\Column(type: Types::TEXT)]</span>
+    <span class="keyword">private</span> ?<span class="class">string</span> <span class="variable">$description</span> = <span class="keyword">null</span>;
+
+    <span class="annotation">#[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]</span>
+    <span class="keyword">private</span> ?<span class="class">string</span> <span class="variable">$surface</span> = <span class="keyword">null</span>;  <span class="comment">// en m²</span>
+
+    <span class="annotation">#[ORM\Column(length: 50)]</span>
+    <span class="keyword">private</span> ?<span class="class">string</span> <span class="variable">$typeEmplacement</span> = <span class="keyword">null</span>;  <span class="comment">// stand, kiosque, boutique, corner</span>
+
+    <span class="annotation">#[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]</span>
+    <span class="keyword">private</span> ?<span class="class">string</span> <span class="variable">$tarifJour</span> = <span class="keyword">null</span>;
+
+    <span class="annotation">#[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2, nullable: true)]</span>
+    <span class="keyword">private</span> ?<span class="class">string</span> <span class="variable">$tarifSemaine</span> = <span class="keyword">null</span>;
+
+    <span class="annotation">#[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2, nullable: true)]</span>
+    <span class="keyword">private</span> ?<span class="class">string</span> <span class="variable">$tarifMois</span> = <span class="keyword">null</span>;
+
+    <span class="annotation">#[ORM\Column(length: 20)]</span>
+    <span class="keyword">private</span> ?<span class="class">string</span> <span class="variable">$statutAnnonce</span> = <span class="string">'brouillon'</span>;  <span class="comment">// publiee, brouillon, archivee</span>
+
+    <span class="comment">// Relations</span>
+    <span class="annotation">#[ORM\ManyToOne(inversedBy: 'emplacements')]</span>
+    <span class="annotation">#[ORM\JoinColumn(nullable: false)]</span>
+    <span class="keyword">private</span> ?<span class="class">CentreCommercial</span> <span class="variable">$centreCommercial</span> = <span class="keyword">null</span>;
+
+    <span class="annotation">#[ORM\OneToMany(targetEntity: Photo::class, mappedBy: 'emplacement', orphanRemoval: true)]</span>
+    <span class="keyword">private</span> <span class="class">Collection</span> <span class="variable">$photos</span>;
+
+    <span class="annotation">#[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'emplacement')]</span>
+    <span class="keyword">private</span> <span class="class">Collection</span> <span class="variable">$reservations</span>;
+
+    <span class="annotation">#[ORM\OneToMany(targetEntity: Favori::class, mappedBy: 'emplacement', orphanRemoval: true)]</span>
+    <span class="keyword">private</span> <span class="class">Collection</span> <span class="variable">$favoris</span>;
+}</div>
+
+    <h3>Entité Reservation</h3>
+    <p>Gère le cycle de vie complet d'une réservation avec un enum pour les statuts.</p>
+
+    <div class="file-path">src/Entity/Reservation.php</div>
+    <div class="code-block"><span class="annotation">#[ORM\Entity(repositoryClass: ReservationRepository::class)]</span>
+<span class="keyword">class</span> <span class="class">Reservation</span>
+{
+    <span class="annotation">#[ORM\Column(type: Types::DATE_MUTABLE)]</span>
+    <span class="keyword">private</span> ?\DateTimeInterface <span class="variable">$dateDebut</span> = <span class="keyword">null</span>;
+
+    <span class="annotation">#[ORM\Column(type: Types::DATE_MUTABLE)]</span>
+    <span class="keyword">private</span> ?\DateTimeInterface <span class="variable">$dateFin</span> = <span class="keyword">null</span>;
+
+    <span class="annotation">#[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]</span>
+    <span class="keyword">private</span> ?<span class="class">string</span> <span class="variable">$montantTotal</span> = <span class="keyword">null</span>;
+
+    <span class="annotation">#[ORM\Column(enumType: StatutReservation::class)]</span>
+    <span class="keyword">private</span> ?<span class="class">StatutReservation</span> <span class="variable">$statut</span> = <span class="keyword">null</span>;
+
+    <span class="comment">// Relations</span>
+    <span class="annotation">#[ORM\ManyToOne(inversedBy: 'reservations')]</span>
+    <span class="annotation">#[ORM\JoinColumn(nullable: false)]</span>
+    <span class="keyword">private</span> ?<span class="class">Locataire</span> <span class="variable">$locataire</span> = <span class="keyword">null</span>;
+
+    <span class="annotation">#[ORM\ManyToOne(inversedBy: 'reservations')]</span>
+    <span class="annotation">#[ORM\JoinColumn(nullable: false)]</span>
+    <span class="keyword">private</span> ?<span class="class">Emplacement</span> <span class="variable">$emplacement</span> = <span class="keyword">null</span>;
+
+    <span class="annotation">#[ORM\OneToOne(mappedBy: 'reservation', cascade: ['persist', 'remove'])]</span>
+    <span class="keyword">private</span> ?<span class="class">Paiement</span> <span class="variable">$paiement</span> = <span class="keyword">null</span>;
+
+    <span class="comment">// Méthodes utilitaires pour le template</span>
+    <span class="keyword">public function</span> <span class="function">getStatutLibelle</span>(): <span class="class">string</span>
+    {
+        <span class="keyword">return</span> <span class="variable">$this</span>->statut?-><span class="function">getLibelle</span>() ?? <span class="string">''</span>;
+    }
+
+    <span class="keyword">public function</span> <span class="function">getStatutCssClass</span>(): <span class="class">string</span>
+    {
+        <span class="keyword">return</span> <span class="variable">$this</span>->statut?-><span class="function">getCssClass</span>() ?? <span class="string">''</span>;
+    }
+}</div>
+
+    <h3 class="page-break">Enum StatutReservation</h3>
+    <p>PHP 8.1 enum natif avec méthodes utilitaires pour l'affichage.</p>
+
+    <div class="file-path">src/Enum/StatutReservation.php</div>
+    <div class="code-block"><span class="keyword">namespace</span> App\Enum;
+
+<span class="keyword">enum</span> <span class="class">StatutReservation</span>: <span class="class">string</span>
+{
+    <span class="keyword">case</span> EN_ATTENTE = <span class="string">'en_attente'</span>;
+    <span class="keyword">case</span> VALIDEE = <span class="string">'validee'</span>;
+    <span class="keyword">case</span> EN_COURS = <span class="string">'en_cours'</span>;
+    <span class="keyword">case</span> TERMINEE = <span class="string">'terminee'</span>;
+    <span class="keyword">case</span> REFUSEE = <span class="string">'refusee'</span>;
+    <span class="keyword">case</span> ANNULEE = <span class="string">'annulee'</span>;
+
+    <span class="keyword">public function</span> <span class="function">getLibelle</span>(): <span class="class">string</span>
+    {
+        <span class="keyword">return match</span>(<span class="variable">$this</span>) {
+            <span class="keyword">self</span>::EN_ATTENTE => <span class="string">'En attente'</span>,
+            <span class="keyword">self</span>::VALIDEE => <span class="string">'Validée'</span>,
+            <span class="keyword">self</span>::EN_COURS => <span class="string">'En cours'</span>,
+            <span class="keyword">self</span>::TERMINEE => <span class="string">'Terminée'</span>,
+            <span class="keyword">self</span>::REFUSEE => <span class="string">'Refusée'</span>,
+            <span class="keyword">self</span>::ANNULEE => <span class="string">'Annulée'</span>,
+        };
+    }
+
+    <span class="keyword">public function</span> <span class="function">getIcone</span>(): <span class="class">string</span>
+    {
+        <span class="keyword">return match</span>(<span class="variable">$this</span>) {
+            <span class="keyword">self</span>::EN_ATTENTE => <span class="string">'⏳'</span>,
+            <span class="keyword">self</span>::VALIDEE => <span class="string">'✅'</span>,
+            <span class="keyword">self</span>::EN_COURS => <span class="string">'🔄'</span>,
+            <span class="keyword">self</span>::TERMINEE => <span class="string">'✔️'</span>,
+            <span class="keyword">self</span>::REFUSEE => <span class="string">'❌'</span>,
+            <span class="keyword">self</span>::ANNULEE => <span class="string">'🚫'</span>,
+        };
+    }
+
+    <span class="keyword">public function</span> <span class="function">getCssClass</span>(): <span class="class">string</span>
+    {
+        <span class="keyword">return match</span>(<span class="variable">$this</span>) {
+            <span class="keyword">self</span>::EN_ATTENTE => <span class="string">'en-attente'</span>,
+            <span class="keyword">self</span>::VALIDEE => <span class="string">'validee'</span>,
+            <span class="keyword">self</span>::EN_COURS => <span class="string">'en-cours'</span>,
+            <span class="keyword">self</span>::TERMINEE => <span class="string">'terminee'</span>,
+            <span class="keyword">self</span>::REFUSEE => <span class="string">'refusee'</span>,
+            <span class="keyword">self</span>::ANNULEE => <span class="string">'annulee'</span>,
+        };
+    }
+}</div>
+
+    <h2>2.3 Relations entre Entités</h2>
+
+    <div class="diagram">
+┌────────────────┐     1:N     ┌────────────────┐     N:1     ┌────────────────┐
+│    LOCATAIRE   │────────────▶│  RESERVATION   │◀────────────│  EMPLACEMENT   │
+└────────────────┘             └────────────────┘             └────────────────┘
+        │                             │                              │
+        │ 1:N                         │ 1:1                          │ N:1
+        ▼                             ▼                              ▼
+┌────────────────┐             ┌────────────────┐             ┌────────────────┐
+│    FAVORI      │             │   PAIEMENT     │             │ CENTRE_COMM.   │
+└────────────────┘             └────────────────┘             └────────────────┘
+        │                             │                              │
+        │ N:1                         │                              │ 1:N
+        ▼                             │                              ▼
+┌────────────────┐                    │                       ┌────────────────┐
+│  EMPLACEMENT   │◀───────────────────┘                       │     PHOTO      │
+└────────────────┘                                            └────────────────┘
+
+┌────────────────┐     N:1     ┌────────────────┐     1:N     ┌────────────────┐
+│    LOCATAIRE   │────────────▶│  CONVERSATION  │◀────────────│ CENTRE_COMM.   │
+└────────────────┘             └────────────────┘             └────────────────┘
+                                      │
+                                      │ 1:N
+                                      ▼
+                               ┌────────────────┐
+                               │    MESSAGE     │
+                               └────────────────┘
+    </div>
+
+    <!-- Section 3 : Contrôleurs -->
+    <h1 class="page-break">3. Contrôleurs et Routes</h1>
+
+    <h2>3.1 Routes Publiques</h2>
+
+    <table>
+        <tr>
+            <th>Route</th>
+            <th>Méthode</th>
+            <th>Contrôleur</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td><code>/</code></td>
+            <td>GET</td>
+            <td>HomePageController::index</td>
+            <td>Page d'accueil</td>
+        </tr>
+        <tr>
+            <td><code>/login</code></td>
+            <td>GET/POST</td>
+            <td>SecurityController::login</td>
+            <td>Connexion</td>
+        </tr>
+        <tr>
+            <td><code>/logout</code></td>
+            <td>GET</td>
+            <td>SecurityController::logout</td>
+            <td>Déconnexion</td>
+        </tr>
+        <tr>
+            <td><code>/inscription</code></td>
+            <td>GET</td>
+            <td>RegistrationController::index</td>
+            <td>Choix du type de compte</td>
+        </tr>
+        <tr>
+            <td><code>/inscription/locataire</code></td>
+            <td>GET/POST</td>
+            <td>RegistrationController::registerLocataire</td>
+            <td>Inscription locataire</td>
+        </tr>
+        <tr>
+            <td><code>/inscription/centre</code></td>
+            <td>GET/POST</td>
+            <td>RegistrationController::registerCentre</td>
+            <td>Inscription centre</td>
+        </tr>
+    </table>
+
+    <h2>3.2 Routes Authentifiées (Locataire)</h2>
+
+    <table>
+        <tr>
+            <th>Route</th>
+            <th>Méthode</th>
+            <th>Nom</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td><code>/dashboard/locataire</code></td>
+            <td>GET</td>
+            <td>locataire_dashboard</td>
+            <td>Dashboard principal</td>
+        </tr>
+        <tr>
+            <td><code>/dashboard/locataire/reservations</code></td>
+            <td>GET</td>
+            <td>locataire_reservations</td>
+            <td>Liste des réservations</td>
+        </tr>
+        <tr>
+            <td><code>/dashboard/locataire/reservations/{id}</code></td>
+            <td>GET</td>
+            <td>locataire_reservation_detail</td>
+            <td>Détail d'une réservation</td>
+        </tr>
+        <tr>
+            <td><code>/dashboard/locataire/profil</code></td>
+            <td>GET</td>
+            <td>locataire_profil</td>
+            <td>Mon profil</td>
+        </tr>
+        <tr>
+            <td><code>/dashboard/locataire/profil/modifier</code></td>
+            <td>POST</td>
+            <td>locataire_profil_edit</td>
+            <td>Modifier le profil</td>
+        </tr>
+        <tr>
+            <td><code>/dashboard/locataire/favoris</code></td>
+            <td>GET</td>
+            <td>locataire_favoris</td>
+            <td>Mes favoris</td>
+        </tr>
+        <tr>
+            <td><code>/dashboard/locataire/messages</code></td>
+            <td>GET</td>
+            <td>locataire_messages</td>
+            <td>Liste des conversations</td>
+        </tr>
+        <tr>
+            <td><code>/dashboard/locataire/messages/{id}</code></td>
+            <td>GET</td>
+            <td>locataire_message_show</td>
+            <td>Afficher une conversation</td>
+        </tr>
+        <tr>
+            <td><code>/dashboard/locataire/paiements</code></td>
+            <td>GET</td>
+            <td>locataire_paiements</td>
+            <td>Mes paiements</td>
+        </tr>
+    </table>
+
+    <h2>3.3 Routes AJAX</h2>
+
+    <table>
+        <tr>
+            <th>Route</th>
+            <th>Méthode</th>
+            <th>Retour</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td><code>/reservations/charger-plus</code></td>
+            <td>GET</td>
+            <td>JSON</td>
+            <td>Charger plus de réservations</td>
+        </tr>
+        <tr>
+            <td><code>/favoris/charger-plus</code></td>
+            <td>GET</td>
+            <td>JSON</td>
+            <td>Charger plus de favoris</td>
+        </tr>
+        <tr>
+            <td><code>/favoris/ajouter/{id}</code></td>
+            <td>POST</td>
+            <td>JSON</td>
+            <td>Ajouter un favori</td>
+        </tr>
+        <tr>
+            <td><code>/favoris/retirer/{id}</code></td>
+            <td>POST</td>
+            <td>JSON</td>
+            <td>Retirer un favori</td>
+        </tr>
+        <tr>
+            <td><code>/messages/{id}/envoyer</code></td>
+            <td>POST</td>
+            <td>Redirect</td>
+            <td>Envoyer un message</td>
+        </tr>
+        <tr>
+            <td><code>/messages/{id}/archiver</code></td>
+            <td>POST</td>
+            <td>Redirect</td>
+            <td>Archiver une conversation</td>
+        </tr>
+    </table>
+
+    <h3 class="page-break">Exemple de Contrôleur : DashboardController</h3>
+
+    <div class="file-path">src/Controller/Locataire/DashboardController.php</div>
+    <div class="code-block"><span class="annotation">#[Route('/dashboard/locataire')]</span>
+<span class="annotation">#[IsGranted('ROLE_LOCATAIRE')]</span>
+<span class="keyword">class</span> <span class="class">DashboardController</span> <span class="keyword">extends</span> <span class="class">AbstractController</span>
+{
+    <span class="annotation">#[Route('', name: 'locataire_dashboard')]</span>
+    <span class="keyword">public function</span> <span class="function">index</span>(
+        <span class="class">ReservationRepository</span> <span class="variable">$reservationRepo</span>,
+        <span class="class">MessageRepository</span> <span class="variable">$messageRepo</span>,
+        <span class="class">FavoriRepository</span> <span class="variable">$favoriRepo</span>
+    ): <span class="class">Response</span> {
+        <span class="comment">/** @var Locataire $locataire */</span>
+        <span class="variable">$locataire</span> = <span class="variable">$this</span>-><span class="function">getUser</span>();
+        <span class="variable">$now</span> = <span class="keyword">new</span> \DateTime();
+
+        <span class="comment">// Statistiques</span>
+        <span class="variable">$reservationsActives</span> = <span class="variable">$reservationRepo</span>-><span class="function">count</span>([
+            <span class="string">'locataire'</span> => <span class="variable">$locataire</span>,
+            <span class="string">'statut'</span> => StatutReservation::EN_COURS
+        ]);
+
+        <span class="comment">// Messages non lus (envoyés par le centre)</span>
+        <span class="variable">$messagesNonLus</span> = <span class="variable">$messageRepo</span>-><span class="function">countUnreadForLocataire</span>(<span class="variable">$locataire</span>);
+
+        <span class="comment">// Favoris</span>
+        <span class="variable">$favorisCount</span> = <span class="variable">$favoriRepo</span>-><span class="function">count</span>([<span class="string">'locataire'</span> => <span class="variable">$locataire</span>]);
+
+        <span class="comment">// Dépenses du mois</span>
+        <span class="variable">$depensesMois</span> = <span class="variable">$reservationRepo</span>-><span class="function">getTotalDepensesMois</span>(<span class="variable">$locataire</span>);
+
+        <span class="comment">// 10 dernières réservations</span>
+        <span class="variable">$reservations</span> = <span class="variable">$reservationRepo</span>-><span class="function">findBy</span>(
+            [<span class="string">'locataire'</span> => <span class="variable">$locataire</span>],
+            [<span class="string">'dateDebut'</span> => <span class="string">'DESC'</span>],
+            <span class="number">10</span>
+        );
+
+        <span class="keyword">return</span> <span class="variable">$this</span>-><span class="function">render</span>(<span class="string">'locataire/dashboard.html.twig'</span>, [
+            <span class="string">'reservationsActives'</span> => <span class="variable">$reservationsActives</span>,
+            <span class="string">'messagesNonLus'</span> => <span class="variable">$messagesNonLus</span>,
+            <span class="string">'favorisCount'</span> => <span class="variable">$favorisCount</span>,
+            <span class="string">'depensesMois'</span> => <span class="variable">$depensesMois</span>,
+            <span class="string">'reservations'</span> => <span class="variable">$reservations</span>,
+        ]);
+    }
+}</div>
+
+    <!-- Section 4 : Authentification -->
+    <h1 class="page-break">4. Système d'Authentification</h1>
+
+    <h2>Configuration Security</h2>
+
+    <div class="file-path">config/packages/security.yaml</div>
+    <div class="code-block">security:
+    password_hashers:
+        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: <span class="string">'auto'</span>
+
+    providers:
+        app_user_provider:
+            entity:
+                class: App\Entity\User
+                property: email
+
+    firewalls:
+        main:
+            lazy: <span class="keyword">true</span>
+            provider: app_user_provider
+            form_login:
+                login_path: app_login
+                check_path: app_login
+                default_target_path: app_mon_compte
+                enable_csrf: <span class="keyword">true</span>
+            logout:
+                path: app_logout
+                target: app_login
+
+    access_control:
+        - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/centre, roles: ROLE_CENTRE }
+        - { path: ^/dashboard/locataire, roles: ROLE_LOCATAIRE }</div>
+
+    <h2>Processus d'Authentification</h2>
+
+    <div class="diagram">
+┌─────────────┐     ┌─────────────────┐     ┌─────────────────┐
+│   Visiteur   │────▶│  /login (GET)    │────▶│ Formulaire affiché│
+└─────────────┘     └─────────────────┘     └─────────────────┘
+                                                     │
+                                                     ▼ POST
+                    ┌─────────────────┐     ┌─────────────────┐
+                    │ Symfony Security │◀────│ email + password │
+                    │    Firewall      │     │   + CSRF token   │
+                    └────────┬────────┘     └─────────────────┘
+                             │
+              ┌──────────────┴──────────────┐
+              │                             │
+              ▼                             ▼
+    ┌─────────────────┐           ┌─────────────────┐
+    │   SUCCÈS         │           │    ÉCHEC         │
+    │                  │           │                  │
+    │ • Crée session   │           │ • Message erreur │
+    │ • Redirige vers  │           │ • Retour /login  │
+    │   /mon-compte    │           │                  │
+    └────────┬────────┘           └─────────────────┘
+             │
+             ▼
+    ┌─────────────────────────────────────────────┐
+    │             /mon-compte                      │
+    │  Détecte le rôle et redirige :              │
+    │  • ROLE_LOCATAIRE → /dashboard/locataire    │
+    │  • ROLE_CENTRE    → /centre/dashboard       │
+    │  • ROLE_ADMIN     → /admin/dashboard        │
+    └─────────────────────────────────────────────┘
+    </div>
+
+    <h3>Contrôleur de Redirection Intelligente</h3>
+
+    <div class="file-path">src/Controller/HomePageController.php</div>
+    <div class="code-block"><span class="annotation">#[Route('/mon-compte', name: 'app_mon_compte')]</span>
+<span class="keyword">public function</span> <span class="function">myAccount</span>(): <span class="class">Response</span>
+{
+    <span class="variable">$user</span> = <span class="variable">$this</span>-><span class="function">getUser</span>();
+
+    <span class="keyword">if</span> (!<span class="variable">$user</span>) {
+        <span class="keyword">return</span> <span class="variable">$this</span>-><span class="function">redirectToRoute</span>(<span class="string">'app_login'</span>);
+    }
+
+    <span class="comment">// Redirection selon le type d'utilisateur</span>
+    <span class="keyword">if</span> (<span class="variable">$user</span> <span class="keyword">instanceof</span> <span class="class">Locataire</span>) {
+        <span class="keyword">return</span> <span class="variable">$this</span>-><span class="function">redirectToRoute</span>(<span class="string">'locataire_dashboard'</span>);
+    }
+
+    <span class="keyword">if</span> (<span class="variable">$user</span> <span class="keyword">instanceof</span> <span class="class">CentreCommercial</span>) {
+        <span class="keyword">return</span> <span class="variable">$this</span>-><span class="function">redirectToRoute</span>(<span class="string">'centre_dashboard'</span>);
+    }
+
+    <span class="keyword">if</span> (<span class="variable">$user</span> <span class="keyword">instanceof</span> <span class="class">Administrateur</span>) {
+        <span class="keyword">return</span> <span class="variable">$this</span>-><span class="function">redirectToRoute</span>(<span class="string">'admin_dashboard'</span>);
+    }
+
+    <span class="keyword">return</span> <span class="variable">$this</span>-><span class="function">redirectToRoute</span>(<span class="string">'app_home'</span>);
+}</div>
+
+    <!-- Section 5 : Messagerie -->
+    <h1 class="page-break">5. Système de Messagerie</h1>
+
+    <h2>Architecture</h2>
+
+    <div class="diagram">
+┌────────────────────────────────────────────────────────────────┐
+│                       CONVERSATION                              │
+├────────────────────────────────────────────────────────────────┤
+│  • Lien entre 1 Locataire et 1 Centre Commercial               │
+│  • Peut être liée à une Réservation (optionnel)                │
+│  • Sujet optionnel                                              │
+│  • Peut être archivée                                           │
+└────────────────────────────────────────────────────────────────┘
+                              │
+                              │ 1:N
+                              ▼
+┌────────────────────────────────────────────────────────────────┐
+│                         MESSAGE                                 │
+├────────────────────────────────────────────────────────────────┤
+│  • contenu (TEXT)                                               │
+│  • dateEnvoi (datetime)                                         │
+│  • estLu (boolean) - marqué lu quand l'autre partie lit        │
+│  • dateLecture (datetime, nullable)                             │
+│  • typeExpediteur ('locataire' ou 'centre')                    │
+└────────────────────────────────────────────────────────────────┘
+    </div>
+
+    <h2>Logique de Lecture des Messages</h2>
+
+    <div class="highlight-box info">
+        <strong>Règle importante :</strong> Un message est considéré "non lu" pour le locataire si :
+        <ul>
+            <li><code>estLu = false</code></li>
+            <li><code>typeExpediteur = 'centre'</code> (envoyé par le centre, pas par le locataire lui-même)</li>
+        </ul>
+    </div>
+
+    <h3>Marquage Automatique comme Lu</h3>
+
+    <div class="file-path">src/Controller/Locataire/MessageController.php</div>
+    <div class="code-block"><span class="annotation">#[Route('/dashboard/locataire/messages/{id}', name: 'locataire_message_show')]</span>
+<span class="keyword">public function</span> <span class="function">show</span>(
+    <span class="class">Conversation</span> <span class="variable">$conversation</span>,
+    <span class="class">EntityManagerInterface</span> <span class="variable">$em</span>
+): <span class="class">Response</span> {
+    <span class="comment">// Vérifier que le locataire est bien participant</span>
+    <span class="keyword">if</span> (<span class="variable">$conversation</span>-><span class="function">getLocataire</span>() !== <span class="variable">$this</span>-><span class="function">getUser</span>()) {
+        <span class="keyword">throw</span> <span class="variable">$this</span>-><span class="function">createAccessDeniedException</span>();
+    }
+
+    <span class="comment">// Marquer tous les messages du CENTRE comme lus</span>
+    <span class="keyword">foreach</span> (<span class="variable">$conversation</span>-><span class="function">getMessages</span>() <span class="keyword">as</span> <span class="variable">$message</span>) {
+        <span class="keyword">if</span> (<span class="variable">$message</span>-><span class="function">getTypeExpediteur</span>() === <span class="string">'centre'</span> && !<span class="variable">$message</span>-><span class="function">isEstLu</span>()) {
+            <span class="variable">$message</span>-><span class="function">setEstLu</span>(<span class="keyword">true</span>);
+            <span class="variable">$message</span>-><span class="function">setDateLecture</span>(<span class="keyword">new</span> \DateTime());
+        }
+    }
+
+    <span class="variable">$em</span>-><span class="function">flush</span>();
+
+    <span class="keyword">return</span> <span class="variable">$this</span>-><span class="function">render</span>(<span class="string">'locataire/message/show.html.twig'</span>, [
+        <span class="string">'conversation'</span> => <span class="variable">$conversation</span>,
+    ]);
+}</div>
+
+    <h3>Envoi d'un Message avec CSRF</h3>
+
+    <div class="file-path">src/Controller/Locataire/MessageController.php</div>
+    <div class="code-block"><span class="annotation">#[Route('/dashboard/locataire/messages/{id}/envoyer', name: 'locataire_message_send', methods: ['POST'])]</span>
+<span class="keyword">public function</span> <span class="function">send</span>(
+    <span class="class">Request</span> <span class="variable">$request</span>,
+    <span class="class">Conversation</span> <span class="variable">$conversation</span>,
+    <span class="class">EntityManagerInterface</span> <span class="variable">$em</span>
+): <span class="class">Response</span> {
+    <span class="comment">// Validation CSRF</span>
+    <span class="keyword">if</span> (!<span class="variable">$this</span>-><span class="function">isCsrfTokenValid</span>(<span class="string">'send_message'</span>.<span class="variable">$conversation</span>-><span class="function">getId</span>(),
+        <span class="variable">$request</span>-><span class="function">request</span>-><span class="function">get</span>(<span class="string">'_token'</span>))) {
+        <span class="keyword">throw</span> <span class="variable">$this</span>-><span class="function">createAccessDeniedException</span>(<span class="string">'Token CSRF invalide'</span>);
+    }
+
+    <span class="variable">$contenu</span> = <span class="variable">$request</span>-><span class="function">request</span>-><span class="function">get</span>(<span class="string">'contenu'</span>);
+
+    <span class="keyword">if</span> (!<span class="keyword">empty</span>(<span class="variable">$contenu</span>)) {
+        <span class="variable">$message</span> = <span class="keyword">new</span> <span class="class">Message</span>();
+        <span class="variable">$message</span>-><span class="function">setConversation</span>(<span class="variable">$conversation</span>);
+        <span class="variable">$message</span>-><span class="function">setContenu</span>(<span class="variable">$contenu</span>);
+        <span class="variable">$message</span>-><span class="function">setDateEnvoi</span>(<span class="keyword">new</span> \DateTime());
+        <span class="variable">$message</span>-><span class="function">setEstLu</span>(<span class="keyword">false</span>);
+        <span class="variable">$message</span>-><span class="function">setTypeExpediteur</span>(<span class="string">'locataire'</span>);
+
+        <span class="comment">// Mettre à jour la date du dernier message</span>
+        <span class="variable">$conversation</span>-><span class="function">setDernierMessageDate</span>(<span class="keyword">new</span> \DateTime());
+
+        <span class="variable">$em</span>-><span class="function">persist</span>(<span class="variable">$message</span>);
+        <span class="variable">$em</span>-><span class="function">flush</span>();
+    }
+
+    <span class="keyword">return</span> <span class="variable">$this</span>-><span class="function">redirectToRoute</span>(<span class="string">'locataire_message_show'</span>, [<span class="string">'id'</span> => <span class="variable">$conversation</span>-><span class="function">getId</span>()]);
+}</div>
+
+    <!-- Section 6 : Réservations -->
+    <h1 class="page-break">6. Gestion des Réservations</h1>
+
+    <h2>Système de Filtres</h2>
+
+    <p>La page des réservations supporte 9 filtres différents :</p>
+
+    <table>
+        <tr>
+            <th>Filtre</th>
+            <th>Critère</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td><code>toutes</code></td>
+            <td>Aucun</td>
+            <td>Toutes les réservations</td>
+        </tr>
+        <tr>
+            <td><code>en_attente</code></td>
+            <td>statut = EN_ATTENTE</td>
+            <td>En attente de validation</td>
+        </tr>
+        <tr>
+            <td><code>validee</code></td>
+            <td>statut = VALIDEE</td>
+            <td>Validées, avant début</td>
+        </tr>
+        <tr>
+            <td><code>en_cours</code></td>
+            <td>statut = EN_COURS</td>
+            <td>Actuellement actives</td>
+        </tr>
+        <tr>
+            <td><code>terminee</code></td>
+            <td>statut = TERMINEE</td>
+            <td>Passées et finies</td>
+        </tr>
+        <tr>
+            <td><code>refusee</code></td>
+            <td>statut = REFUSEE</td>
+            <td>Refusées par le centre</td>
+        </tr>
+        <tr>
+            <td><code>annulee</code></td>
+            <td>statut = ANNULEE</td>
+            <td>Annulées</td>
+        </tr>
+        <tr>
+            <td><code>actives</code></td>
+            <td>EN_ATTENTE ou EN_COURS + dates valides</td>
+            <td>Réservations en cours ou à venir</td>
+        </tr>
+        <tr>
+            <td><code>a_venir</code></td>
+            <td>dateDebut > maintenant</td>
+            <td>Réservations futures</td>
+        </tr>
+        <tr>
+            <td><code>passees</code></td>
+            <td>dateFin < maintenant</td>
+            <td>Réservations passées</td>
+        </tr>
+    </table>
+
+    <h3>Implémentation du Filtre</h3>
+
+    <div class="file-path">src/Controller/Locataire/DashboardController.php</div>
+    <div class="code-block"><span class="annotation">#[Route('/reservations', name: 'locataire_reservations')]</span>
+<span class="keyword">public function</span> <span class="function">reservations</span>(
+    <span class="class">Request</span> <span class="variable">$request</span>,
+    <span class="class">ReservationRepository</span> <span class="variable">$repo</span>
+): <span class="class">Response</span> {
+    <span class="variable">$filtre</span> = <span class="variable">$request</span>-><span class="function">query</span>-><span class="function">get</span>(<span class="string">'filtre'</span>, <span class="string">'toutes'</span>);
+    <span class="variable">$locataire</span> = <span class="variable">$this</span>-><span class="function">getUser</span>();
+    <span class="variable">$now</span> = <span class="keyword">new</span> \DateTime();
+
+    <span class="comment">// Construction de la requête selon le filtre</span>
+    <span class="variable">$criteria</span> = [<span class="string">'locataire'</span> => <span class="variable">$locataire</span>];
+
+    <span class="keyword">switch</span> (<span class="variable">$filtre</span>) {
+        <span class="keyword">case</span> <span class="string">'en_attente'</span>:
+            <span class="variable">$criteria</span>[<span class="string">'statut'</span>] = StatutReservation::EN_ATTENTE;
+            <span class="keyword">break</span>;
+        <span class="keyword">case</span> <span class="string">'validee'</span>:
+            <span class="variable">$criteria</span>[<span class="string">'statut'</span>] = StatutReservation::VALIDEE;
+            <span class="keyword">break</span>;
+        <span class="keyword">case</span> <span class="string">'en_cours'</span>:
+            <span class="variable">$criteria</span>[<span class="string">'statut'</span>] = StatutReservation::EN_COURS;
+            <span class="keyword">break</span>;
+        <span class="comment">// ... autres cas</span>
+    }
+
+    <span class="comment">// Pagination : 12 premiers résultats</span>
+    <span class="variable">$reservations</span> = <span class="variable">$repo</span>-><span class="function">findBy</span>(
+        <span class="variable">$criteria</span>,
+        [<span class="string">'dateDebut'</span> => <span class="string">'DESC'</span>],
+        <span class="number">12</span>,  <span class="comment">// limit</span>
+        <span class="number">0</span>    <span class="comment">// offset</span>
+    );
+
+    <span class="variable">$total</span> = <span class="variable">$repo</span>-><span class="function">count</span>(<span class="variable">$criteria</span>);
+
+    <span class="keyword">return</span> <span class="variable">$this</span>-><span class="function">render</span>(<span class="string">'locataire/reservations.html.twig'</span>, [
+        <span class="string">'reservations'</span> => <span class="variable">$reservations</span>,
+        <span class="string">'total'</span> => <span class="variable">$total</span>,
+        <span class="string">'filtre'</span> => <span class="variable">$filtre</span>,
+    ]);
+}</div>
+
+    <h2 class="page-break">Pagination AJAX</h2>
+
+    <h3>Endpoint de Chargement</h3>
+
+    <div class="file-path">src/Controller/Locataire/DashboardController.php</div>
+    <div class="code-block"><span class="annotation">#[Route('/reservations/charger-plus', name: 'locataire_reservations_charger_plus')]</span>
+<span class="keyword">public function</span> <span class="function">chargerPlusReservations</span>(
+    <span class="class">Request</span> <span class="variable">$request</span>,
+    <span class="class">ReservationRepository</span> <span class="variable">$repo</span>
+): <span class="class">JsonResponse</span> {
+    <span class="variable">$offset</span> = (<span class="class">int</span>) <span class="variable">$request</span>-><span class="function">query</span>-><span class="function">get</span>(<span class="string">'offset'</span>, <span class="number">0</span>);
+    <span class="variable">$filtre</span> = <span class="variable">$request</span>-><span class="function">query</span>-><span class="function">get</span>(<span class="string">'filtre'</span>, <span class="string">'toutes'</span>);
+    <span class="variable">$limit</span> = <span class="number">12</span>;
+
+    <span class="comment">// ... logique de filtrage identique</span>
+
+    <span class="variable">$reservations</span> = <span class="variable">$repo</span>-><span class="function">findBy</span>(<span class="variable">$criteria</span>, [<span class="string">'dateDebut'</span> => <span class="string">'DESC'</span>], <span class="variable">$limit</span>, <span class="variable">$offset</span>);
+    <span class="variable">$total</span> = <span class="variable">$repo</span>-><span class="function">count</span>(<span class="variable">$criteria</span>);
+
+    <span class="comment">// Rendu HTML partiel pour AJAX</span>
+    <span class="variable">$html</span> = <span class="variable">$this</span>-><span class="function">renderView</span>(<span class="string">'locataire/_reservations_list.html.twig'</span>, [
+        <span class="string">'reservations'</span> => <span class="variable">$reservations</span>
+    ]);
+
+    <span class="keyword">return</span> <span class="keyword">new</span> <span class="class">JsonResponse</span>([
+        <span class="string">'success'</span> => <span class="keyword">true</span>,
+        <span class="string">'html'</span> => <span class="variable">$html</span>,
+        <span class="string">'hasMore'</span> => (<span class="variable">$offset</span> + <span class="variable">$limit</span>) < <span class="variable">$total</span>,
+        <span class="string">'count'</span> => <span class="function">count</span>(<span class="variable">$reservations</span>),
+        <span class="string">'offset'</span> => <span class="variable">$offset</span> + <span class="variable">$limit</span>,
+    ]);
+}</div>
+
+    <!-- Section 7 : Favoris -->
+    <h1 class="page-break">7. Système de Favoris</h1>
+
+    <h2>Modèle de Données</h2>
+
+    <div class="file-path">src/Entity/Favori.php</div>
+    <div class="code-block"><span class="annotation">#[ORM\Entity(repositoryClass: FavoriRepository::class)]</span>
+<span class="annotation">#[ORM\UniqueConstraint(columns: ['locataire_id', 'emplacement_id'])]</span>
+<span class="keyword">class</span> <span class="class">Favori</span>
+{
+    <span class="annotation">#[ORM\Id]</span>
+    <span class="annotation">#[ORM\GeneratedValue]</span>
+    <span class="annotation">#[ORM\Column]</span>
+    <span class="keyword">private</span> ?<span class="class">int</span> <span class="variable">$id</span> = <span class="keyword">null</span>;
+
+    <span class="annotation">#[ORM\Column]</span>
+    <span class="keyword">private</span> ?\DateTimeImmutable <span class="variable">$dateAjout</span> = <span class="keyword">null</span>;
+
+    <span class="annotation">#[ORM\ManyToOne(inversedBy: 'favoris')]</span>
+    <span class="annotation">#[ORM\JoinColumn(nullable: false)]</span>
+    <span class="keyword">private</span> ?<span class="class">Locataire</span> <span class="variable">$locataire</span> = <span class="keyword">null</span>;
+
+    <span class="annotation">#[ORM\ManyToOne(inversedBy: 'favoris')]</span>
+    <span class="annotation">#[ORM\JoinColumn(nullable: false)]</span>
+    <span class="keyword">private</span> ?<span class="class">Emplacement</span> <span class="variable">$emplacement</span> = <span class="keyword">null</span>;
+}</div>
+
+    <div class="highlight-box warning">
+        <strong>Contrainte d'unicité :</strong> La combinaison <code>(locataire_id, emplacement_id)</code> est unique. Un locataire ne peut pas ajouter deux fois le même emplacement en favori.
+    </div>
+
+    <h2>API AJAX</h2>
+
+    <div class="file-path">src/Controller/Locataire/FavoriController.php</div>
+    <div class="code-block"><span class="annotation">#[Route('/favoris/ajouter/{id}', name: 'locataire_favori_ajouter', methods: ['POST'])]</span>
+<span class="keyword">public function</span> <span class="function">ajouter</span>(
+    <span class="class">Emplacement</span> <span class="variable">$emplacement</span>,
+    <span class="class">FavoriRepository</span> <span class="variable">$favoriRepo</span>,
+    <span class="class">EntityManagerInterface</span> <span class="variable">$em</span>
+): <span class="class">JsonResponse</span> {
+    <span class="variable">$locataire</span> = <span class="variable">$this</span>-><span class="function">getUser</span>();
+
+    <span class="comment">// Vérifier si déjà en favori</span>
+    <span class="variable">$existant</span> = <span class="variable">$favoriRepo</span>-><span class="function">findOneBy</span>([
+        <span class="string">'locataire'</span> => <span class="variable">$locataire</span>,
+        <span class="string">'emplacement'</span> => <span class="variable">$emplacement</span>
+    ]);
+
+    <span class="keyword">if</span> (<span class="variable">$existant</span>) {
+        <span class="keyword">return</span> <span class="keyword">new</span> <span class="class">JsonResponse</span>([
+            <span class="string">'success'</span> => <span class="keyword">false</span>,
+            <span class="string">'message'</span> => <span class="string">'Déjà en favoris'</span>
+        ], <span class="number">400</span>);
+    }
+
+    <span class="variable">$favori</span> = <span class="keyword">new</span> <span class="class">Favori</span>();
+    <span class="variable">$favori</span>-><span class="function">setLocataire</span>(<span class="variable">$locataire</span>);
+    <span class="variable">$favori</span>-><span class="function">setEmplacement</span>(<span class="variable">$emplacement</span>);
+    <span class="variable">$favori</span>-><span class="function">setDateAjout</span>(<span class="keyword">new</span> \DateTimeImmutable());
+
+    <span class="variable">$em</span>-><span class="function">persist</span>(<span class="variable">$favori</span>);
+    <span class="variable">$em</span>-><span class="function">flush</span>();
+
+    <span class="keyword">return</span> <span class="keyword">new</span> <span class="class">JsonResponse</span>([<span class="string">'success'</span> => <span class="keyword">true</span>]);
+}
+
+<span class="annotation">#[Route('/favoris/retirer/{id}', name: 'locataire_favori_retirer', methods: ['POST'])]</span>
+<span class="keyword">public function</span> <span class="function">retirer</span>(
+    <span class="class">Emplacement</span> <span class="variable">$emplacement</span>,
+    <span class="class">FavoriRepository</span> <span class="variable">$favoriRepo</span>,
+    <span class="class">EntityManagerInterface</span> <span class="variable">$em</span>
+): <span class="class">JsonResponse</span> {
+    <span class="variable">$locataire</span> = <span class="variable">$this</span>-><span class="function">getUser</span>();
+
+    <span class="variable">$favori</span> = <span class="variable">$favoriRepo</span>-><span class="function">findOneBy</span>([
+        <span class="string">'locataire'</span> => <span class="variable">$locataire</span>,
+        <span class="string">'emplacement'</span> => <span class="variable">$emplacement</span>
+    ]);
+
+    <span class="keyword">if</span> (<span class="variable">$favori</span>) {
+        <span class="variable">$em</span>-><span class="function">remove</span>(<span class="variable">$favori</span>);
+        <span class="variable">$em</span>-><span class="function">flush</span>();
+    }
+
+    <span class="keyword">return</span> <span class="keyword">new</span> <span class="class">JsonResponse</span>([<span class="string">'success'</span> => <span class="keyword">true</span>]);
+}</div>
+
+    <!-- Section 8 : Templates -->
+    <h1 class="page-break">8. Templates Twig</h1>
+
+    <h2>Hiérarchie des Templates</h2>
+
+    <div class="diagram">
+┌───────────────────────────────────────────────────────────┐
+│                      base.html.twig                        │
+│  • Doctype, head, meta                                     │
+│  • Chargement des CSS/JS globaux                          │
+│  • Block: stylesheets, body, javascripts                  │
+└───────────────────────────────────────────────────────────┘
+                              │
+              ┌───────────────┴───────────────┐
+              │                               │
+              ▼                               ▼
+┌───────────────────────────┐   ┌───────────────────────────┐
+│   base_auth.html.twig      │   │ locataire/base_dashboard   │
+│  • Pages login/register    │   │  • Sidebar                 │
+│  • Layout centré           │   │  • Header avec user        │
+└───────────────────────────┘   │  • Zone main-content       │
+                                └──────────────���────────────┘
+                                              │
+                                              ▼
+                                ┌───────────────────────────┐
+                                │  Pages spécifiques:        │
+                                │  • dashboard.html.twig     │
+                                │  • reservations.html.twig  │
+                                │  • profil.html.twig        │
+                                │  • favoris.html.twig       │
+                                │  • messagerie.html.twig    │
+                                └───────────────────────────┘
+    </div>
+
+    <h2>Template de Base Dashboard</h2>
+
+    <div class="file-path">templates/locataire/base_dashboard.html.twig</div>
+    <div class="code-block">{% <span class="keyword">extends</span> <span class="string">'base.html.twig'</span> %}
+
+{% <span class="keyword">block</span> stylesheets %}
+    {{ <span class="function">parent</span>() }}
+    &lt;link rel="stylesheet" href="{{ <span class="function">asset</span>(<span class="string">'css/dashboard.css'</span>) }}"&gt;
+{% <span class="keyword">endblock</span> %}
+
+{% <span class="keyword">block</span> body %}
+&lt;div class="dashboard-wrapper"&gt;
+    <span class="comment">{# Inclusion de la sidebar #}</span>
+    {% <span class="keyword">include</span> <span class="string">'partials/_sidebar_locataire.html.twig'</span> %}
+
+    <span class="comment">{# Contenu principal #}</span>
+    &lt;main class="main-content"&gt;
+        <span class="comment">{# Header avec profil utilisateur #}</span>
+        &lt;header class="dashboard-header"&gt;
+            &lt;div class="header-left"&gt;
+                {% <span class="keyword">block</span> page_title %}{% <span class="keyword">endblock</span> %}
+            &lt;/div&gt;
+            &lt;div class="header-right"&gt;
+                &lt;span class="user-name"&gt;{{ <span class="variable">app.user.nom</span> }}&lt;/span&gt;
+                &lt;a href="{{ <span class="function">path</span>(<span class="string">'app_logout'</span>) }}"&gt;Déconnexion&lt;/a&gt;
+            &lt;/div&gt;
+        &lt;/header&gt;
+
+        <span class="comment">{# Contenu de la page #}</span>
+        &lt;div class="content-area"&gt;
+            {% <span class="keyword">block</span> content %}{% <span class="keyword">endblock</span> %}
+        &lt;/div&gt;
+    &lt;/main&gt;
+&lt;/div&gt;
+{% <span class="keyword">endblock</span> %}</div>
+
+    <h2 class="page-break">Sidebar avec Navigation</h2>
+
+    <div class="file-path">templates/partials/_sidebar_locataire.html.twig</div>
+    <div class="code-block">&lt;aside class="sidebar"&gt;
+    &lt;div class="sidebar-brand"&gt;
+        &lt;a href="{{ <span class="function">path</span>(<span class="string">'locataire_dashboard'</span>) }}"&gt;
+            Références Événements
+        &lt;/a&gt;
+    &lt;/div&gt;
+
+    &lt;nav class="sidebar-nav"&gt;
+        &lt;ul&gt;
+            &lt;li class="{{ <span class="variable">app.request.attributes.get</span>(<span class="string">'_route'</span>) == <span class="string">'locataire_dashboard'</span> ? <span class="string">'active'</span> : <span class="string">''</span> }}"&gt;
+                &lt;a href="{{ <span class="function">path</span>(<span class="string">'locataire_dashboard'</span>) }}"&gt;
+                    &lt;span class="icon"&gt;🏠&lt;/span&gt; Tableau de bord
+                &lt;/a&gt;
+            &lt;/li&gt;
+            &lt;li class="{{ <span class="variable">app.request.attributes.get</span>(<span class="string">'_route'</span>) starts with <span class="string">'locataire_reservations'</span> ? <span class="string">'active'</span> : <span class="string">''</span> }}"&gt;
+                &lt;a href="{{ <span class="function">path</span>(<span class="string">'locataire_reservations'</span>) }}"&gt;
+                    &lt;span class="icon"&gt;📋&lt;/span&gt; Mes réservations
+                &lt;/a&gt;
+            &lt;/li&gt;
+            &lt;li class="{{ <span class="variable">app.request.attributes.get</span>(<span class="string">'_route'</span>) starts with <span class="string">'locataire_message'</span> ? <span class="string">'active'</span> : <span class="string">''</span> }}"&gt;
+                &lt;a href="{{ <span class="function">path</span>(<span class="string">'locataire_messages'</span>) }}"&gt;
+                    &lt;span class="icon"&gt;💬&lt;/span&gt; Messagerie
+                    {% <span class="keyword">if</span> <span class="variable">messagesNonLus</span> is defined and <span class="variable">messagesNonLus</span> &gt; 0 %}
+                        &lt;span class="badge"&gt;{{ <span class="variable">messagesNonLus</span> }}&lt;/span&gt;
+                    {% <span class="keyword">endif</span> %}
+                &lt;/a&gt;
+            &lt;/li&gt;
+            <span class="comment">{# ... autres liens #}</span>
+        &lt;/ul&gt;
+    &lt;/nav&gt;
+&lt;/aside&gt;</div>
+
+    <h2>Affichage d'une Réservation</h2>
+
+    <div class="file-path">templates/locataire/reservations.html.twig (extrait)</div>
+    <div class="code-block">{% <span class="keyword">for</span> <span class="variable">reservation</span> in <span class="variable">reservations</span> %}
+&lt;div class="reservation-card"&gt;
+    <span class="comment">{# Image de l'emplacement #}</span>
+    &lt;div class="reservation-image"&gt;
+        {% <span class="keyword">if</span> <span class="variable">reservation.emplacement.photos</span>|<span class="function">length</span> &gt; 0 %}
+            &lt;img src="{{ <span class="function">asset</span>(<span class="variable">reservation.emplacement.photos</span>|<span class="function">first</span>.cheminFichier) }}"
+                 alt="{{ <span class="variable">reservation.emplacement.titreAnnonce</span> }}"&gt;
+        {% <span class="keyword">else</span> %}
+            &lt;div class="no-image"&gt;Pas d'image&lt;/div&gt;
+        {% <span class="keyword">endif</span> %}
+    &lt;/div&gt;
+
+    <span class="comment">{# Informations #}</span>
+    &lt;div class="reservation-info"&gt;
+        &lt;h3&gt;{{ <span class="variable">reservation.emplacement.titreAnnonce</span> }}&lt;/h3&gt;
+        &lt;p class="dates"&gt;
+            Du {{ <span class="variable">reservation.dateDebut</span>|<span class="function">date</span>(<span class="string">'d/m/Y'</span>) }}
+            au {{ <span class="variable">reservation.dateFin</span>|<span class="function">date</span>(<span class="string">'d/m/Y'</span>) }}
+        &lt;/p&gt;
+        &lt;p class="centre"&gt;{{ <span class="variable">reservation.emplacement.centreCommercial.nomCentre</span> }}&lt;/p&gt;
+        &lt;p class="montant"&gt;{{ <span class="variable">reservation.montantTotal</span>|<span class="function">number_format</span>(2, <span class="string">','</span>, <span class="string">' '</span>) }} €&lt;/p&gt;
+    &lt;/div&gt;
+
+    <span class="comment">{# Actions et statut #}</span>
+    &lt;div class="reservation-actions"&gt;
+        <span class="comment">{# Badge de statut utilisant l'enum #}</span>
+        &lt;span class="status-badge {{ <span class="variable">reservation.statutCssClass</span> }}"&gt;
+            {{ <span class="variable">reservation.statut.icone</span> }} {{ <span class="variable">reservation.statut.libelle</span> }}
+        &lt;/span&gt;
+
+        &lt;a href="{{ <span class="function">path</span>(<span class="string">'locataire_reservation_detail'</span>, {id: <span class="variable">reservation.id</span>}) }}"
+           class="btn-detail"&gt;
+            Voir détails
+        &lt;/a&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+{% <span class="keyword">endfor</span> %}</div>
+
+    <!-- Section 9 : JavaScript -->
+    <h1 class="page-break">9. JavaScript et AJAX</h1>
+
+    <h2>Script de Chargement AJAX des Réservations</h2>
+
+    <div class="file-path">public/js/reservations.js</div>
+    <div class="code-block"><span class="comment">// Variables globales</span>
+<span class="keyword">let</span> <span class="variable">offsetReservations</span> = <span class="number">12</span>;  <span class="comment">// Commence après les 12 premiers</span>
+<span class="keyword">let</span> <span class="variable">totalReservations</span> = <span class="number">0</span>;
+<span class="keyword">let</span> <span class="variable">filtreActif</span> = <span class="string">'toutes'</span>;
+
+<span class="comment">// Initialisation depuis Twig</span>
+<span class="keyword">function</span> <span class="function">initialiserReservations</span>(<span class="variable">total</span>, <span class="variable">filtre</span>) {
+    <span class="variable">totalReservations</span> = <span class="variable">total</span>;
+    <span class="variable">filtreActif</span> = <span class="variable">filtre</span>;
+    <span class="function">updateCompteur</span>();
+}
+
+<span class="comment">// Chargement AJAX</span>
+<span class="keyword">async function</span> <span class="function">chargerPlusReservations</span>() {
+    <span class="keyword">const</span> <span class="variable">btn</span> = document.<span class="function">getElementById</span>(<span class="string">'btn-charger-plus'</span>);
+    <span class="variable">btn</span>.disabled = <span class="keyword">true</span>;
+    <span class="variable">btn</span>.textContent = <span class="string">'Chargement...'</span>;
+
+    <span class="keyword">try</span> {
+        <span class="keyword">const</span> <span class="variable">url</span> = <span class="string">`/dashboard/locataire/reservations/charger-plus?offset=${<span class="variable">offsetReservations</span>}&filtre=${<span class="variable">filtreActif</span>}`</span>;
+        <span class="keyword">const</span> <span class="variable">response</span> = <span class="keyword">await</span> <span class="function">fetch</span>(<span class="variable">url</span>);
+        <span class="keyword">const</span> <span class="variable">data</span> = <span class="keyword">await</span> <span class="variable">response</span>.<span class="function">json</span>();
+
+        <span class="keyword">if</span> (<span class="variable">data</span>.success) {
+            <span class="comment">// Insérer le HTML avant le bouton</span>
+            <span class="keyword">const</span> <span class="variable">container</span> = document.<span class="function">getElementById</span>(<span class="string">'reservations-container'</span>);
+            <span class="variable">container</span>.<span class="function">insertAdjacentHTML</span>(<span class="string">'beforeend'</span>, <span class="variable">data</span>.html);
+
+            <span class="comment">// Mettre à jour l'offset</span>
+            <span class="variable">offsetReservations</span> = <span class="variable">data</span>.offset;
+
+            <span class="comment">// Cacher le bouton si plus de données</span>
+            <span class="keyword">if</span> (!<span class="variable">data</span>.hasMore) {
+                <span class="variable">btn</span>.style.display = <span class="string">'none'</span>;
+            }
+
+            <span class="function">updateCompteur</span>();
+        }
+    } <span class="keyword">catch</span> (<span class="variable">error</span>) {
+        console.<span class="function">error</span>(<span class="string">'Erreur:'</span>, <span class="variable">error</span>);
+    } <span class="keyword">finally</span> {
+        <span class="variable">btn</span>.disabled = <span class="keyword">false</span>;
+        <span class="variable">btn</span>.textContent = <span class="string">'Charger plus'</span>;
+    }
+}
+
+<span class="comment">// Mise à jour du compteur</span>
+<span class="keyword">function</span> <span class="function">updateCompteur</span>() {
+    <span class="keyword">const</span> <span class="variable">compteur</span> = document.<span class="function">getElementById</span>(<span class="string">'compteur-reservations'</span>);
+    <span class="keyword">const</span> <span class="variable">affichees</span> = document.<span class="function">querySelectorAll</span>(<span class="string">'.reservation-card'</span>).length;
+    <span class="variable">compteur</span>.textContent = <span class="string">`${<span class="variable">affichees</span>} réservations affichées sur ${<span class="variable">totalReservations</span>}`</span>;
+}</div>
+
+    <h2>Script de Gestion des Favoris</h2>
+
+    <div class="file-path">public/js/favoris.js</div>
+    <div class="code-block"><span class="comment">// Retirer un favori avec animation</span>
+<span class="keyword">async function</span> <span class="function">retirerDesFavoris</span>(<span class="variable">emplacementId</span>, <span class="variable">element</span>) {
+    <span class="keyword">if</span> (!<span class="function">confirm</span>(<span class="string">'Retirer des favoris ?'</span>)) <span class="keyword">return</span>;
+
+    <span class="keyword">try</span> {
+        <span class="keyword">const</span> <span class="variable">response</span> = <span class="keyword">await</span> <span class="function">fetch</span>(<span class="string">`/dashboard/locataire/favoris/retirer/${<span class="variable">emplacementId</span>}`</span>, {
+            method: <span class="string">'POST'</span>,
+            headers: {
+                <span class="string">'Content-Type'</span>: <span class="string">'application/json'</span>,
+                <span class="string">'X-Requested-With'</span>: <span class="string">'XMLHttpRequest'</span>
+            }
+        });
+
+        <span class="keyword">const</span> <span class="variable">data</span> = <span class="keyword">await</span> <span class="variable">response</span>.<span class="function">json</span>();
+
+        <span class="keyword">if</span> (<span class="variable">data</span>.success) {
+            <span class="comment">// Animation de sortie</span>
+            <span class="keyword">const</span> <span class="variable">card</span> = <span class="variable">element</span>.<span class="function">closest</span>(<span class="string">'.favori-card'</span>);
+            <span class="variable">card</span>.style.animation = <span class="string">'slideOut 0.3s ease forwards'</span>;
+
+            <span class="comment">// Supprimer après animation</span>
+            <span class="function">setTimeout</span>(() => {
+                <span class="variable">card</span>.<span class="function">remove</span>();
+                <span class="variable">totalFavoris</span>--;
+                <span class="function">updateCompteurFavoris</span>();
+            }, <span class="number">300</span>);
+        }
+    } <span class="keyword">catch</span> (<span class="variable">error</span>) {
+        console.<span class="function">error</span>(<span class="string">'Erreur:'</span>, <span class="variable">error</span>);
+    }
+}</div>
+
+    <!-- Section 10 : Fixtures -->
+    <h1 class="page-break">10. Fixtures et Données de Test</h1>
+
+    <h2>Structure des Fixtures</h2>
+
+    <div class="file-path">src/DataFixtures/AppFixtures.php</div>
+    <div class="code-block"><span class="keyword">class</span> <span class="class">AppFixtures</span> <span class="keyword">extends</span> <span class="class">Fixture</span>
+{
+    <span class="keyword">public function</span> <span class="function">__construct</span>(
+        <span class="keyword">private</span> <span class="class">UserPasswordHasherInterface</span> <span class="variable">$hasher</span>
+    ) {}
+
+    <span class="keyword">public function</span> <span class="function">load</span>(<span class="class">ObjectManager</span> <span class="variable">$manager</span>): <span class="keyword">void</span>
+    {
+        <span class="comment">// 1. Créer l'administrateur</span>
+        <span class="variable">$admin</span> = <span class="keyword">new</span> <span class="class">Administrateur</span>();
+        <span class="variable">$admin</span>-><span class="function">setEmail</span>(<span class="string">'naudet2003@gmail.com'</span>);
+        <span class="variable">$admin</span>-><span class="function">setPassword</span>(<span class="variable">$this</span>-><span class="variable">hasher</span>-><span class="function">hashPassword</span>(<span class="variable">$admin</span>, <span class="string">'admin123'</span>));
+        <span class="variable">$admin</span>-><span class="function">setRoles</span>([<span class="string">'ROLE_ADMIN'</span>]);
+        <span class="variable">$admin</span>-><span class="function">setNom</span>(<span class="string">'Naudet'</span>);
+        <span class="variable">$admin</span>-><span class="function">setPrenom</span>(<span class="string">'Nathan'</span>);
+        <span class="variable">$manager</span>-><span class="function">persist</span>(<span class="variable">$admin</span>);
+
+        <span class="comment">// 2. Créer les centres commerciaux</span>
+        <span class="variable">$centres</span> = [];
+        <span class="variable">$centresData</span> = [
+            [<span class="string">'nom'</span> => <span class="string">'Galeries Lafayette Paris'</span>, <span class="string">'ville'</span> => <span class="string">'Paris'</span>, <span class="string">'statut'</span> => <span class="string">'actif'</span>],
+            [<span class="string">'nom'</span> => <span class="string">'Les 4 Temps'</span>, <span class="string">'ville'</span> => <span class="string">'La Défense'</span>, <span class="string">'statut'</span> => <span class="string">'actif'</span>],
+            [<span class="string">'nom'</span> => <span class="string">'Centre Nouveau'</span>, <span class="string">'ville'</span> => <span class="string">'Lyon'</span>, <span class="string">'statut'</span> => <span class="string">'en_attente'</span>],
+        ];
+
+        <span class="keyword">foreach</span> (<span class="variable">$centresData</span> <span class="keyword">as</span> <span class="variable">$data</span>) {
+            <span class="variable">$centre</span> = <span class="keyword">new</span> <span class="class">CentreCommercial</span>();
+            <span class="variable">$centre</span>-><span class="function">setNomCentre</span>(<span class="variable">$data</span>[<span class="string">'nom'</span>]);
+            <span class="variable">$centre</span>-><span class="function">setVille</span>(<span class="variable">$data</span>[<span class="string">'ville'</span>]);
+            <span class="variable">$centre</span>-><span class="function">setStatutCompte</span>(<span class="variable">$data</span>[<span class="string">'statut'</span>]);
+            <span class="comment">// ... autres propriétés</span>
+            <span class="variable">$manager</span>-><span class="function">persist</span>(<span class="variable">$centre</span>);
+            <span class="variable">$centres</span>[] = <span class="variable">$centre</span>;
+        }
+
+        <span class="comment">// 3. Créer les locataires</span>
+        <span class="variable">$locataires</span> = [];
+        <span class="variable">$locatairesData</span> = [
+            [<span class="string">'nom'</span> => <span class="string">'Sophie Martin'</span>, <span class="string">'email'</span> => <span class="string">'sophie.martin@email.fr'</span>],
+            [<span class="string">'nom'</span> => <span class="string">'Pierre Dubois'</span>, <span class="string">'email'</span> => <span class="string">'pierre.dubois@email.fr'</span>],
+            <span class="comment">// ... 5 locataires au total</span>
+        ];
+
+        <span class="keyword">foreach</span> (<span class="variable">$locatairesData</span> <span class="keyword">as</span> <span class="variable">$data</span>) {
+            <span class="variable">$locataire</span> = <span class="keyword">new</span> <span class="class">Locataire</span>();
+            <span class="variable">$locataire</span>-><span class="function">setEmail</span>(<span class="variable">$data</span>[<span class="string">'email'</span>]);
+            <span class="variable">$locataire</span>-><span class="function">setPassword</span>(<span class="variable">$this</span>-><span class="variable">hasher</span>-><span class="function">hashPassword</span>(<span class="variable">$locataire</span>, <span class="string">'locataire123'</span>));
+            <span class="comment">// ... autres propriétés</span>
+            <span class="variable">$manager</span>-><span class="function">persist</span>(<span class="variable">$locataire</span>);
+            <span class="variable">$locataires</span>[] = <span class="variable">$locataire</span>;
+        }
+
+        <span class="comment">// 4. Créer les emplacements (42)</span>
+        <span class="comment">// 5. Créer les réservations (30)</span>
+        <span class="comment">// 6. Créer les favoris (20)</span>
+        <span class="comment">// 7. Créer les conversations et messages (6)</span>
+        <span class="comment">// 8. Créer les paramètres système</span>
+
+        <span class="variable">$manager</span>-><span class="function">flush</span>();
+    }
+}</div>
+
+    <h2>Comptes de Test</h2>
+
+    <table>
+        <tr>
+            <th>Type</th>
+            <th>Email</th>
+            <th>Mot de passe</th>
+            <th>Notes</th>
+        </tr>
+        <tr>
+            <td>Admin</td>
+            <td><code>naudet2003@gmail.com</code></td>
+            <td><code>admin123</code></td>
+            <td>Compte principal</td>
+        </tr>
+        <tr>
+            <td>Locataire</td>
+            <td><code>sophie.martin@email.fr</code></td>
+            <td><code>locataire123</code></td>
+            <td>Compte avec beaucoup de données</td>
+        </tr>
+        <tr>
+            <td>Centre</td>
+            <td><code>contact@galeries-lafayette.fr</code></td>
+            <td><code>centre123</code></td>
+            <td>Centre actif</td>
+        </tr>
+    </table>
+
+    <h2>Charger les Fixtures</h2>
+
+    <div class="code-block"><span class="comment"># Charger les fixtures (attention : efface les données existantes)</span>
+php bin/console doctrine:fixtures:load
+
+<span class="comment"># Avec confirmation automatique</span>
+php bin/console doctrine:fixtures:load --no-interaction
+
+<span class="comment"># En mode append (sans purger)</span>
+php bin/console doctrine:fixtures:load --append</div>
+
+    <hr style="margin: 50px 0; border: none; border-top: 2px solid #e5e5e5;">
+
+    <p style="text-align: center; color: #666; font-size: 14px;">
+        <em>Documentation Technique - Références Événements v1.0</em><br>
+        <em>Pour convertir en PDF : Ouvrir dans un navigateur > Ctrl+P > Enregistrer en PDF</em>
+    </p>
+</body>
+</html>

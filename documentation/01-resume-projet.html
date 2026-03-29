@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Références Événements - Résumé du Projet</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+            background: #fff;
+            padding: 40px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .cover {
+            text-align: center;
+            padding: 80px 40px;
+            background: linear-gradient(135deg, #1a1a1a 0%, #333 100%);
+            color: white;
+            border-radius: 12px;
+            margin-bottom: 50px;
+            page-break-after: always;
+        }
+
+        .cover h1 {
+            font-size: 42px;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .cover .subtitle {
+            font-size: 24px;
+            opacity: 0.9;
+            margin-bottom: 40px;
+        }
+
+        .cover .meta {
+            font-size: 14px;
+            opacity: 0.7;
+            margin-top: 60px;
+        }
+
+        h1 {
+            font-size: 28px;
+            color: #1a1a1a;
+            border-bottom: 3px solid #1a1a1a;
+            padding-bottom: 10px;
+            margin: 40px 0 20px 0;
+        }
+
+        h2 {
+            font-size: 22px;
+            color: #333;
+            margin: 30px 0 15px 0;
+            padding-left: 15px;
+            border-left: 4px solid #1a1a1a;
+        }
+
+        h3 {
+            font-size: 18px;
+            color: #555;
+            margin: 20px 0 10px 0;
+        }
+
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        .highlight-box {
+            background: #f5f5f5;
+            border-left: 4px solid #1a1a1a;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .highlight-box.info {
+            background: #e3f2fd;
+            border-left-color: #2196f3;
+        }
+
+        .highlight-box.success {
+            background: #e8f5e9;
+            border-left-color: #4caf50;
+        }
+
+        .highlight-box.warning {
+            background: #fff3e0;
+            border-left-color: #ff9800;
+        }
+
+        .highlight-box.danger {
+            background: #ffebee;
+            border-left-color: #f44336;
+        }
+
+        ul, ol {
+            margin: 15px 0 15px 30px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #e5e5e5;
+        }
+
+        .stat-card .number {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+
+        .stat-card .label {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        th {
+            background: #1a1a1a;
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-done { background: #d4edda; color: #155724; }
+        .status-partial { background: #fff3cd; color: #856404; }
+        .status-todo { background: #f8d7da; color: #721c24; }
+
+        .two-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .toc {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 8px;
+            margin: 30px 0;
+        }
+
+        .toc h2 {
+            margin-top: 0;
+            border-left: none;
+            padding-left: 0;
+        }
+
+        .toc ol {
+            margin-left: 20px;
+        }
+
+        .toc li {
+            margin-bottom: 10px;
+        }
+
+        .page-break {
+            page-break-before: always;
+        }
+
+        @media print {
+            body {
+                padding: 20px;
+            }
+
+            .cover {
+                padding: 100px 40px;
+            }
+
+            .no-print {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Page de couverture -->
+    <div class="cover">
+        <h1>Références Événements</h1>
+        <p class="subtitle">Plateforme de Location d'Emplacements Commerciaux</p>
+        <p style="font-size: 18px; margin-top: 30px;">RÉSUMÉ COMPLET DU PROJET</p>
+        <p class="meta">
+            Document généré le 22 janvier 2026<br>
+            Version 1.0
+        </p>
+    </div>
+
+    <!-- Table des matières -->
+    <div class="toc">
+        <h2>Table des matières</h2>
+        <ol>
+            <li>Présentation du projet</li>
+            <li>Acteurs et rôles</li>
+            <li>Fonctionnalités implémentées</li>
+            <li>Fonctionnalités en cours</li>
+            <li>Fonctionnalités à développer</li>
+            <li>Statistiques du projet</li>
+            <li>Roadmap recommandée</li>
+        </ol>
+    </div>
+
+    <!-- Section 1 -->
+    <h1>1. Présentation du Projet</h1>
+
+    <div class="highlight-box info">
+        <strong>En bref :</strong> Références Événements est une marketplace B2B qui connecte les locataires (entreprises cherchant des espaces temporaires) avec les centres commerciaux proposant des emplacements à la location.
+    </div>
+
+    <h2>Description</h2>
+    <p>
+        <strong>Références Événements</strong> est une plateforme web développée avec Symfony 7 qui permet la location d'emplacements commerciaux sur courte et moyenne durée. Elle fonctionne comme une marketplace mettant en relation deux types d'acteurs principaux :
+    </p>
+
+    <ul>
+        <li><strong>Les locataires</strong> : particuliers ou entreprises cherchant à louer un emplacement temporaire (pop-up stores, stands d'exposition, kiosques, corners...)</li>
+        <li><strong>Les centres commerciaux</strong> : gestionnaires d'espaces commerciaux qui proposent leurs emplacements disponibles à la location</li>
+    </ul>
+
+    <h2>Objectifs de la plateforme</h2>
+    <ul>
+        <li>Permettre aux centres commerciaux de publier et gérer leurs emplacements disponibles</li>
+        <li>Offrir aux locataires un moteur de recherche pour trouver l'emplacement idéal</li>
+        <li>Gérer le cycle complet des réservations (demande, validation, paiement, réalisation)</li>
+        <li>Faciliter la communication entre les deux parties via une messagerie intégrée</li>
+        <li>Automatiser la génération de documents (contrats, factures)</li>
+        <li>Permettre les évaluations post-location pour améliorer la confiance</li>
+    </ul>
+
+    <h2>Stack Technique</h2>
+    <table>
+        <tr>
+            <th>Composant</th>
+            <th>Technologie</th>
+        </tr>
+        <tr>
+            <td>Framework Backend</td>
+            <td>Symfony 7.x</td>
+        </tr>
+        <tr>
+            <td>Base de données</td>
+            <td>Doctrine ORM (MySQL/PostgreSQL)</td>
+        </tr>
+        <tr>
+            <td>Templating</td>
+            <td>Twig</td>
+        </tr>
+        <tr>
+            <td>Frontend</td>
+            <td>Vanilla JavaScript + CSS3</td>
+        </tr>
+        <tr>
+            <td>Authentification</td>
+            <td>Symfony Security (Form Login)</td>
+        </tr>
+        <tr>
+            <td>Architecture</td>
+            <td>MVC avec héritage de classes utilisateur</td>
+        </tr>
+    </table>
+
+    <!-- Section 2 -->
+    <h1 class="page-break">2. Acteurs et Rôles</h1>
+
+    <p>La plateforme utilise un système d'héritage de table (JOINED) pour gérer les différents types d'utilisateurs :</p>
+
+    <h2>Locataire (ROLE_LOCATAIRE)</h2>
+    <div class="highlight-box">
+        <p><strong>Profil type :</strong> Entrepreneur, commerçant temporaire, marque souhaitant tester un marché</p>
+        <p><strong>Objectif :</strong> Trouver et réserver un emplacement commercial pour une durée déterminée</p>
+    </div>
+    <p><strong>Informations stockées :</strong></p>
+    <ul>
+        <li>Nom, email, téléphone</li>
+        <li>SIRET (optionnel), type d'activité</li>
+        <li>Adresse de facturation, code postal, ville</li>
+        <li>Photo de profil, statut du compte</li>
+    </ul>
+
+    <h2>Centre Commercial (ROLE_CENTRE)</h2>
+    <div class="highlight-box">
+        <p><strong>Profil type :</strong> Gestionnaire d'espace commercial, propriétaire de galerie marchande</p>
+        <p><strong>Objectif :</strong> Rentabiliser ses espaces vacants en les proposant à la location temporaire</p>
+    </div>
+    <p><strong>Informations stockées :</strong></p>
+    <ul>
+        <li>Nom du centre, SIRET, numéro TVA</li>
+        <li>Adresse complète, téléphone</li>
+        <li>Description, IBAN pour les paiements</li>
+        <li>Photo de profil, statut du compte</li>
+    </ul>
+
+    <h2>Administrateur (ROLE_ADMIN)</h2>
+    <div class="highlight-box">
+        <p><strong>Profil type :</strong> Équipe de gestion de la plateforme</p>
+        <p><strong>Objectif :</strong> Valider les inscriptions des centres, modérer les contenus, gérer les paramètres</p>
+    </div>
+
+    <!-- Section 3 -->
+    <h1 class="page-break">3. Fonctionnalités Implémentées</h1>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="number">15</div>
+            <div class="label">Entités de données</div>
+        </div>
+        <div class="stat-card">
+            <div class="number">7</div>
+            <div class="label">Contrôleurs</div>
+        </div>
+        <div class="stat-card">
+            <div class="number">17</div>
+            <div class="label">Templates Twig</div>
+        </div>
+    </div>
+
+    <h2>Authentification et Inscription</h2>
+    <table>
+        <tr>
+            <th>Fonctionnalité</th>
+            <th>Statut</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>Connexion utilisateur</td>
+            <td><span class="status-badge status-done">Fait</span></td>
+            <td>Login par email/mot de passe avec CSRF</td>
+        </tr>
+        <tr>
+            <td>Inscription locataire</td>
+            <td><span class="status-badge status-done">Fait</span></td>
+            <td>Formulaire complet avec validation</td>
+        </tr>
+        <tr>
+            <td>Inscription centre</td>
+            <td><span class="status-badge status-done">Fait</span></td>
+            <td>Formulaire avec statut "en_attente"</td>
+        </tr>
+        <tr>
+            <td>Déconnexion</td>
+            <td><span class="status-badge status-done">Fait</span></td>
+            <td>Logout sécurisé</td>
+        </tr>
+        <tr>
+            <td>Redirection intelligente</td>
+            <td><span class="status-badge status-done">Fait</span></td>
+            <td>Vers le bon dashboard selon le rôle</td>
+        </tr>
+    </table>
+
+    <h2>Dashboard Locataire</h2>
+    <table>
+        <tr>
+            <th>Fonctionnalité</th>
+            <th>Statut</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>Page d'accueil dashboard</td>
+            <td><span class="status-badge status-done">Fait</span></td>
+            <td>Statistiques et aperçu des réservations</td>
+        </tr>
+        <tr>
+            <td>Liste des réservations</td>
+            <td><span class="status-badge status-done">Fait</span></td>
+            <td>Avec 9 filtres et pagination AJAX</td>
+        </tr>
+        <tr>
+            <td>Gestion des favoris</td>
+            <td><span class="status-badge status-done">Fait</span></td>
+            <td>Ajout/retrait AJAX avec animation</td>
+        </tr>
+        <tr>
+            <td>Messagerie</td>
+            <td><span class="status-badge status-done">Fait</span></td>
+            <td>Conversations, envoi, archivage, marquage lu</td>
+        </tr>
+        <tr>
+            <td>Mon profil</td>
+            <td><span class="status-badge status-done">Fait</span></td>
+            <td>Consultation et modification</td>
+        </tr>
+        <tr>
+            <td>Détail réservation</td>
+            <td><span class="status-badge status-partial">Partiel</span></td>
+            <td>Route existe, template manquant</td>
+        </tr>
+        <tr>
+            <td>Mes documents</td>
+            <td><span class="status-badge status-partial">Partiel</span></td>
+            <td>Page placeholder</td>
+        </tr>
+        <tr>
+            <td>Mes paiements</td>
+            <td><span class="status-badge status-partial">Partiel</span></td>
+            <td>Page placeholder</td>
+        </tr>
+    </table>
+
+    <h2>Système de Réservation</h2>
+    <p>Le système gère 6 statuts de réservation avec un workflow complet :</p>
+    <table>
+        <tr>
+            <th>Statut</th>
+            <th>Description</th>
+            <th>Couleur</th>
+        </tr>
+        <tr>
+            <td>En attente</td>
+            <td>Demande envoyée, en attente de validation du centre</td>
+            <td style="background: #fff3cd;">Jaune</td>
+        </tr>
+        <tr>
+            <td>Validée</td>
+            <td>Acceptée par le centre, en attente du paiement</td>
+            <td style="background: #d4edda;">Vert</td>
+        </tr>
+        <tr>
+            <td>En cours</td>
+            <td>Location actuellement active</td>
+            <td style="background: #cce5ff;">Bleu</td>
+        </tr>
+        <tr>
+            <td>Terminée</td>
+            <td>Location passée et finalisée</td>
+            <td style="background: #e2e3e5;">Gris</td>
+        </tr>
+        <tr>
+            <td>Refusée</td>
+            <td>Rejetée par le centre commercial</td>
+            <td style="background: #f8d7da;">Rouge</td>
+        </tr>
+        <tr>
+            <td>Annulée</td>
+            <td>Annulée par le locataire ou le centre</td>
+            <td style="background: #f8d7da;">Rouge foncé</td>
+        </tr>
+    </table>
+
+    <!-- Section 4 -->
+    <h1 class="page-break">4. Fonctionnalités en Cours</h1>
+
+    <div class="highlight-box warning">
+        <strong>Attention :</strong> Ces fonctionnalités sont partiellement implémentées et nécessitent du travail supplémentaire.
+    </div>
+
+    <h2>Pages Placeholder</h2>
+    <ul>
+        <li><strong>Page Paiements</strong> - Le contrôleur et le template existent mais sont vides. L'intégration avec un système de paiement (Stripe, PayPal) reste à faire.</li>
+        <li><strong>Page Documents</strong> - La structure existe mais aucune fonctionnalité de visualisation/téléchargement.</li>
+        <li><strong>Détail Réservation</strong> - La route existe mais le template n'est pas créé.</li>
+    </ul>
+
+    <h2>Upload de fichiers</h2>
+    <p>Les champs pour stocker les chemins de fichiers existent en base de données (photos de profil, photos d'emplacements, documents) mais aucune logique d'upload n'est implémentée.</p>
+
+    <!-- Section 5 -->
+    <h1 class="page-break">5. Fonctionnalités à Développer</h1>
+
+    <div class="highlight-box danger">
+        <strong>Important :</strong> Ces fonctionnalités sont essentielles pour une mise en production et doivent être développées.
+    </div>
+
+    <h2>Dashboard Centre Commercial</h2>
+    <ul>
+        <li>Page d'accueil avec statistiques (emplacements, réservations, revenus)</li>
+        <li>Gestion des emplacements (CRUD complet)</li>
+        <li>Upload et gestion des photos d'emplacements</li>
+        <li>Gestion des périodes d'indisponibilité</li>
+        <li>Traitement des demandes de réservation (accepter/refuser)</li>
+        <li>Messagerie avec les locataires</li>
+        <li>Tableau de bord financier</li>
+        <li>Gestion du profil centre</li>
+    </ul>
+
+    <h2>Dashboard Administrateur</h2>
+    <ul>
+        <li>Validation des inscriptions des centres commerciaux</li>
+        <li>Modération des avis</li>
+        <li>Gestion des paramètres système</li>
+        <li>Tableau de bord global (statistiques plateforme)</li>
+        <li>Gestion des litiges</li>
+        <li>Export de données</li>
+    </ul>
+
+    <h2>Système de Paiement</h2>
+    <ul>
+        <li>Intégration Stripe ou PayPal</li>
+        <li>Gestion des cautions</li>
+        <li>Remboursements automatisés</li>
+        <li>Historique des transactions</li>
+        <li>Factures automatiques</li>
+    </ul>
+
+    <h2>Recherche et Catalogue</h2>
+    <ul>
+        <li>Page de recherche d'emplacements</li>
+        <li>Filtres avancés (localisation, prix, type, surface)</li>
+        <li>Carte interactive</li>
+        <li>Page détail d'un emplacement</li>
+        <li>Formulaire de demande de réservation</li>
+    </ul>
+
+    <h2>Notifications</h2>
+    <ul>
+        <li>Emails transactionnels (confirmation inscription, réservation, etc.)</li>
+        <li>Notifications en temps réel (nouveaux messages)</li>
+        <li>Rappels automatiques</li>
+    </ul>
+
+    <h2>Autres</h2>
+    <ul>
+        <li>API REST pour applications mobiles</li>
+        <li>Tests unitaires et fonctionnels</li>
+        <li>Documentation API</li>
+        <li>Système de récupération de mot de passe</li>
+        <li>Vérification email</li>
+    </ul>
+
+    <!-- Section 6 -->
+    <h1 class="page-break">6. Statistiques du Projet</h1>
+
+    <h2>Structure du Code</h2>
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="number">15</div>
+            <div class="label">Entités</div>
+        </div>
+        <div class="stat-card">
+            <div class="number">7</div>
+            <div class="label">Contrôleurs</div>
+        </div>
+        <div class="stat-card">
+            <div class="number">17</div>
+            <div class="label">Templates</div>
+        </div>
+        <div class="stat-card">
+            <div class="number">7</div>
+            <div class="label">Fichiers CSS</div>
+        </div>
+        <div class="stat-card">
+            <div class="number">2</div>
+            <div class="label">Fichiers JS</div>
+        </div>
+        <div class="stat-card">
+            <div class="number">5</div>
+            <div class="label">Migrations</div>
+        </div>
+    </div>
+
+    <h2>Données de Test (Fixtures)</h2>
+    <table>
+        <tr>
+            <th>Type</th>
+            <th>Quantité</th>
+        </tr>
+        <tr>
+            <td>Administrateurs</td>
+            <td>1</td>
+        </tr>
+        <tr>
+            <td>Centres commerciaux</td>
+            <td>3 (2 actifs, 1 en attente)</td>
+        </tr>
+        <tr>
+            <td>Locataires</td>
+            <td>5 (4 actifs, 1 suspendu)</td>
+        </tr>
+        <tr>
+            <td>Emplacements</td>
+            <td>42</td>
+        </tr>
+        <tr>
+            <td>Réservations</td>
+            <td>30</td>
+        </tr>
+        <tr>
+            <td>Conversations</td>
+            <td>6</td>
+        </tr>
+        <tr>
+            <td>Favoris</td>
+            <td>20</td>
+        </tr>
+    </table>
+
+    <h2>Avancement Global</h2>
+    <div class="highlight-box">
+        <p style="font-size: 18px; text-align: center; margin: 20px 0;">
+            <strong>Estimation : ~35% du projet complété</strong>
+        </p>
+        <ul>
+            <li><strong>Modèle de données :</strong> 100% - Toutes les entités sont définies</li>
+            <li><strong>Dashboard Locataire :</strong> 85% - Presque complet</li>
+            <li><strong>Dashboard Centre :</strong> 0% - Non commencé</li>
+            <li><strong>Dashboard Admin :</strong> 0% - Non commencé</li>
+            <li><strong>Recherche/Catalogue :</strong> 0% - Non commencé</li>
+            <li><strong>Paiements :</strong> 5% - Structure uniquement</li>
+        </ul>
+    </div>
+
+    <!-- Section 7 -->
+    <h1 class="page-break">7. Roadmap Recommandée</h1>
+
+    <h2>Phase 1 : Finaliser le Dashboard Locataire</h2>
+    <div class="highlight-box success">
+        <strong>Priorité : Haute</strong>
+    </div>
+    <ol>
+        <li>Créer le template de détail de réservation</li>
+        <li>Implémenter la page des documents</li>
+        <li>Implémenter la page des paiements (lecture seule d'abord)</li>
+        <li>Ajouter l'upload de photo de profil</li>
+    </ol>
+
+    <h2>Phase 2 : Catalogue et Recherche</h2>
+    <div class="highlight-box info">
+        <strong>Priorité : Haute</strong>
+    </div>
+    <ol>
+        <li>Page d'accueil avec emplacements mis en avant</li>
+        <li>Page de recherche avec filtres</li>
+        <li>Page détail d'un emplacement</li>
+        <li>Formulaire de demande de réservation</li>
+    </ol>
+
+    <h2>Phase 3 : Dashboard Centre Commercial</h2>
+    <div class="highlight-box info">
+        <strong>Priorité : Haute</strong>
+    </div>
+    <ol>
+        <li>Dashboard principal avec statistiques</li>
+        <li>CRUD des emplacements</li>
+        <li>Upload de photos</li>
+        <li>Gestion des réservations (accepter/refuser)</li>
+        <li>Messagerie</li>
+    </ol>
+
+    <h2>Phase 4 : Système de Paiement</h2>
+    <div class="highlight-box warning">
+        <strong>Priorité : Moyenne</strong>
+    </div>
+    <ol>
+        <li>Intégration Stripe</li>
+        <li>Workflow de paiement complet</li>
+        <li>Gestion des remboursements</li>
+        <li>Génération de factures</li>
+    </ol>
+
+    <h2>Phase 5 : Administration</h2>
+    <div class="highlight-box warning">
+        <strong>Priorité : Moyenne</strong>
+    </div>
+    <ol>
+        <li>Validation des centres</li>
+        <li>Tableau de bord global</li>
+        <li>Gestion des paramètres</li>
+    </ol>
+
+    <h2>Phase 6 : Polissage</h2>
+    <div class="highlight-box">
+        <strong>Priorité : Basse</strong>
+    </div>
+    <ol>
+        <li>Notifications email</li>
+        <li>Tests automatisés</li>
+        <li>Documentation</li>
+        <li>Optimisations performances</li>
+    </ol>
+
+    <hr style="margin: 50px 0; border: none; border-top: 2px solid #e5e5e5;">
+
+    <p style="text-align: center; color: #666; font-size: 14px;">
+        <em>Document généré automatiquement - Références Événements v1.0</em><br>
+        <em>Pour convertir en PDF : Ouvrir dans un navigateur > Ctrl+P > Enregistrer en PDF</em>
+    </p>
+</body>
+</html>

@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Références Événements - Cahier des Charges</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+            background: #fff;
+            padding: 40px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .cover {
+            text-align: center;
+            padding: 80px 40px;
+            background: linear-gradient(135deg, #1a1a1a 0%, #333 100%);
+            color: white;
+            border-radius: 12px;
+            margin-bottom: 50px;
+            page-break-after: always;
+        }
+        .cover h1 { font-size: 42px; margin-bottom: 20px; font-weight: 700; }
+        .cover .subtitle { font-size: 22px; opacity: 0.9; margin-bottom: 10px; }
+        .cover .subtitle2 { font-size: 15px; opacity: 0.7; margin-bottom: 40px; }
+        .cover .meta { font-size: 13px; opacity: 0.6; margin-top: 60px; }
+        .cover .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 20px;
+            padding: 6px 20px;
+            font-size: 13px;
+            margin: 4px;
+        }
+
+        h1 {
+            font-size: 26px;
+            color: #1a1a1a;
+            border-bottom: 3px solid #1a1a1a;
+            padding-bottom: 10px;
+            margin: 40px 0 20px 0;
+        }
+        h2 {
+            font-size: 20px;
+            color: #333;
+            margin: 30px 0 15px 0;
+            padding-left: 15px;
+            border-left: 4px solid #1a1a1a;
+        }
+        h3 {
+            font-size: 16px;
+            color: #555;
+            margin: 20px 0 10px 0;
+        }
+
+        p { margin-bottom: 12px; text-align: justify; }
+
+        .toc {
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 30px;
+            margin: 30px 0 50px 0;
+            page-break-after: always;
+        }
+        .toc h2 { border-left: none; padding-left: 0; font-size: 18px; margin-bottom: 20px; }
+        .toc-section { margin-bottom: 8px; }
+        .toc-section a { color: #1a1a1a; text-decoration: none; font-weight: 600; font-size: 14px; }
+        .toc-sub { margin-left: 20px; margin-top: 4px; }
+        .toc-sub a { color: #555; font-weight: 400; font-size: 13px; }
+
+        .info-box {
+            background: #f0f4ff;
+            border-left: 4px solid #3b5bdb;
+            border-radius: 0 8px 8px 0;
+            padding: 16px 20px;
+            margin: 15px 0;
+        }
+        .warning-box {
+            background: #fff8e1;
+            border-left: 4px solid #f59f00;
+            border-radius: 0 8px 8px 0;
+            padding: 16px 20px;
+            margin: 15px 0;
+        }
+
+        .highlight-box {
+            background: #f5f5f5;
+            border-radius: 8px;
+            padding: 20px 25px;
+            margin: 15px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0 25px 0;
+            font-size: 14px;
+        }
+        th {
+            background: #1a1a1a;
+            color: white;
+            padding: 10px 14px;
+            text-align: left;
+        }
+        td {
+            padding: 9px 14px;
+            border-bottom: 1px solid #e0e0e0;
+            vertical-align: top;
+        }
+        tr:nth-child(even) td { background: #f9f9f9; }
+
+        ul { margin: 8px 0 12px 20px; }
+        li { margin-bottom: 5px; font-size: 14px; }
+
+        .req-block {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            margin: 12px 0;
+            overflow: hidden;
+        }
+        .req-header {
+            background: #f5f5f5;
+            padding: 10px 15px;
+            font-weight: 600;
+            font-size: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .req-body {
+            padding: 12px 15px;
+            font-size: 14px;
+        }
+        .prio {
+            font-size: 11px;
+            padding: 3px 9px;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+        .prio-must { background: #f8d7da; color: #842029; }
+        .prio-should { background: #fff3cd; color: #856404; }
+        .prio-could { background: #d1e7dd; color: #0f5132; }
+
+        .tech-stack {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 15px 0;
+        }
+        .tech-item {
+            background: #f5f5f5;
+            border-radius: 8px;
+            padding: 15px;
+        }
+        .tech-item h4 { font-size: 13px; color: #888; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .tech-item p { font-weight: 600; color: #1a1a1a; font-size: 15px; margin: 0; }
+
+        .page-break { page-break-before: always; }
+
+        @media print {
+            body { padding: 20px; }
+            .cover { border-radius: 0; }
+            .page-break { page-break-before: always; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- PAGE DE COUVERTURE -->
+<div class="cover">
+    <h1>Références Événements</h1>
+    <div class="subtitle">Cahier des Charges</div>
+    <div class="subtitle2">Application web de mise en relation pour la location d'espaces événementiels</div>
+    <div>
+        <span class="badge">BTS SIO SLAM</span>
+        <span class="badge">Session 2026</span>
+        <span class="badge">Projet Léger</span>
+    </div>
+    <div class="meta">
+        Auteur : AUDET Nathan &nbsp;|&nbsp; N° candidat : 0182835530<br>
+        CFA INSTA — Paris 75005 &nbsp;|&nbsp; Mars 2025 – Mars 2026
+    </div>
+</div>
+
+<!-- TABLE DES MATIÈRES -->
+<div class="toc">
+    <h2>Table des matières</h2>
+    <div class="toc-section"><a href="#contexte">1. Contexte et objectifs</a></div>
+    <div class="toc-sub">
+        <a href="#presentation">1.1 Présentation du projet</a><br>
+        <a href="#problematique">1.2 Problématique</a><br>
+        <a href="#objectifs">1.3 Objectifs</a>
+    </div>
+    <div class="toc-section"><a href="#acteurs">2. Acteurs et périmètre</a></div>
+    <div class="toc-sub">
+        <a href="#utilisateurs">2.1 Utilisateurs cibles</a><br>
+        <a href="#perimetre">2.2 Périmètre fonctionnel</a>
+    </div>
+    <div class="toc-section"><a href="#besoins-fonctionnels">3. Besoins fonctionnels</a></div>
+    <div class="toc-sub">
+        <a href="#auth">3.1 Authentification et gestion des comptes</a><br>
+        <a href="#espaces">3.2 Gestion des espaces</a><br>
+        <a href="#reservations">3.3 Réservations</a><br>
+        <a href="#messagerie">3.4 Messagerie</a><br>
+        <a href="#avis">3.5 Avis et notes</a><br>
+        <a href="#paiements">3.6 Paiements</a><br>
+        <a href="#recherche-fonc">3.7 Recherche et carte</a><br>
+        <a href="#administration">3.8 Administration</a>
+    </div>
+    <div class="toc-section"><a href="#besoins-non-fonctionnels">4. Besoins non fonctionnels</a></div>
+    <div class="toc-section"><a href="#stack">5. Architecture technique</a></div>
+    <div class="toc-sub">
+        <a href="#techno">5.1 Technologies utilisées</a><br>
+        <a href="#bdd">5.2 Modèle de données</a><br>
+        <a href="#securite">5.3 Sécurité</a>
+    </div>
+    <div class="toc-section"><a href="#contraintes">6. Contraintes</a></div>
+    <div class="toc-section"><a href="#livrables">7. Livrables</a></div>
+</div>
+
+<!-- SECTION 1 -->
+<h1 id="contexte">1. Contexte et objectifs</h1>
+
+<h2 id="presentation">1.1 Présentation du projet</h2>
+
+<p>
+    Le projet <strong>Références Événements</strong> est une application web développée dans le cadre du BTS SIO option SLAM (Session 2026), en autonomie, sur la période de mars 2025 à mars 2026 au CFA INSTA (Paris 75005).
+</p>
+<p>
+    Il s'agit d'une plateforme de mise en relation entre des <strong>centres commerciaux</strong> souhaitant rentabiliser leurs espaces inoccupés et des <strong>locataires</strong> (entreprises, associations, artisans, etc.) cherchant des espaces événementiels ou commerciaux temporaires.
+</p>
+
+<h2 id="problematique">1.2 Problématique</h2>
+
+<p>
+    Les centres commerciaux disposent fréquemment d'espaces inoccupés (halls, boutiques vides, terrasses) qu'ils peinent à valoriser. Parallèlement, de nombreux acteurs économiques ont des besoins ponctuels d'espaces pour des événements, des pop-up stores, des présentations ou des opérations commerciales, sans souhaiter s'engager dans des baux de longue durée.
+</p>
+<p>
+    Il n'existe pas de plateforme centralisée permettant à ces deux parties de se trouver, de négocier et de gérer leurs locations de manière simple et sécurisée.
+</p>
+
+<h2 id="objectifs">1.3 Objectifs</h2>
+
+<ul>
+    <li>Permettre aux centres commerciaux de publier et gérer leurs espaces disponibles</li>
+    <li>Permettre aux locataires de rechercher, comparer et réserver des espaces</li>
+    <li>Fluidifier le workflow complet : demande → validation → location → paiement → avis</li>
+    <li>Sécuriser les échanges entre les parties via une messagerie intégrée</li>
+    <li>Offrir un outil d'administration pour superviser et modérer la plateforme</li>
+</ul>
+
+<!-- SECTION 2 -->
+<h1 id="acteurs" class="page-break">2. Acteurs et périmètre</h1>
+
+<h2 id="utilisateurs">2.1 Utilisateurs cibles</h2>
+
+<table>
+    <tr><th>Acteur</th><th>Profil</th><th>Besoins principaux</th></tr>
+    <tr>
+        <td><strong>Locataire</strong></td>
+        <td>Entreprise, association, artisan ou particulier cherchant un espace temporaire</td>
+        <td>Trouver rapidement un espace adapté, réserver en ligne, communiquer avec le centre, suivre ses réservations et paiements</td>
+    </tr>
+    <tr>
+        <td><strong>Centre Commercial</strong></td>
+        <td>Gestionnaire d'un ou plusieurs centres commerciaux possédant des espaces à louer</td>
+        <td>Publier ses espaces, recevoir et traiter les demandes, communiquer avec les locataires, suivre ses revenus</td>
+    </tr>
+    <tr>
+        <td><strong>Administrateur</strong></td>
+        <td>Gestionnaire de la plateforme Références Événements</td>
+        <td>Valider les inscriptions des centres, superviser les réservations, gérer les comptes utilisateurs</td>
+    </tr>
+    <tr>
+        <td><strong>Visiteur anonyme</strong></td>
+        <td>Internaute non connecté</td>
+        <td>Consulter les espaces disponibles, utiliser la carte interactive, accéder aux pages d'information</td>
+    </tr>
+</table>
+
+<h2 id="perimetre">2.2 Périmètre fonctionnel</h2>
+
+<div class="highlight-box">
+    <p>Le périmètre du projet couvre :</p>
+    <ul>
+        <li>L'inscription et l'authentification multi-rôles</li>
+        <li>La publication et gestion d'espaces avec photos</li>
+        <li>Le moteur de recherche avec filtres avancés et carte interactive</li>
+        <li>Le système de réservation avec workflow de statuts</li>
+        <li>La messagerie interne entre centres et locataires</li>
+        <li>La gestion des avis et des notes multi-critères</li>
+        <li>Le suivi des paiements et documents contractuels</li>
+        <li>Un tableau de bord d'administration</li>
+    </ul>
+</div>
+
+<!-- SECTION 3 -->
+<h1 id="besoins-fonctionnels" class="page-break">3. Besoins fonctionnels</h1>
+
+<p>Les exigences sont classées selon la méthode MoSCoW : <span style="color:#842029;font-weight:600">MUST</span> (indispensable), <span style="color:#856404;font-weight:600">SHOULD</span> (important), <span style="color:#0f5132;font-weight:600">COULD</span> (optionnel).</p>
+
+<h2 id="auth">3.1 Authentification et gestion des comptes</h2>
+
+<div class="req-block">
+    <div class="req-header">F-AUTH-01 — Inscription Locataire <span class="prio prio-must">MUST</span></div>
+    <div class="req-body">
+        Un visiteur doit pouvoir créer un compte locataire en fournissant : nom, email (unique), mot de passe (haché), téléphone, adresse, ville, code postal. Le compte est activé immédiatement.
+    </div>
+</div>
+<div class="req-block">
+    <div class="req-header">F-AUTH-02 — Inscription Centre Commercial <span class="prio prio-must">MUST</span></div>
+    <div class="req-body">
+        Un visiteur doit pouvoir créer un compte centre en fournissant : nom du centre, SIRET, adresse, email, téléphone, description, IBAN. Le compte est créé en statut « En attente » et nécessite une validation par l'administrateur.
+    </div>
+</div>
+<div class="req-block">
+    <div class="req-header">F-AUTH-03 — Connexion et gestion des sessions <span class="prio prio-must">MUST</span></div>
+    <div class="req-body">
+        Tout utilisateur (locataire, centre, admin) doit pouvoir se connecter via email/mot de passe. La session est sécurisée par Symfony Security. La déconnexion est disponible à tout moment.
+    </div>
+</div>
+<div class="req-block">
+    <div class="req-header">F-AUTH-04 — Modification du profil et du mot de passe <span class="prio prio-must">MUST</span></div>
+    <div class="req-body">
+        Chaque utilisateur doit pouvoir modifier ses informations personnelles et son mot de passe (min. 8 caractères, confirmation requise). Les mots de passe sont hachés avec bcrypt.
+    </div>
+</div>
+<div class="req-block">
+    <div class="req-header">F-AUTH-05 — Photo de profil <span class="prio prio-should">SHOULD</span></div>
+    <div class="req-body">
+        L'utilisateur peut ajouter ou supprimer une photo de profil. Formats acceptés : JPEG, PNG, GIF, WebP. Taille maximale : 5 Mo.
+    </div>
+</div>
+
+<h2 id="espaces">3.2 Gestion des espaces</h2>
+
+<div class="req-block">
+    <div class="req-header">F-ESP-01 — Création d'un emplacement <span class="prio prio-must">MUST</span></div>
+    <div class="req-body">
+        Un centre commercial doit pouvoir créer un emplacement avec : titre, description, surface, type, localisation, équipements, tarifs (jour/semaine/mois), caution, durée min/max.
+    </div>
+</div>
+<div class="req-block">
+    <div class="req-header">F-ESP-02 — Gestion des photos <span class="prio prio-must">MUST</span></div>
+    <div class="req-body">
+        Le centre peut ajouter jusqu'à 10 photos par emplacement (JPG/PNG/WebP, max 5 Mo chacune). Les photos peuvent être supprimées individuellement.
+    </div>
+</div>
+<div class="req-block">
+    <div class="req-header">F-ESP-03 — Modification et suppression d'un emplacement <span class="prio prio-must">MUST</span></div>
+    <div class="req-body">
+        Le centre peut modifier les informations d'un emplacement à tout moment. La suppression est bloquée si des réservations actives, validées ou en cours sont associées à l'emplacement.
+    </div>
+</div>
+<div class="req-block">
+    <div class="req-header">F-ESP-04 — Périodes d'indisponibilité <span class="prio prio-must">MUST</span></div>
+    <div class="req-body">
+        Le centre peut déclarer des périodes durant lesquelles l'emplacement n'est pas disponible (date début obligatoirement antérieure à la date de fin). Ces périodes bloquent les réservations sur ces dates.
+    </div>
+</div>
+<div class="req-block">
+    <div class="req-header">F-ESP-05 — Statut de publication <span class="prio prio-must">MUST</span></div>
+    <div class="req-body">
+        Un emplacement peut être actif (visible publiquement) ou inactif (masqué). Seuls les emplacements publiés apparaissent dans les résultats de recherche et la carte.
+    </div>
+</div>
+
+<h2 id="reservations">3.3 Réservations</h2>
+
+<div class="req-block">
+    <div class="req-header">F-RES-01 — Demande de réservation <span class="prio prio-must">MUST</span></div>
+    <div class="req-body">
+        Un locataire connecté doit pouvoir effectuer une demande de réservation sur un emplacement publié, en spécifiant les dates de début et de fin. Le montant total est calculé automatiquement.
+    </div>
+</div>
+<div class="req-block">
+    <div class="req-header">F-RES-02 — Workflow de statuts <span class="prio prio-must">MUST</span></div>
+    <div class="req-body">
+        La réservation suit un workflow : EN_ATTENTE → VALIDÉE ou REFUSÉE (par le centre), puis EN_COURS → TERMINÉE (automatique selon les dates). Une réservation EN_ATTENTE ou VALIDÉE peut être ANNULÉE par le locataire. Le refus nécessite un motif obligatoire.
+    </div>
+</div>
+<div class="req-block">
+    <div class="req-header">F-RES-03 — Calcul des montants <span class="prio prio-must">MUST</span></div>
+    <div class="req-body">
+        Le système calcule automatiquement : montant location (revenu centre), commission plateforme, montant total (payé par le locataire), caution versée.
+    </div>
+</div>
+<div class="req-block">
+    <div class="req-header">F-RES-04 — Filtrage et pagination <span class="prio prio-should">SHOULD</span></div>
+    <div class="req-body">
+        Les réservations sont filtrables par statut (ou regroupement temporel : actives, à venir, passées). Affichage paginé à 12 par page avec chargement AJAX des suivantes.
+    </div>
+</div>
+
+<h2 id="messagerie">3.4 Messagerie</h2>
+
+<div class="req-block">
+    <div class="req-header">F-MSG-01 — Création d'une conversation <span class="prio prio-must">MUST</span></div>
+    <div class="req-body">
+        Un locataire connecté doit pouvoir initier une conversation avec un centre depuis la fiche d'un emplacement, en indiquant un objet et un premier message.
+    </div>
+</div>
+<div class="req-block">
+    <div class="req-header">F-MSG-02 — Échange de messages <span class="prio prio-must">MUST</span></div>
+    <div class="req-body">
+        Les deux parties peuvent s'envoyer des messages au sein d'une conversation. Chaque message est horodaté et identifié par l'expéditeur (locataire ou centre).
+    </div>
+</div>
+<div class="req-block">
+    <div class="req-header">F-MSG-03 — Indicateur de messages non lus <span class="prio prio-must">MUST</span></div>
+    <div class="req-body">
+        Les messages non lus sont marqués visuellement. La lecture d'une conversation marque automatiquement tous les messages de l'interlocuteur comme lus.
+    </div>
+</div>
+<div class="req-block">
+    <div class="req-header">F-MSG-04 — Archivage des conversations <span class="prio prio-should">SHOULD</span></div>
+    <div class="req-body">
+        Chaque partie peut archiver une conversation pour la déplacer dans une section « Archives ». L'archivage est réversible.
+    </div>
+</div>
+
+<h2 id="avis">3.5 Avis et notes</h2>
+
+<div class="req-block">
+    <div class="req-header">F-AVIS-01 — Soumission d'un avis <span class="prio prio-must">MUST</span></div>
+    <div class="req-body">
+        Un locataire peut laisser un avis sur une réservation terminée avec : note globale (1-5), notes par critère (propreté/conformité, emplacement, qualité/prix, communication), commentaire libre.
+    </div>
+</div>
+<div class="req-block">
+    <div class="req-header">F-AVIS-02 — Modération par le centre <span class="prio prio-must">MUST</span></div>
+    <div class="req-body">
+        Le centre peut publier ou dépublier un avis. Seuls les avis publiés sont visibles publiquement.
+    </div>
+</div>
+<div class="req-block">
+    <div class="req-header">F-AVIS-03 — Réponse du centre <span class="prio prio-should">SHOULD</span></div>
+    <div class="req-body">
+        Le centre peut apporter une réponse publique à un avis. La réponse est horodatée.
+    </div>
+</div>
+
+<h2 id="paiements">3.6 Paiements et documents</h2>
+
+<div class="req-block">
+    <div class="req-header">F-PAY-01 — Suivi des paiements <span class="prio prio-must">MUST</span></div>
+    <div class="req-body">
+        Chaque réservation est associée à un paiement traçable (montant, méthode, statut, date, transaction_id). Les deux parties ont accès à un récapitulatif financier.
+    </div>
+</div>
+<div class="req-block">
+    <div class="req-header">F-PAY-02 — Statistiques financières <span class="prio prio-should">SHOULD</span></div>
+    <div class="req-body">
+        Le centre dispose de statistiques : CA total, commissions, montant net, paiements en attente. Le locataire voit : total dépensé, total remboursé, répartition par statut.
+    </div>
+</div>
+<div class="req-block">
+    <div class="req-header">F-PAY-03 — Gestion des documents <span class="prio prio-should">SHOULD</span></div>
+    <div class="req-body">
+        Les documents contractuels (contrats, factures, devis) sont associés aux réservations et consultables par le locataire, filtrables par type.
+    </div>
+</div>
+
+<h2 id="recherche-fonc">3.7 Recherche et carte</h2>
+
+<div class="req-block">
+    <div class="req-header">F-RECH-01 — Moteur de recherche avec filtres <span class="prio prio-must">MUST</span></div>
+    <div class="req-body">
+        La page d'accueil propose une recherche multi-critères : texte libre (titre/description), surface (min/max), tarif (min/max), type d'emplacement, dates de disponibilité. Résultats paginés (50 + chargement AJAX).
+    </div>
+</div>
+<div class="req-block">
+    <div class="req-header">F-RECH-02 — Carte interactive <span class="prio prio-must">MUST</span></div>
+    <div class="req-body">
+        Une page dédiée affiche une carte interactive avec tous les emplacements publiés. Chaque marqueur affiche les informations clés de l'espace et un lien vers sa fiche.
+    </div>
+</div>
+<div class="req-block">
+    <div class="req-header">F-RECH-03 — Espaces populaires <span class="prio prio-could">COULD</span></div>
+    <div class="req-body">
+        Les 10 espaces les plus consultés (nombre de vues) sont mis en avant sur la page d'accueil.
+    </div>
+</div>
+<div class="req-block">
+    <div class="req-header">F-RECH-04 — Favoris <span class="prio prio-should">SHOULD</span></div>
+    <div class="req-body">
+        Un locataire connecté peut ajouter ou retirer des espaces de ses favoris depuis n'importe quelle fiche. La liste des favoris est accessible depuis le tableau de bord.
+    </div>
+</div>
+
+<h2 id="administration">3.8 Administration</h2>
+
+<div class="req-block">
+    <div class="req-header">F-ADM-01 — Validation des centres <span class="prio prio-must">MUST</span></div>
+    <div class="req-body">
+        L'administrateur doit pouvoir activer les comptes centres en attente de validation.
+    </div>
+</div>
+<div class="req-block">
+    <div class="req-header">F-ADM-02 — Gestion des comptes <span class="prio prio-must">MUST</span></div>
+    <div class="req-body">
+        L'administrateur peut activer/désactiver un compte (locataire ou centre), supprimer un compte (si aucune réservation active), et réinitialiser le mot de passe d'un utilisateur.
+    </div>
+</div>
+<div class="req-block">
+    <div class="req-header">F-ADM-03 — Vue globale des réservations <span class="prio prio-should">SHOULD</span></div>
+    <div class="req-body">
+        L'administrateur peut consulter toutes les réservations de la plateforme avec filtrage par statut.
+    </div>
+</div>
+<div class="req-block">
+    <div class="req-header">F-ADM-04 — Tableau de bord avec statistiques <span class="prio prio-should">SHOULD</span></div>
+    <div class="req-body">
+        Le tableau de bord admin présente des statistiques globales : nombre total d'utilisateurs, de centres, de réservations, dernières inscriptions.
+    </div>
+</div>
+
+<!-- SECTION 4 -->
+<h1 id="besoins-non-fonctionnels" class="page-break">4. Besoins non fonctionnels</h1>
+
+<table>
+    <tr><th>Catégorie</th><th>Exigence</th></tr>
+    <tr>
+        <td><strong>Sécurité</strong></td>
+        <td>
+            Authentification gérée par Symfony Security Component.<br>
+            Mots de passe hachés avec bcrypt.<br>
+            Protection CSRF sur toutes les actions sensibles (formulaires, actions POST).<br>
+            Protection XSS par échappement automatique Twig.<br>
+            Contrôle d'accès strict par rôle (IsGranted) sur chaque contrôleur.<br>
+            Validation des fichiers uploadés (type MIME + taille max).
+        </td>
+    </tr>
+    <tr>
+        <td><strong>Performance</strong></td>
+        <td>
+            Pagination à 12 éléments par défaut avec chargement AJAX (infinite scroll).<br>
+            Requêtes Doctrine optimisées avec jointures et filtres en base.<br>
+            Assets compilés et minifiés via Symfony Asset Mapper.
+        </td>
+    </tr>
+    <tr>
+        <td><strong>Accessibilité</strong></td>
+        <td>
+            Interface responsive (mobile, tablette, desktop).<br>
+            Navigation accessible sans JavaScript pour les fonctionnalités principales.
+        </td>
+    </tr>
+    <tr>
+        <td><strong>Maintenabilité</strong></td>
+        <td>
+            Architecture MVC stricte (Symfony).<br>
+            Entités Doctrine avec migrations versionnées.<br>
+            Code organisé en namespaces par rôle (Admin, CentreCommercial, Locataire).
+        </td>
+    </tr>
+    <tr>
+        <td><strong>Disponibilité</strong></td>
+        <td>
+            Application déployable sur tout hébergement PHP 8.2+ avec MySQL/PostgreSQL.<br>
+            Configuration via variables d'environnement (.env).
+        </td>
+    </tr>
+    <tr>
+        <td><strong>Traçabilité</strong></td>
+        <td>
+            Chaque entité sensible (réservation, paiement, message) est horodatée.<br>
+            Les annulations et refus sont enregistrés avec date et auteur.
+        </td>
+    </tr>
+</table>
+
+<!-- SECTION 5 -->
+<h1 id="stack" class="page-break">5. Architecture technique</h1>
+
+<h2 id="techno">5.1 Technologies utilisées</h2>
+
+<div class="tech-stack">
+    <div class="tech-item"><h4>Langage</h4><p>PHP 8.2+</p></div>
+    <div class="tech-item"><h4>Framework</h4><p>Symfony 7.0</p></div>
+    <div class="tech-item"><h4>ORM</h4><p>Doctrine ORM 3.5</p></div>
+    <div class="tech-item"><h4>Templates</h4><p>Twig 3.0</p></div>
+    <div class="tech-item"><h4>Base de données</h4><p>MySQL 10.4 / PostgreSQL</p></div>
+    <div class="tech-item"><h4>JavaScript</h4><p>Stimulus JS + UX Turbo</p></div>
+    <div class="tech-item"><h4>Assets</h4><p>Symfony Asset Mapper</p></div>
+    <div class="tech-item"><h4>Conteneurisation</h4><p>Docker Compose</p></div>
+    <div class="tech-item"><h4>Tests</h4><p>PHPUnit 11.5</p></div>
+    <div class="tech-item"><h4>IDE</h4><p>Visual Studio Code</p></div>
+    <div class="tech-item"><h4>Versioning</h4><p>Git / GitHub</p></div>
+    <div class="tech-item"><h4>Aide au développement</h4><p>Claude.ai, ChatGPT</p></div>
+</div>
+
+<h2 id="bdd">5.2 Modèle de données — Entités principales</h2>
+
+<table>
+    <tr><th>Entité</th><th>Rôle</th><th>Relations principales</th></tr>
+    <tr><td><strong>User</strong></td><td>Classe abstraite de base (Single Table Inheritance)</td><td>Discriminateur vers Admin, CentreCommercial, Locataire</td></tr>
+    <tr><td><strong>Administrateur</strong></td><td>Gestionnaire de la plateforme</td><td>Valide les CentreCommercial</td></tr>
+    <tr><td><strong>CentreCommercial</strong></td><td>Centre proposant des espaces</td><td>→ Emplacement, Conversation</td></tr>
+    <tr><td><strong>Locataire</strong></td><td>Utilisateur cherchant un espace</td><td>→ Reservation, Conversation, Favori</td></tr>
+    <tr><td><strong>Emplacement</strong></td><td>Espace à louer</td><td>→ Photo, PeriodeIndisponibilite, Reservation, Favori</td></tr>
+    <tr><td><strong>Reservation</strong></td><td>Réservation d'un espace</td><td>→ Paiement, Document, Avis</td></tr>
+    <tr><td><strong>Paiement</strong></td><td>Transaction financière</td><td>← Reservation (1:1)</td></tr>
+    <tr><td><strong>Message</strong></td><td>Message dans une conversation</td><td>← Conversation (N:1)</td></tr>
+    <tr><td><strong>Conversation</strong></td><td>Fil de discussion entre un locataire et un centre</td><td>→ Message</td></tr>
+    <tr><td><strong>Avis</strong></td><td>Évaluation d'une réservation</td><td>← Reservation (N:1)</td></tr>
+    <tr><td><strong>Photo</strong></td><td>Image d'un emplacement</td><td>← Emplacement (N:1)</td></tr>
+    <tr><td><strong>Document</strong></td><td>Fichier contractuel lié à une réservation</td><td>← Reservation (N:1)</td></tr>
+    <tr><td><strong>Favori</strong></td><td>Emplacement favori d'un locataire</td><td>← Locataire + Emplacement</td></tr>
+    <tr><td><strong>PeriodeIndisponibilite</strong></td><td>Période de blocage d'un emplacement</td><td>← Emplacement (N:1)</td></tr>
+    <tr><td><strong>Parametre</strong></td><td>Paramètres de configuration (clé/valeur)</td><td>—</td></tr>
+</table>
+
+<h2 id="securite">5.3 Sécurité</h2>
+
+<table>
+    <tr><th>Menace</th><th>Contre-mesure</th></tr>
+    <tr><td>Injection SQL</td><td>Requêtes préparées exclusivement via Doctrine ORM</td></tr>
+    <tr><td>XSS (Cross-Site Scripting)</td><td>Échappement automatique des variables Twig</td></tr>
+    <tr><td>CSRF</td><td>Token CSRF sur tous les formulaires et actions POST sensibles</td></tr>
+    <tr><td>Accès non autorisé</td><td>Annotation <code>#[IsGranted]</code> sur chaque contrôleur par rôle</td></tr>
+    <tr><td>Mots de passe en clair</td><td>Hachage bcrypt via Symfony PasswordHasher</td></tr>
+    <tr><td>Upload de fichiers malveillants</td><td>Validation du type MIME et de la taille côté serveur</td></tr>
+    <tr><td>Élévation de privilèges</td><td>Contrôle strict de l'ownership (un centre ne peut gérer que ses propres emplacements)</td></tr>
+</table>
+
+<!-- SECTION 6 -->
+<h1 id="contraintes" class="page-break">6. Contraintes</h1>
+
+<table>
+    <tr><th>Type</th><th>Contrainte</th></tr>
+    <tr>
+        <td><strong>Techniques</strong></td>
+        <td>
+            PHP 8.2 minimum requis.<br>
+            Environnement conforme à l'annexe II.E du référentiel BTS SIO.<br>
+            Base de données MySQL ou PostgreSQL.
+        </td>
+    </tr>
+    <tr>
+        <td><strong>Humaines</strong></td>
+        <td>
+            Projet réalisé seul (un seul développeur).<br>
+            Durée de réalisation : mars 2025 – mars 2026.
+        </td>
+    </tr>
+    <tr>
+        <td><strong>Organisationnelles</strong></td>
+        <td>
+            Le projet s'inscrit dans le cadre du BTS SIO SLAM, session 2026.<br>
+            Il constitue une réalisation professionnelle évaluée à l'épreuve E6.
+        </td>
+    </tr>
+    <tr>
+        <td><strong>Légales</strong></td>
+        <td>
+            Conformité RGPD : données personnelles limitées au nécessaire, droit de suppression du compte.<br>
+            Mentions légales et CGU accessibles publiquement.
+        </td>
+    </tr>
+    <tr>
+        <td><strong>Fonctionnelles</strong></td>
+        <td>
+            Un compte centre doit être validé par l'admin avant toute publication d'espace.<br>
+            Un emplacement avec des réservations actives ne peut pas être supprimé.<br>
+            Un compte avec des réservations actives ne peut pas être supprimé.
+        </td>
+    </tr>
+</table>
+
+<!-- SECTION 7 -->
+<h1 id="livrables">7. Livrables</h1>
+
+<table>
+    <tr><th>Livrable</th><th>Description</th><th>Emplacement</th></tr>
+    <tr>
+        <td><strong>Code source</strong></td>
+        <td>Application complète Symfony, versionnée sous Git</td>
+        <td>github.com/Swonath/projet_ref_event</td>
+    </tr>
+    <tr>
+        <td><strong>Base de données</strong></td>
+        <td>Migrations Doctrine versionées, schéma complet</td>
+        <td>/migrations/</td>
+    </tr>
+    <tr>
+        <td><strong>Résumé projet</strong></td>
+        <td>Présentation générale de la plateforme</td>
+        <td>documentation/01-resume-projet.html</td>
+    </tr>
+    <tr>
+        <td><strong>Charte graphique</strong></td>
+        <td>Palette de couleurs, typographie, composants UI</td>
+        <td>documentation/02-charte-graphique.html</td>
+    </tr>
+    <tr>
+        <td><strong>Documentation technique</strong></td>
+        <td>Architecture, entités, contrôleurs, sécurité</td>
+        <td>documentation/03-documentation-technique.html</td>
+    </tr>
+    <tr>
+        <td><strong>Manuel utilisateur</strong></td>
+        <td>Guide d'utilisation par rôle (locataire, centre, admin)</td>
+        <td>documentation/04-manuel-utilisateur.html</td>
+    </tr>
+    <tr>
+        <td><strong>Cahier des charges</strong></td>
+        <td>Ce document — besoins fonctionnels et techniques</td>
+        <td>documentation/05-cahier-des-charges.html</td>
+    </tr>
+    <tr>
+        <td><strong>Fiche E6 (projet léger)</strong></td>
+        <td>Fiche descriptive de réalisation professionnelle BTS SIO</td>
+        <td>SLAM-Fiche-presentation-situation_Nathan_projet_leger.pdf</td>
+    </tr>
+</table>
+
+<div class="info-box">
+    Pour générer un PDF depuis ce document : ouvrir dans un navigateur, puis Fichier → Imprimer → Enregistrer en PDF. Les sauts de page sont pré-configurés pour un rendu optimal au format A4.
+</div>
+
+</body>
+</html>

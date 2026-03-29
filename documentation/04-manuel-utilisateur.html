@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Références Événements - Manuel Utilisateur</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+            background: #fff;
+            padding: 40px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .cover {
+            text-align: center;
+            padding: 80px 40px;
+            background: linear-gradient(135deg, #1a1a1a 0%, #333 100%);
+            color: white;
+            border-radius: 12px;
+            margin-bottom: 50px;
+            page-break-after: always;
+        }
+        .cover h1 { font-size: 42px; margin-bottom: 20px; font-weight: 700; }
+        .cover .subtitle { font-size: 22px; opacity: 0.9; margin-bottom: 20px; }
+        .cover .subtitle2 { font-size: 16px; opacity: 0.75; margin-bottom: 40px; }
+        .cover .meta { font-size: 13px; opacity: 0.6; margin-top: 60px; }
+        .cover .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 20px;
+            padding: 6px 20px;
+            font-size: 13px;
+            margin: 4px;
+        }
+
+        h1 {
+            font-size: 26px;
+            color: #1a1a1a;
+            border-bottom: 3px solid #1a1a1a;
+            padding-bottom: 10px;
+            margin: 40px 0 20px 0;
+        }
+        h2 {
+            font-size: 20px;
+            color: #333;
+            margin: 30px 0 15px 0;
+            padding-left: 15px;
+            border-left: 4px solid #1a1a1a;
+        }
+        h3 {
+            font-size: 16px;
+            color: #555;
+            margin: 20px 0 10px 0;
+        }
+
+        p { margin-bottom: 12px; text-align: justify; }
+
+        .toc {
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 30px;
+            margin: 30px 0 50px 0;
+            page-break-after: always;
+        }
+        .toc h2 { border-left: none; padding-left: 0; font-size: 18px; margin-bottom: 20px; }
+        .toc-section { margin-bottom: 8px; }
+        .toc-section a { color: #1a1a1a; text-decoration: none; font-weight: 600; font-size: 14px; }
+        .toc-sub { margin-left: 20px; margin-top: 4px; }
+        .toc-sub a { color: #555; font-weight: 400; font-size: 13px; }
+
+        .info-box {
+            background: #f0f4ff;
+            border-left: 4px solid #3b5bdb;
+            border-radius: 0 8px 8px 0;
+            padding: 16px 20px;
+            margin: 15px 0;
+        }
+        .warning-box {
+            background: #fff8e1;
+            border-left: 4px solid #f59f00;
+            border-radius: 0 8px 8px 0;
+            padding: 16px 20px;
+            margin: 15px 0;
+        }
+        .success-box {
+            background: #ebfbee;
+            border-left: 4px solid #2f9e44;
+            border-radius: 0 8px 8px 0;
+            padding: 16px 20px;
+            margin: 15px 0;
+        }
+
+        .role-block {
+            background: #f5f5f5;
+            border-radius: 8px;
+            padding: 20px 25px;
+            margin: 15px 0;
+        }
+        .role-block h3 { color: #1a1a1a; margin-top: 0; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0 25px 0;
+            font-size: 14px;
+        }
+        th {
+            background: #1a1a1a;
+            color: white;
+            padding: 10px 14px;
+            text-align: left;
+        }
+        td {
+            padding: 9px 14px;
+            border-bottom: 1px solid #e0e0e0;
+            vertical-align: top;
+        }
+        tr:nth-child(even) td { background: #f9f9f9; }
+
+        .step {
+            display: flex;
+            align-items: flex-start;
+            margin: 12px 0;
+        }
+        .step-num {
+            min-width: 32px;
+            height: 32px;
+            background: #1a1a1a;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+            margin-right: 14px;
+            flex-shrink: 0;
+        }
+        .step-content { flex: 1; padding-top: 4px; }
+
+        .badge-status {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .status-attente { background: #fff3cd; color: #856404; }
+        .status-valide { background: #d1e7dd; color: #0f5132; }
+        .status-cours { background: #cfe2ff; color: #084298; }
+        .status-termine { background: #e2e3e5; color: #383d41; }
+        .status-refuse { background: #f8d7da; color: #842029; }
+        .status-annule { background: #f8d7da; color: #842029; }
+
+        ul { margin: 8px 0 12px 20px; }
+        li { margin-bottom: 5px; font-size: 14px; }
+
+        .page-break { page-break-before: always; }
+
+        @media print {
+            body { padding: 20px; }
+            .cover { border-radius: 0; }
+            .page-break { page-break-before: always; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- PAGE DE COUVERTURE -->
+<div class="cover">
+    <h1>Références Événements</h1>
+    <div class="subtitle">Manuel Utilisateur</div>
+    <div class="subtitle2">Guide complet d'utilisation de la plateforme</div>
+    <div>
+        <span class="badge">Locataire</span>
+        <span class="badge">Centre Commercial</span>
+        <span class="badge">Administrateur</span>
+    </div>
+    <div class="meta">
+        Version 1.0 &nbsp;|&nbsp; Mars 2026<br>
+        AUDET Nathan &nbsp;|&nbsp; BTS SIO SLAM — Session 2026
+    </div>
+</div>
+
+<!-- TABLE DES MATIÈRES -->
+<div class="toc">
+    <h2>Table des matières</h2>
+    <div class="toc-section"><a href="#presentation">1. Présentation de la plateforme</a></div>
+    <div class="toc-section"><a href="#acces">2. Accès et authentification</a></div>
+    <div class="toc-sub">
+        <a href="#inscription">2.1 Inscription</a><br>
+        <a href="#connexion">2.2 Connexion</a>
+    </div>
+    <div class="toc-section"><a href="#espace-public">3. Espace public — Recherche d'espaces</a></div>
+    <div class="toc-sub">
+        <a href="#recherche">3.1 Recherche et filtres</a><br>
+        <a href="#carte">3.2 Recherche par carte</a><br>
+        <a href="#fiche-espace">3.3 Fiche détail d'un espace</a>
+    </div>
+    <div class="toc-section"><a href="#espace-locataire">4. Espace Locataire</a></div>
+    <div class="toc-sub">
+        <a href="#loc-tableau-bord">4.1 Tableau de bord</a><br>
+        <a href="#loc-reservations">4.2 Réservations</a><br>
+        <a href="#loc-favoris">4.3 Favoris</a><br>
+        <a href="#loc-messages">4.4 Messagerie</a><br>
+        <a href="#loc-paiements">4.5 Paiements</a><br>
+        <a href="#loc-documents">4.6 Documents</a><br>
+        <a href="#loc-profil">4.7 Profil</a>
+    </div>
+    <div class="toc-section"><a href="#espace-centre">5. Espace Centre Commercial</a></div>
+    <div class="toc-sub">
+        <a href="#cc-tableau-bord">5.1 Tableau de bord</a><br>
+        <a href="#cc-emplacements">5.2 Gestion des emplacements</a><br>
+        <a href="#cc-reservations">5.3 Gestion des réservations</a><br>
+        <a href="#cc-avis">5.4 Avis clients</a><br>
+        <a href="#cc-messages">5.5 Messagerie</a><br>
+        <a href="#cc-paiements">5.6 Paiements</a><br>
+        <a href="#cc-profil">5.7 Profil</a>
+    </div>
+    <div class="toc-section"><a href="#espace-admin">6. Espace Administrateur</a></div>
+    <div class="toc-section"><a href="#statuts">7. Référentiel des statuts de réservation</a></div>
+</div>
+
+<!-- SECTION 1 -->
+<h1 id="presentation">1. Présentation de la plateforme</h1>
+
+<p>
+    <strong>Références Événements</strong> est une plateforme web de mise en relation entre des <strong>locataires</strong> (entreprises ou particuliers cherchant à louer un espace) et des <strong>centres commerciaux</strong> proposant des espaces événementiels à la location.
+</p>
+<p>
+    La plateforme permet à chaque acteur de gérer l'intégralité du processus de réservation, de la recherche d'espace jusqu'au paiement, en passant par la messagerie, les avis et les documents contractuels.
+</p>
+
+<div class="role-block">
+    <h3>Trois types de comptes</h3>
+    <table>
+        <tr>
+            <th>Rôle</th>
+            <th>Description</th>
+            <th>Accès</th>
+        </tr>
+        <tr>
+            <td><strong>Locataire</strong></td>
+            <td>Cherche et réserve des espaces événementiels</td>
+            <td>/dashboard/locataire</td>
+        </tr>
+        <tr>
+            <td><strong>Centre Commercial</strong></td>
+            <td>Publie et gère ses espaces, traite les demandes</td>
+            <td>/dashboard/centre</td>
+        </tr>
+        <tr>
+            <td><strong>Administrateur</strong></td>
+            <td>Supervise la plateforme, gère les comptes</td>
+            <td>/admin</td>
+        </tr>
+    </table>
+</div>
+
+<!-- SECTION 2 -->
+<h1 id="acces" class="page-break">2. Accès et authentification</h1>
+
+<h2 id="inscription">2.1 Inscription</h2>
+
+<p>L'accès à la plateforme nécessite la création d'un compte. Rendez-vous sur <strong>/inscription</strong> pour choisir votre type de compte.</p>
+
+<div class="role-block">
+    <h3>Inscription Locataire</h3>
+    <div class="step"><div class="step-num">1</div><div class="step-content">Cliquer sur « Créer un compte Locataire »</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-content">Renseigner : nom complet, adresse email, mot de passe, numéro de téléphone, adresse de facturation, ville, code postal</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-content">Optionnel : SIRET et type d'activité (pour les professionnels)</div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-content">Valider le formulaire — le compte est <strong>immédiatement actif</strong></div></div>
+    <div class="success-box">Votre compte est activé instantanément. Vous pouvez vous connecter et commencer à chercher des espaces.</div>
+</div>
+
+<div class="role-block">
+    <h3>Inscription Centre Commercial</h3>
+    <div class="step"><div class="step-num">1</div><div class="step-content">Cliquer sur « Créer un compte Centre Commercial »</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-content">Renseigner : nom du centre, SIRET, adresse, email, téléphone, description, IBAN (pour recevoir les paiements)</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-content">Valider le formulaire</div></div>
+    <div class="warning-box">Le compte centre est créé avec le statut <strong>«&nbsp;En attente »</strong>. Un administrateur doit valider votre inscription avant que vous puissiez vous connecter et publier des espaces.</div>
+</div>
+
+<h2 id="connexion">2.2 Connexion</h2>
+
+<div class="step"><div class="step-num">1</div><div class="step-content">Accéder à la page <strong>/login</strong></div></div>
+<div class="step"><div class="step-num">2</div><div class="step-content">Saisir votre adresse email et votre mot de passe</div></div>
+<div class="step"><div class="step-num">3</div><div class="step-content">Cliquer sur « Se connecter »</div></div>
+<div class="step"><div class="step-num">4</div><div class="step-content">Vous êtes redirigé automatiquement vers votre tableau de bord selon votre rôle</div></div>
+
+<div class="info-box">
+    Pour vous déconnecter, cliquez sur votre nom en haut à droite, puis sur « Se déconnecter ».
+</div>
+
+<!-- SECTION 3 -->
+<h1 id="espace-public" class="page-break">3. Espace public — Recherche d'espaces</h1>
+
+<h2 id="recherche">3.1 Recherche et filtres</h2>
+
+<p>La page d'accueil (<strong>/</strong>) permet de rechercher des espaces sans être connecté. Les 50 premiers résultats correspondants sont affichés, avec chargement progressif par défilement.</p>
+
+<table>
+    <tr><th>Filtre</th><th>Description</th></tr>
+    <tr><td>Recherche textuelle</td><td>Recherche dans le titre et la description des annonces</td></tr>
+    <tr><td>Surface minimale / maximale</td><td>Filtrer par surface en m²</td></tr>
+    <tr><td>Prix minimum / maximum</td><td>Filtrer par tarif journalier en €</td></tr>
+    <tr><td>Type d'emplacement</td><td>Boutique, bureau, restaurant, hall, extérieur, etc.</td></tr>
+    <tr><td>Dates de disponibilité</td><td>Période souhaitée pour la location</td></tr>
+</table>
+
+<div class="info-box">
+    Les 10 espaces les plus consultés sont mis en avant en bas de la page d'accueil.
+</div>
+
+<h2 id="carte">3.2 Recherche par carte interactive</h2>
+
+<p>La page <strong>/recherche-carte</strong> affiche une carte interactive avec tous les emplacements publiés. Cliquer sur un marqueur affiche les informations de l'espace et un lien vers sa fiche détail.</p>
+
+<h2 id="fiche-espace">3.3 Fiche détail d'un espace</h2>
+
+<p>La fiche d'un espace (<strong>/emplacement/{id}</strong>) présente :</p>
+<ul>
+    <li>Les photos de l'espace (galerie)</li>
+    <li>Le titre, la description, la surface et le type</li>
+    <li>Les tarifs (jour, semaine, mois) et la caution</li>
+    <li>Les équipements disponibles</li>
+    <li>La localisation précise</li>
+    <li>Les avis clients</li>
+</ul>
+<p>Un locataire connecté peut, depuis cette page, envoyer un message au centre ou effectuer une demande de réservation.</p>
+
+<!-- SECTION 4 -->
+<h1 id="espace-locataire" class="page-break">4. Espace Locataire</h1>
+
+<h2 id="loc-tableau-bord">4.1 Tableau de bord</h2>
+
+<p>Le tableau de bord (<strong>/dashboard/locataire</strong>) offre une vue d'ensemble de votre activité :</p>
+<ul>
+    <li>Statistiques : nombre total de réservations, répartition par statut</li>
+    <li>Réservations actives, à venir, passées</li>
+    <li>Les 10 dernières réservations</li>
+    <li>Les 5 dernières conversations</li>
+</ul>
+
+<h2 id="loc-reservations">4.2 Réservations</h2>
+
+<p>La page <strong>/dashboard/locataire/reservations</strong> liste toutes vos réservations, filtrables par statut.</p>
+
+<h3>Faire une demande de réservation</h3>
+<div class="step"><div class="step-num">1</div><div class="step-content">Depuis la fiche d'un espace, cliquer sur « Réserver »</div></div>
+<div class="step"><div class="step-num">2</div><div class="step-content">Sélectionner les dates de début et de fin</div></div>
+<div class="step"><div class="step-num">3</div><div class="step-content">Vérifier le récapitulatif du montant</div></div>
+<div class="step"><div class="step-num">4</div><div class="step-content">Confirmer la demande — elle passe au statut <span class="badge-status status-attente">En attente</span></div></div>
+
+<h3>Annuler une réservation</h3>
+<p>Vous pouvez annuler une réservation uniquement si elle est au statut <span class="badge-status status-attente">En attente</span> ou <span class="badge-status status-valide">Validée</span>. Depuis le détail de la réservation, cliquer sur « Annuler ma réservation ».</p>
+
+<h2 id="loc-favoris">4.3 Favoris</h2>
+
+<p>Depuis la fiche d'un espace, cliquer sur l'icône en forme de cœur pour ajouter l'espace à vos favoris. Retrouvez tous vos espaces favoris sur <strong>/dashboard/locataire/favoris</strong>.</p>
+
+<h2 id="loc-messages">4.4 Messagerie</h2>
+
+<p>La messagerie vous permet d'échanger directement avec les centres commerciaux.</p>
+
+<h3>Démarrer une conversation</h3>
+<div class="step"><div class="step-num">1</div><div class="step-content">Depuis la fiche d'un espace, cliquer sur « Contacter le centre »</div></div>
+<div class="step"><div class="step-num">2</div><div class="step-content">Saisir un objet et votre premier message</div></div>
+<div class="step"><div class="step-num">3</div><div class="step-content">Envoyer — la conversation est créée</div></div>
+
+<p>Depuis <strong>/dashboard/locataire/messages</strong>, consultez toutes vos conversations. Les messages non lus sont signalés. Vous pouvez archiver les conversations terminées.</p>
+
+<h2 id="loc-paiements">4.5 Paiements</h2>
+
+<p>La page <strong>/dashboard/locataire/paiements</strong> récapitule tous vos paiements avec les statistiques suivantes :</p>
+<ul>
+    <li>Nombre total de paiements</li>
+    <li>Montant total dépensé</li>
+    <li>Répartition par statut (accepté, en attente, remboursé, refusé)</li>
+    <li>Total remboursé</li>
+</ul>
+
+<h2 id="loc-documents">4.6 Documents</h2>
+
+<p>La page <strong>/dashboard/locataire/documents</strong> liste tous les documents liés à vos réservations (contrats, factures, devis), filtrables par type.</p>
+
+<h2 id="loc-profil">4.7 Profil</h2>
+
+<p>Depuis <strong>/dashboard/locataire/profil/modifier</strong>, vous pouvez :</p>
+<ul>
+    <li>Modifier vos informations personnelles (nom, email, téléphone, adresse, SIRET, type d'activité)</li>
+    <li>Ajouter ou supprimer une photo de profil (formats acceptés : JPEG, PNG, WebP — taille max : 5 Mo)</li>
+    <li>Changer votre mot de passe (minimum 8 caractères, confirmation requise)</li>
+</ul>
+
+<!-- SECTION 5 -->
+<h1 id="espace-centre" class="page-break">5. Espace Centre Commercial</h1>
+
+<h2 id="cc-tableau-bord">5.1 Tableau de bord</h2>
+
+<p>Le tableau de bord (<strong>/dashboard/centre</strong>) présente :</p>
+<ul>
+    <li>Les demandes de réservation en attente (action requise)</li>
+    <li>Les derniers messages non lus</li>
+    <li>Statistiques du mois : réservations en attente, chiffre d'affaires mensuel, nombre d'emplacements actifs, note moyenne</li>
+</ul>
+
+<h2 id="cc-emplacements">5.2 Gestion des emplacements</h2>
+
+<p>Accès via <strong>/dashboard/centre/emplacements</strong>. Liste tous vos espaces avec filtre actif/inactif.</p>
+
+<h3>Créer un emplacement</h3>
+<div class="step"><div class="step-num">1</div><div class="step-content">Cliquer sur « Ajouter un emplacement »</div></div>
+<div class="step"><div class="step-num">2</div><div class="step-content">Renseigner : titre, description, surface, type, localisation, équipements</div></div>
+<div class="step"><div class="step-num">3</div><div class="step-content">Définir les tarifs (jour, semaine, mois) et la caution</div></div>
+<div class="step"><div class="step-num">4</div><div class="step-content">Ajouter des photos (jusqu'à 10, formats : JPG/PNG/WebP, max 5 Mo chacune)</div></div>
+<div class="step"><div class="step-num">5</div><div class="step-content">Enregistrer — l'espace est créé</div></div>
+
+<h3>Gérer les périodes d'indisponibilité</h3>
+<p>Depuis la fiche détail d'un emplacement, ajoutez des périodes durant lesquelles l'espace n'est pas disponible à la réservation (congés, travaux, etc.).</p>
+
+<div class="warning-box">
+    Un emplacement ne peut pas être supprimé s'il possède des réservations actives, validées ou en cours.
+</div>
+
+<h2 id="cc-reservations">5.3 Gestion des réservations</h2>
+
+<p>La page <strong>/dashboard/centre/reservations</strong> liste toutes les réservations reçues, filtrables par statut.</p>
+
+<h3>Traiter une demande de réservation</h3>
+
+<div class="role-block">
+    <h3>Valider une demande</h3>
+    <div class="step"><div class="step-num">1</div><div class="step-content">Ouvrir le détail de la réservation au statut <span class="badge-status status-attente">En attente</span></div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-content">Cliquer sur « Valider la réservation »</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-content">La réservation passe au statut <span class="badge-status status-valide">Validée</span></div></div>
+</div>
+
+<div class="role-block">
+    <h3>Refuser une demande</h3>
+    <div class="step"><div class="step-num">1</div><div class="step-content">Ouvrir le détail de la réservation au statut <span class="badge-status status-attente">En attente</span></div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-content">Cliquer sur « Refuser la réservation »</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-content">Saisir un motif de refus (obligatoire)</div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-content">La réservation passe au statut <span class="badge-status status-refuse">Refusée</span></div></div>
+</div>
+
+<h2 id="cc-avis">5.4 Avis clients</h2>
+
+<p>La page <strong>/dashboard/centre/avis</strong> liste tous les avis laissés sur vos espaces avec les statistiques : note globale moyenne, taux de publication, taux de réponse.</p>
+
+<table>
+    <tr><th>Action</th><th>Description</th></tr>
+    <tr><td>Répondre à un avis</td><td>Saisir une réponse publique qui sera visible par tous</td></tr>
+    <tr><td>Modérer un avis</td><td>Publier ou dépublier un avis selon votre modération</td></tr>
+</table>
+
+<p>Filtres disponibles : tous / publiés / non publiés / avec réponse / sans réponse.</p>
+
+<h2 id="cc-messages">5.5 Messagerie</h2>
+
+<p>La messagerie centre (<strong>/dashboard/centre/messages</strong>) fonctionne de la même manière que côté locataire. Les conversations sont initiées par les locataires. Vous pouvez répondre, archiver et désarchiver les conversations.</p>
+
+<h2 id="cc-paiements">5.6 Paiements</h2>
+
+<p>La page <strong>/dashboard/centre/paiements</strong> présente un récapitulatif financier :</p>
+<ul>
+    <li>Chiffre d'affaires total</li>
+    <li>Total des commissions de la plateforme</li>
+    <li>Montant net à recevoir</li>
+    <li>Paiements en attente et remboursements</li>
+</ul>
+
+<h2 id="cc-profil">5.7 Profil</h2>
+
+<p>Depuis <strong>/dashboard/centre/profil/modifier</strong>, modifiez les informations de votre centre (nom, email, téléphone, adresse, TVA, IBAN, description), votre photo de profil ou votre mot de passe.</p>
+
+<!-- SECTION 6 -->
+<h1 id="espace-admin" class="page-break">6. Espace Administrateur</h1>
+
+<p>L'espace administrateur (<strong>/admin</strong>) permet la supervision globale de la plateforme.</p>
+
+<table>
+    <tr><th>Section</th><th>Fonctionnalités</th></tr>
+    <tr>
+        <td><strong>Tableau de bord</strong></td>
+        <td>Statistiques globales : nombre total d'utilisateurs, de centres, de réservations. Dernières inscriptions et dernières réservations.</td>
+    </tr>
+    <tr>
+        <td><strong>Gestion Locataires</strong><br><small>/admin/locataires</small></td>
+        <td>Lister tous les locataires (filtre actif/inactif), activer/désactiver un compte, supprimer un compte, réinitialiser le mot de passe.</td>
+    </tr>
+    <tr>
+        <td><strong>Gestion Centres</strong><br><small>/admin/centres</small></td>
+        <td>Lister tous les centres (filtre actif/inactif), activer ou désactiver un centre (validation des inscriptions), supprimer un compte, réinitialiser le mot de passe.</td>
+    </tr>
+    <tr>
+        <td><strong>Réservations</strong><br><small>/admin/reservations</small></td>
+        <td>Vue globale de toutes les réservations de la plateforme, filtrables par statut.</td>
+    </tr>
+</table>
+
+<div class="info-box">
+    La validation des centres commerciaux se fait depuis <strong>/admin/centres</strong> en activant les comptes au statut « En attente ».
+</div>
+
+<div class="warning-box">
+    Il est impossible de supprimer un compte (locataire ou centre) s'il possède des réservations actives.
+</div>
+
+<!-- SECTION 7 -->
+<h1 id="statuts" class="page-break">7. Référentiel des statuts de réservation</h1>
+
+<table>
+    <tr><th>Statut</th><th>Signification</th><th>Actions possibles</th></tr>
+    <tr>
+        <td><span class="badge-status status-attente">En attente</span></td>
+        <td>La demande a été soumise par le locataire et attend une réponse du centre</td>
+        <td>Centre : Valider ou Refuser — Locataire : Annuler</td>
+    </tr>
+    <tr>
+        <td><span class="badge-status status-valide">Validée</span></td>
+        <td>Le centre a accepté la demande, en attente du début de la location</td>
+        <td>Locataire : Annuler</td>
+    </tr>
+    <tr>
+        <td><span class="badge-status status-cours">En cours</span></td>
+        <td>La location est actuellement active (entre la date de début et de fin)</td>
+        <td>Aucune action (consultation uniquement)</td>
+    </tr>
+    <tr>
+        <td><span class="badge-status status-termine">Terminée</span></td>
+        <td>La location s'est terminée normalement</td>
+        <td>Locataire : Laisser un avis</td>
+    </tr>
+    <tr>
+        <td><span class="badge-status status-refuse">Refusée</span></td>
+        <td>Le centre a refusé la demande (motif obligatoire)</td>
+        <td>Consultation du motif</td>
+    </tr>
+    <tr>
+        <td><span class="badge-status status-annule">Annulée</span></td>
+        <td>Le locataire a annulé la demande ou la réservation validée</td>
+        <td>Consultation uniquement</td>
+    </tr>
+</table>
+
+</body>
+</html>
