@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; font-size: 13px; color: #333; line-height: 1.5; }
+    .header { background: #1a1a1a; color: white; padding: 30px; margin-bottom: 30px; }
+    .header h1 { font-size: 28px; font-weight: 700; margin-bottom: 4px; }
+    .header .subtitle { font-size: 14px; opacity: 0.8; }
+    .facture-meta { display: flex; justify-content: space-between; margin-bottom: 30px; padding: 0 20px; }
+    .meta-block h3 { font-size: 12px; text-transform: uppercase; color: #999; letter-spacing: 0.5px; margin-bottom: 6px; }
+    .meta-block p { font-size: 14px; font-weight: 600; color: #1a1a1a; }
+    .meta-block .small { font-size: 13px; font-weight: 400; color: #555; }
+    .parties { display: flex; gap: 40px; margin: 0 20px 30px; }
+    .partie { flex: 1; background: #f8f9fa; border-radius: 6px; padding: 16px; }
+    .partie h3 { font-size: 12px; text-transform: uppercase; color: #999; margin-bottom: 8px; }
+    .partie p { font-size: 13px; color: #333; margin-bottom: 2px; }
+    .partie .name { font-size: 15px; font-weight: 700; color: #1a1a1a; }
+    .section { margin: 0 20px 24px; }
+    .section h2 { font-size: 16px; font-weight: 700; color: #1a1a1a; border-bottom: 2px solid #e5e5e5; padding-bottom: 8px; margin-bottom: 14px; }
+    .detail-table { width: 100%; border-collapse: collapse; }
+    .detail-table th { background: #f8f9fa; padding: 10px 12px; text-align: left; font-size: 12px; font-weight: 600; text-transform: uppercase; color: #666; border-bottom: 1px solid #e5e5e5; }
+    .detail-table td { padding: 10px 12px; border-bottom: 1px solid #f0f0f0; font-size: 13px; }
+    .totals { margin: 0 20px 30px; }
+    .total-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f0f0f0; font-size: 14px; }
+    .total-row.final { font-size: 17px; font-weight: 700; border-bottom: none; border-top: 2px solid #1a1a1a; padding-top: 12px; margin-top: 4px; }
+    .total-row span:last-child { font-weight: 600; }
+    .footer { background: #f8f9fa; padding: 20px; text-align: center; font-size: 11px; color: #999; margin-top: 40px; border-top: 1px solid #e5e5e5; }
+    .badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; background: #d4edda; color: #155724; }
+</style>
+</head>
+<body>
+
+<div class="header">
+    <h1>Références Événements</h1>
+    <div class="subtitle">Plateforme de location d'emplacements événementiels</div>
+</div>
+
+<div class="facture-meta">
+    <div class="meta-block">
+        <h3>Facture</h3>
+        <p>{{ numero_facture }}</p>
+        <p class="small">Émise le {{ date_generation|date('d/m/Y') }}</p>
+    </div>
+    <div class="meta-block" style="text-align:right;">
+        <h3>Statut</h3>
+        <span class="badge">Payée</span>
+        {% if reservation.datePaiement %}
+        <p class="small" style="margin-top:4px;">Paiement le {{ reservation.datePaiement|date('d/m/Y') }}</p>
+        {% endif %}
+    </div>
+</div>
+
+<div class="parties">
+    <div class="partie">
+        <h3>Locataire</h3>
+        <p class="name">{{ reservation.locataire.nom }}</p>
+        <p>{{ reservation.locataire.email }}</p>
+        {% if reservation.locataire.telephone %}<p>{{ reservation.locataire.telephone }}</p>{% endif %}
+        {% if reservation.locataire.adresseFacturation %}<p>{{ reservation.locataire.adresseFacturation }}</p>{% endif %}
+        {% if reservation.locataire.ville %}<p>{{ reservation.locataire.codePostal }} {{ reservation.locataire.ville }}</p>{% endif %}
+    </div>
+    <div class="partie">
+        <h3>Prestataire</h3>
+        <p class="name">{{ reservation.emplacement.centreCommercial.nomCentre }}</p>
+        <p>{{ reservation.emplacement.centreCommercial.email }}</p>
+        <p>{{ reservation.emplacement.centreCommercial.adresse }}</p>
+        <p>{{ reservation.emplacement.centreCommercial.codePostal }} {{ reservation.emplacement.centreCommercial.ville }}</p>
+        {% if reservation.emplacement.centreCommercial.siret %}<p>SIRET : {{ reservation.emplacement.centreCommercial.siret }}</p>{% endif %}
+    </div>
+</div>
+
+<div class="section">
+    <h2>Détail de la réservation</h2>
+    <table class="detail-table">
+        <thead>
+            <tr>
+                <th>Désignation</th>
+                <th>Période</th>
+                <th style="text-align:right;">Montant HT</th>
+                <th style="text-align:right;">TVA 20%</th>
+                <th style="text-align:right;">Montant TTC</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <strong>{{ reservation.emplacement.titreAnnonce }}</strong><br>
+                    <span style="color:#666;font-size:12px;">{{ reservation.emplacement.typeEmplacement|capitalize }} • {{ reservation.emplacement.surface }} m²</span>
+                </td>
+                <td>{{ reservation.dateDebut|date('d/m/Y') }} → {{ reservation.dateFin|date('d/m/Y') }}</td>
+                <td style="text-align:right;">{{ (reservation.montantLocation / 1.20)|number_format(2, ',', ' ') }} €</td>
+                <td style="text-align:right;">{{ (reservation.montantLocation - reservation.montantLocation / 1.20)|number_format(2, ',', ' ') }} €</td>
+                <td style="text-align:right;">{{ reservation.montantLocation }} €</td>
+            </tr>
+            <tr>
+                <td>Commission plateforme (25%)</td>
+                <td>—</td>
+                <td style="text-align:right;">{{ (reservation.montantCommission / 1.20)|number_format(2, ',', ' ') }} €</td>
+                <td style="text-align:right;">{{ (reservation.montantCommission - reservation.montantCommission / 1.20)|number_format(2, ',', ' ') }} €</td>
+                <td style="text-align:right;">{{ reservation.montantCommission }} €</td>
+            </tr>
+            {% if reservation.cautionVersee and reservation.cautionVersee > 0 %}
+            <tr>
+                <td>Caution (remboursable en fin de location)</td>
+                <td>—</td>
+                <td style="text-align:right;" colspan="3">{{ reservation.cautionVersee }} €</td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+
+<div class="totals">
+    <div class="total-row"><span>Sous-total HT</span><span>{{ ((reservation.montantLocation + reservation.montantCommission) / 1.20)|number_format(2, ',', ' ') }} €</span></div>
+    <div class="total-row"><span>TVA 20%</span><span>{{ ((reservation.montantLocation + reservation.montantCommission) - (reservation.montantLocation + reservation.montantCommission) / 1.20)|number_format(2, ',', ' ') }} €</span></div>
+    {% if reservation.cautionVersee and reservation.cautionVersee > 0 %}
+    <div class="total-row"><span>Caution</span><span>{{ reservation.cautionVersee }} €</span></div>
+    {% endif %}
+    <div class="total-row final"><span>TOTAL TTC</span><span>{{ reservation.montantTotal }} €</span></div>
+</div>
+
+{% if reservation.paiement %}
+<div class="section">
+    <h2>Informations de paiement</h2>
+    <p>Paiement par carte bancaire — Transaction : <code>{{ reservation.paiement.transactionId }}</code></p>
+</div>
+{% endif %}
+
+<div class="footer">
+    <p>Références Événements — accueil@refevent.fr</p>
+    <p>Document généré automatiquement le {{ date_generation|date('d/m/Y à H:i') }}</p>
+</div>
+
+</body>
+</html>

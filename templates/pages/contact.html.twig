@@ -261,7 +261,7 @@
                     <div class="info-icon">📧</div>
                     <div class="info-text">
                         <h3>Email</h3>
-                        <p><a href="mailto:contact@references-evenements.fr">contact@references-evenements.fr</a></p>
+                        <p><a href="mailto:accueil@refevent.fr">accueil@refevent.fr</a></p>
                     </div>
                 </div>
 
@@ -298,71 +298,38 @@
             <div class="contact-form">
                 <h2>Envoyez-nous un message</h2>
 
-                {% if success %}
-                    <div class="alert alert-success">
-                        ✓ Votre message a été envoyé avec succès ! Nous vous répondrons dans les plus brefs délais.
+                {% for message in app.flashes('success') %}
+                    <div style="text-align:center; padding: 30px 20px; background:#f0fdf4; border-radius:12px; margin-bottom:24px; border:1px solid #bbf7d0;">
+                        <div style="font-size: 56px; margin-bottom: 12px;">✅</div>
+                        <h3 style="font-size: 20px; font-weight: 700; color: #166534; margin-bottom: 8px;">Message envoyé !</h3>
+                        <p style="color: #555; font-size: 15px; line-height: 1.6;">{{ message }}</p>
                     </div>
-                {% endif %}
+                {% endfor %}
 
                 {% if error %}
-                    <div class="alert alert-error">
-                        ✗ {{ error }}
+                    <div class="alert alert-error">✗ {{ error }}</div>
+                {% endif %}
+
+                <form method="POST" id="formContact">
+                    <input type="hidden" name="_token" value="{{ csrf_token('contact_form') }}">
+                    <div class="form-group">
+                        <label class="form-label">Nom complet <span class="required">*</span></label>
+                        <input type="text" name="nom" class="form-control" placeholder="Votre nom et prénom" required>
                     </div>
-                {% endif %}
-
-                {% if not success %}
-                    <form method="POST">
-                        <div class="form-group">
-                            <label class="form-label">
-                                Nom complet <span class="required">*</span>
-                            </label>
-                            <input type="text"
-                                   name="nom"
-                                   class="form-control"
-                                   placeholder="Votre nom et prénom"
-                                   value="{{ app.request.get('nom') }}"
-                                   required>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">
-                                Adresse email <span class="required">*</span>
-                            </label>
-                            <input type="email"
-                                   name="email"
-                                   class="form-control"
-                                   placeholder="votre@email.com"
-                                   value="{{ app.request.get('email') }}"
-                                   required>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">
-                                Sujet <span class="required">*</span>
-                            </label>
-                            <input type="text"
-                                   name="sujet"
-                                   class="form-control"
-                                   placeholder="Objet de votre message"
-                                   value="{{ app.request.get('sujet') }}"
-                                   required>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">
-                                Message <span class="required">*</span>
-                            </label>
-                            <textarea name="message"
-                                      class="form-control"
-                                      placeholder="Décrivez votre demande en détail..."
-                                      required>{{ app.request.get('message') }}</textarea>
-                        </div>
-
-                        <button type="submit" class="btn-submit">
-                            Envoyer le message
-                        </button>
-                    </form>
-                {% endif %}
+                    <div class="form-group">
+                        <label class="form-label">Adresse email <span class="required">*</span></label>
+                        <input type="email" name="email" class="form-control" placeholder="votre@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Sujet <span class="required">*</span></label>
+                        <input type="text" name="sujet" class="form-control" placeholder="Objet de votre message" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Message <span class="required">*</span></label>
+                        <textarea name="message" class="form-control" placeholder="Décrivez votre demande en détail..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn-submit">Envoyer le message</button>
+                </form>
             </div>
         </div>
 
@@ -413,7 +380,7 @@
                 <div class="faq-question">Vous n'avez pas trouvé la réponse à votre question ?</div>
                 <div class="faq-answer">
                     N'hésitez pas à nous contacter via le formulaire ci-dessus ou par email à
-                    <a href="mailto:contact@references-evenements.fr">contact@references-evenements.fr</a>.
+                    <a href="mailto:accueil@refevent.fr">accueil@refevent.fr</a>.
                     Nous vous répondrons sous 24h ouvrées.
                 </div>
             </div>

@@ -1,0 +1,31 @@
+{% extends 'emails/base_email.html.twig' %}
+
+{% block content %}
+<h2>Information sur votre réservation</h2>
+<p>Bonjour <strong>{{ locataire.nom }}</strong>,</p>
+<p>Nous vous informons que votre demande de réservation a été <strong>refusée</strong> par le centre commercial.</p>
+
+<div class="info-box">
+    <div class="info-row">
+        <span class="info-label">Emplacement</span>
+        <span class="info-value">{{ reservation.emplacement.titreAnnonce }}</span>
+    </div>
+    <div class="info-row">
+        <span class="info-label">Dates demandées</span>
+        <span class="info-value">{{ reservation.dateDebut|date('d/m/Y') }} → {{ reservation.dateFin|date('d/m/Y') }}</span>
+    </div>
+    {% if reservation.motifRefus %}
+    <div class="info-row">
+        <span class="info-label">Motif du refus</span>
+        <span class="info-value">{{ reservation.motifRefus }}</span>
+    </div>
+    {% endif %}
+    <div class="info-row">
+        <span class="info-label">Remboursement</span>
+        <span class="info-value"><span class="badge badge-green">Remboursement automatique en cours</span></span>
+    </div>
+</div>
+
+<p>Votre paiement de <strong>{{ reservation.montantTotal }} €</strong> sera remboursé sous 5 à 10 jours ouvrés selon votre banque.</p>
+<p>N'hésitez pas à rechercher d'autres emplacements disponibles sur notre plateforme.</p>
+{% endblock %}

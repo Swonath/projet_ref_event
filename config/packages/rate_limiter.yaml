@@ -1,0 +1,13 @@
+framework:
+    rate_limiter:
+        # Max 5 tentatives de login par IP sur 15 minutes
+        login_limiter:
+            policy: sliding_window
+            limit: 5
+            interval: '15 minutes'
+
+        # Max 3 envois de formulaire contact par IP par heure
+        contact_limiter:
+            policy: sliding_window
+            limit: 3
+            interval: '1 hour'

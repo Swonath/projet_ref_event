@@ -1,0 +1,157 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ centre.nomCentre }} - Références Événements{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/homepage.css') }}">
+    <style>
+        .centre-hero {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+        .centre-hero-avatar {
+            width: 100px; height: 100px; border-radius: 50%;
+            background: #444; margin: 0 auto 20px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 36px; font-weight: 700; color: white;
+            overflow: hidden;
+        }
+        .centre-hero-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .centre-hero h1 { font-size: 36px; font-weight: 700; margin: 0 0 8px; }
+        .centre-hero p { font-size: 16px; opacity: 0.8; margin: 4px 0; }
+        .centre-container { max-width: 1100px; margin: 0 auto; padding: 40px 20px; }
+        .centre-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 40px; }
+        .info-card { background: white; border-radius: 12px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .info-card h3 { font-size: 18px; font-weight: 700; color: #1a1a1a; margin: 0 0 16px; }
+        .info-row { display: flex; gap: 12px; margin-bottom: 12px; font-size: 15px; color: #555; }
+        .info-row strong { color: #1a1a1a; min-width: 100px; }
+        .section-title { font-size: 24px; font-weight: 700; color: #1a1a1a; margin: 0 0 24px; }
+        .emplacements-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; }
+        .emplacement-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: transform 0.2s, box-shadow 0.2s; text-decoration: none; color: inherit; display: block; }
+        .emplacement-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
+        .emplacement-img { height: 200px; background: #f5f5f5; overflow: hidden; position: relative; }
+        .emplacement-img img { width: 100%; height: 100%; object-fit: cover; }
+        .emplacement-img-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 48px; }
+        .emplacement-body { padding: 20px; }
+        .emplacement-body h4 { font-size: 18px; font-weight: 600; margin: 0 0 8px; color: #1a1a1a; }
+        .emplacement-body p { font-size: 14px; color: #666; margin: 4px 0; }
+        .emplacement-price { font-size: 20px; font-weight: 700; color: #1a1a1a; margin-top: 12px; }
+        .btn-reserver { display: inline-block; background: #1a1a1a; color: white; padding: 10px 20px; border-radius: 6px; text-decoration: none; font-size: 14px; font-weight: 600; margin-top: 12px; }
+        .btn-retour { display: inline-flex; align-items: center; gap: 8px; background: white; color: #1a1a1a; border: 2px solid #1a1a1a; padding: 10px 20px; border-radius: 6px; text-decoration: none; font-weight: 600; margin-bottom: 24px; }
+        .empty-state { text-align: center; padding: 60px; background: white; border-radius: 12px; color: #666; }
+        .stars { display: inline-flex; gap: 2px; }
+        .star { font-size: 18px; line-height: 1; }
+        .star-full { color: #f59e0b; }
+        .star-half { color: #f59e0b; }
+        .star-empty { color: #d1d5db; }
+        .note-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.15); border-radius: 20px; padding: 6px 14px; margin-top: 10px; }
+        .note-badge-card { display: inline-flex; align-items: center; gap: 5px; background: #fffbeb; border-radius: 6px; padding: 3px 8px; margin-top: 6px; font-size: 13px; }
+        @media (max-width: 768px) { .centre-info-grid { grid-template-columns: 1fr; } .emplacements-grid { grid-template-columns: 1fr; } }
+    </style>
+{% endblock %}
+
+{% macro etoiles(note) %}
+    {% set plein = note|round(0, 'floor') %}
+    {% set demi = (note - plein) >= 0.5 ? 1 : 0 %}
+    {% set vide = 5 - plein - demi %}
+    <span class="stars">
+        {% if plein > 0 %}{% for i in 1..plein %}<span class="star star-full">★</span>{% endfor %}{% endif %}
+        {% if demi %}<span class="star star-half">⯨</span>{% endif %}
+        {% if vide > 0 %}{% for i in 1..vide %}<span class="star star-empty">★</span>{% endfor %}{% endif %}
+    </span>
+{% endmacro %}
+
+{% block body %}
+    {% include 'partials/_navbar.html.twig' %}
+
+    <div class="centre-hero">
+        <div class="centre-hero-avatar">
+            {% if centre.photoProfile %}
+                <img src="{{ asset('uploads/profiles/' ~ centre.photoProfile) }}" alt="{{ centre.nomCentre }}">
+            {% else %}
+                {{ centre.nomCentre|slice(0, 2)|upper }}
+            {% endif %}
+        </div>
+        <h1>{{ centre.nomCentre }}</h1>
+        <p>📍 {{ centre.adresse }}, {{ centre.codePostal }} {{ centre.ville }}</p>
+        <p>{{ emplacements|length }} emplacement{% if emplacements|length > 1 %}s{% endif %} disponible{% if emplacements|length > 1 %}s{% endif %}</p>
+        {% if statsCentre.count > 0 %}
+            <div class="note-badge">
+                {{ _self.etoiles(statsCentre.moyenne) }}
+                <span style="font-size:16px; font-weight:700;">{{ statsCentre.moyenne }}/5</span>
+                <span style="font-size:13px; opacity:0.8;">({{ statsCentre.count }} avis)</span>
+            </div>
+        {% else %}
+            <div class="note-badge">
+                <span style="font-size:13px; opacity:0.7;">Pas encore d'avis</span>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="centre-container">
+        <a href="javascript:history.back()" class="btn-retour">← Retour</a>
+
+        <div class="centre-info-grid">
+            <div class="info-card">
+                <h3>Informations</h3>
+                <div class="info-row"><strong>Adresse</strong> {{ centre.adresse }}</div>
+                <div class="info-row"><strong>Ville</strong> {{ centre.codePostal }} {{ centre.ville }}</div>
+                {% if centre.telephone %}
+                    <div class="info-row"><strong>Téléphone</strong> {{ centre.telephone }}</div>
+                {% endif %}
+            </div>
+            {% if centre.description %}
+            <div class="info-card">
+                <h3>À propos</h3>
+                <p style="font-size:15px; color:#555; line-height:1.7;">{{ centre.description }}</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <h2 class="section-title">Emplacements disponibles</h2>
+
+        {% if emplacements is empty %}
+            <div class="empty-state">
+                <p style="font-size:18px;">Aucun emplacement disponible pour le moment.</p>
+            </div>
+        {% else %}
+            <div class="emplacements-grid">
+                {% for emplacement in emplacements %}
+                    <a href="{{ path('emplacement_detail', {id: emplacement.id}) }}" class="emplacement-card">
+                        <div class="emplacement-img">
+                            {% if emplacement.photos|length > 0 %}
+                                <img src="{{ asset('uploads/photos/' ~ emplacement.photos[0].cheminFichier) }}" alt="{{ emplacement.titreAnnonce }}">
+                            {% else %}
+                                <div class="emplacement-img-placeholder">🏪</div>
+                            {% endif %}
+                        </div>
+                        <div class="emplacement-body">
+                            <h4>{{ emplacement.titreAnnonce }}</h4>
+                            <p>{{ emplacement.typeEmplacement|capitalize }} • {{ emplacement.surface }} m²</p>
+                            {% if emplacement.description %}
+                                <p>{{ emplacement.description|slice(0, 80) }}{% if emplacement.description|length > 80 %}…{% endif %}</p>
+                            {% endif %}
+                            {% set stats = statsEmplacements[emplacement.id] ?? null %}
+                            {% if stats and stats.count > 0 %}
+                                <div class="note-badge-card">
+                                    {{ _self.etoiles(stats.moyenne) }}
+                                    <strong>{{ stats.moyenne }}/5</strong>
+                                    <span style="color:#999;">({{ stats.count }})</span>
+                                </div>
+                            {% endif %}
+                            <div class="emplacement-price">
+                                {{ (emplacement.tarifJour * 1.25 * 1.20)|number_format(2, ',', ' ') }} €/jour
+                            </div>
+                            <span class="btn-reserver">Voir les détails</span>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    {% include 'partials/_footer.html.twig' %}
+{% endblock %}

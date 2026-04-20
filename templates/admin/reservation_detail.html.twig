@@ -1,0 +1,212 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Réservation #{{ reservation.id }} - Admin{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
+    <style>
+        body { background: #f8f9fa; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .admin-container { max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
+        .admin-header { background: white; border-radius: 12px; padding: 24px 30px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+        .admin-header h1 { font-size: 26px; font-weight: 700; color: #1a1a1a; margin: 0; }
+        .admin-nav { background: white; border-radius: 12px; padding: 16px 20px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); display: flex; gap: 10px; flex-wrap: wrap; }
+        .admin-nav-link { padding: 10px 20px; border-radius: 8px; background: #f8f9fa; color: #1a1a1a; text-decoration: none; font-weight: 600; font-size: 14px; transition: all 0.2s; }
+        .admin-nav-link:hover, .admin-nav-link.active { background: #6366f1; color: white; }
+        .card { background: white; border-radius: 12px; padding: 28px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .card h2 { font-size: 18px; font-weight: 700; color: #1a1a1a; margin: 0 0 20px; padding-bottom: 14px; border-bottom: 1px solid #f0f0f0; }
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .info-item label { display: block; font-size: 12px; color: #999; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+        .info-item span { font-size: 15px; color: #1a1a1a; font-weight: 500; }
+        .status-badge { display: inline-block; padding: 5px 14px; border-radius: 20px; font-size: 13px; font-weight: 600; }
+        .status-badge.en_attente { background: #fff3cd; color: #856404; }
+        .status-badge.validee { background: #d4edda; color: #155724; }
+        .status-badge.en_cours { background: #cce5ff; color: #004085; }
+        .status-badge.terminee { background: #e2e3e5; color: #383d41; }
+        .status-badge.refusee, .status-badge.annulee { background: #f8d7da; color: #721c24; }
+        .status-badge.rembourse { background: #d4edda; color: #155724; }
+        .actions-zone { display: flex; gap: 12px; flex-wrap: wrap; }
+        .btn { padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 600; border: none; cursor: pointer; text-decoration: none; display: inline-block; transition: all 0.2s; }
+        .btn-danger { background: #dc3545; color: white; }
+        .btn-danger:hover { background: #c82333; }
+        .btn-warning { background: #ffc107; color: #1a1a1a; }
+        .btn-warning:hover { background: #e0a800; }
+        .btn-secondary { background: #6c757d; color: white; }
+        .btn-secondary:hover { background: #545b62; }
+        .btn-primary { background: #6366f1; color: white; }
+        .btn-primary:hover { background: #4f46e5; }
+        .amount-box { background: #f8f9fa; border-radius: 8px; padding: 16px; }
+        .amount-row { display: flex; justify-content: space-between; padding: 6px 0; font-size: 14px; border-bottom: 1px solid #e9ecef; }
+        .amount-row:last-child { border-bottom: none; font-weight: 700; font-size: 16px; }
+        .amount-row span:last-child { font-weight: 600; }
+        .motif-box { background: #fff3cd; border-left: 4px solid #ffc107; padding: 12px 16px; border-radius: 4px; font-size: 14px; color: #856404; margin-top: 12px; }
+        .alert { padding: 12px 16px; border-radius: 8px; margin-bottom: 16px; font-size: 14px; }
+        .alert-success { background: #d4edda; color: #155724; }
+        .alert-error { background: #f8d7da; color: #721c24; }
+        .alert-warning { background: #fff3cd; color: #856404; }
+        select.statut-select { padding: 8px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
+        @media (max-width: 768px) { .info-grid { grid-template-columns: 1fr; } .actions-zone { flex-direction: column; } }
+    </style>
+{% endblock %}
+
+{% block body %}
+    {% include 'partials/_navbar.html.twig' %}
+
+    <div class="admin-container">
+        <!-- Flash messages -->
+        {% for type, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ type == 'success' ? 'success' : (type == 'warning' ? 'warning' : 'error') }}">{{ message }}</div>
+            {% endfor %}
+        {% endfor %}
+
+        <div class="admin-header">
+            <h1>Réservation #{{ reservation.id }}</h1>
+            <span class="status-badge {{ reservation.statut.value }}">{{ reservation.statutLibelle }}</span>
+        </div>
+
+        <div class="admin-nav">
+            <a href="{{ path('admin_dashboard') }}" class="admin-nav-link">Vue d'ensemble</a>
+            <a href="{{ path('admin_locataires') }}" class="admin-nav-link">Locataires</a>
+            <a href="{{ path('admin_centres') }}" class="admin-nav-link">Centres</a>
+            <a href="{{ path('admin_reservations') }}" class="admin-nav-link active">Réservations</a>
+            <a href="{{ path('app_home_page') }}" class="admin-nav-link">Retour au site</a>
+        </div>
+
+        <!-- Parties prenantes -->
+        <div class="card">
+            <h2>Parties prenantes</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <label>Locataire</label>
+                    <span>{{ reservation.locataire.nom }}</span>
+                </div>
+                <div class="info-item">
+                    <label>Email locataire</label>
+                    <span><a href="mailto:{{ reservation.locataire.email }}">{{ reservation.locataire.email }}</a></span>
+                </div>
+                <div class="info-item">
+                    <label>Centre commercial</label>
+                    <span>{{ reservation.emplacement.centreCommercial.nomCentre }}</span>
+                </div>
+                <div class="info-item">
+                    <label>Email centre</label>
+                    <span><a href="mailto:{{ reservation.emplacement.centreCommercial.email }}">{{ reservation.emplacement.centreCommercial.email }}</a></span>
+                </div>
+                <div class="info-item">
+                    <label>Emplacement</label>
+                    <span>{{ reservation.emplacement.titreAnnonce }}</span>
+                </div>
+                <div class="info-item">
+                    <label>Type</label>
+                    <span>{{ reservation.emplacement.typeEmplacement|capitalize }} • {{ reservation.emplacement.surface }} m²</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dates & montants -->
+        <div class="card">
+            <h2>Dates & Montants</h2>
+            <div class="info-grid" style="margin-bottom:20px;">
+                <div class="info-item">
+                    <label>Date début</label>
+                    <span>{{ reservation.dateDebut|date('d/m/Y') }}</span>
+                </div>
+                <div class="info-item">
+                    <label>Date fin</label>
+                    <span>{{ reservation.dateFin|date('d/m/Y') }}</span>
+                </div>
+                <div class="info-item">
+                    <label>Demande créée le</label>
+                    <span>{{ reservation.dateDemande|date('d/m/Y H:i') }}</span>
+                </div>
+                {% if reservation.dateValidation %}
+                <div class="info-item">
+                    <label>Validée / refusée le</label>
+                    <span>{{ reservation.dateValidation|date('d/m/Y H:i') }}</span>
+                </div>
+                {% endif %}
+            </div>
+            <div class="amount-box">
+                <div class="amount-row"><span>Location (HT)</span><span>{{ reservation.montantLocation }} €</span></div>
+                <div class="amount-row"><span>Commission Références Événements (25%)</span><span>{{ reservation.montantCommission }} €</span></div>
+                {% if reservation.cautionVersee and reservation.cautionVersee > 0 %}
+                <div class="amount-row"><span>Caution</span><span>{{ reservation.cautionVersee }} €</span></div>
+                {% endif %}
+                <div class="amount-row"><span>Total débité</span><span>{{ reservation.montantTotal }} €</span></div>
+            </div>
+            {% if reservation.motifRefus %}
+                <div class="motif-box">Motif de refus : {{ reservation.motifRefus }}</div>
+            {% endif %}
+        </div>
+
+        <!-- Paiement -->
+        {% if reservation.paiement %}
+        <div class="card">
+            <h2>Paiement Stripe</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <label>Transaction ID</label>
+                    <span style="font-family:monospace;font-size:13px;">{{ reservation.paiement.transactionId }}</span>
+                </div>
+                <div class="info-item">
+                    <label>Statut paiement</label>
+                    <span class="status-badge {{ reservation.paiement.statut }}">{{ reservation.paiement.statut|upper }}</span>
+                </div>
+                <div class="info-item">
+                    <label>Montant</label>
+                    <span>{{ reservation.paiement.montant }} €</span>
+                </div>
+                <div class="info-item">
+                    <label>Date paiement</label>
+                    <span>{{ reservation.paiement.datePaiement|date('d/m/Y H:i') }}</span>
+                </div>
+                {% if reservation.paiement.dateRemboursement %}
+                <div class="info-item">
+                    <label>Remboursé le</label>
+                    <span>{{ reservation.paiement.dateRemboursement|date('d/m/Y H:i') }}</span>
+                </div>
+                <div class="info-item">
+                    <label>Montant remboursé</label>
+                    <span>{{ reservation.paiement.montantRembourse }} €</span>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Actions admin -->
+        <div class="card">
+            <h2>Actions administrateur</h2>
+            <div class="actions-zone">
+
+                <!-- Forcer un statut -->
+                <form method="POST" action="{{ path('admin_reservation_forcer_statut', {id: reservation.id}) }}" style="display:flex;gap:8px;align-items:center;">
+                    <input type="hidden" name="_token" value="{{ csrf_token('admin_forcer_statut_' ~ reservation.id) }}">
+                    <select name="statut" class="statut-select">
+                        <option value="">-- Forcer le statut --</option>
+                        <option value="en_attente" {{ reservation.statut.value == 'en_attente' ? 'selected' : '' }}>En attente</option>
+                        <option value="validee" {{ reservation.statut.value == 'validee' ? 'selected' : '' }}>Validée</option>
+                        <option value="en_cours" {{ reservation.statut.value == 'en_cours' ? 'selected' : '' }}>En cours</option>
+                        <option value="terminee" {{ reservation.statut.value == 'terminee' ? 'selected' : '' }}>Terminée</option>
+                        <option value="refusee" {{ reservation.statut.value == 'refusee' ? 'selected' : '' }}>Refusée</option>
+                        <option value="annulee" {{ reservation.statut.value == 'annulee' ? 'selected' : '' }}>Annulée</option>
+                    </select>
+                    <button type="submit" class="btn btn-warning">Appliquer</button>
+                </form>
+
+                <!-- Remboursement Stripe -->
+                {% if reservation.paiement and reservation.paiement.transactionId and reservation.paiement.statut != 'rembourse' %}
+                <form method="POST" action="{{ path('admin_reservation_rembourser', {id: reservation.id}) }}"
+                      onsubmit="return confirm('Confirmer le remboursement de {{ reservation.paiement.montant }} € via Stripe ?')">
+                    <input type="hidden" name="_token" value="{{ csrf_token('admin_rembourser_' ~ reservation.id) }}">
+                    <button type="submit" class="btn btn-danger">
+                        Rembourser {{ reservation.paiement.montant }} € via Stripe
+                    </button>
+                </form>
+                {% endif %}
+
+                <a href="{{ path('admin_reservations') }}" class="btn btn-secondary">← Retour à la liste</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

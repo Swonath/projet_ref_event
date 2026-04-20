@@ -223,6 +223,7 @@
                             <th>Montant</th>
                             <th>Statut</th>
                             <th>Date création</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -238,25 +239,17 @@
                                 </td>
                                 <td style="font-weight: 600;">{{ reservation.montantLocation }}€</td>
                                 <td>
-                                    <span class="reservation-status {{ reservation.statut }}">
-                                        {% if reservation.statut == 'en_attente' %}
-                                            En attente
-                                        {% elseif reservation.statut == 'validee' %}
-                                            Validée
-                                        {% elseif reservation.statut == 'en_cours' %}
-                                            En cours
-                                        {% elseif reservation.statut == 'terminee' %}
-                                            Terminée
-                                        {% elseif reservation.statut == 'refusee' %}
-                                            Refusée
-                                        {% elseif reservation.statut == 'annulee' %}
-                                            Annulée
-                                        {% else %}
-                                            {{ reservation.statut }}
-                                        {% endif %}
+                                    <span class="reservation-status status-{{ reservation.statut.cssClass }}">
+                                        {{ reservation.statut.icone }} {{ reservation.statut.libelle }}
                                     </span>
                                 </td>
                                 <td>{{ reservation.dateDemande|date('d/m/Y H:i') }}</td>
+                                <td>
+                                    <a href="{{ path('admin_reservation_detail', {id: reservation.id}) }}"
+                                       style="display:inline-block;background:#6366f1;color:white;padding:5px 12px;border-radius:6px;text-decoration:none;font-size:12px;font-weight:600;">
+                                        Détail
+                                    </a>
+                                </td>
                             </tr>
                         {% endfor %}
                     </tbody>

@@ -9,6 +9,8 @@ use App\Repository\EmplacementRepository;
 use App\Repository\FavoriRepository;
 use App\Repository\DocumentRepository;
 use App\Repository\ConversationRepository;
+use App\Service\EmailNotificationService;
+use App\Service\PdfService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,6 +20,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
@@ -474,7 +477,8 @@ class DashboardController extends AbstractController
         int $id,
         Request $request,
         ReservationRepository $reservationRepo,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        EmailNotificationService $emailNotification
     ): Response {
         /** @var Locataire $locataire */
         $locataire = $this->getUser();
@@ -506,11 +510,42 @@ class DashboardController extends AbstractController
 
         $entityManager->flush();
 
+        $emailNotification->notifierReservationAnnulee($reservation, 'locataire');
+
         $this->addFlash('success', 'Votre réservation a été annulée avec succès.');
 
         return $this->redirectToRoute('locataire_reservations');
     }
     
+    /**
+     * Télécharger la facture PDF d'une réservation
+     */
+    #[Route('/reservations/{id}/facture', name: 'reservation_facture', requirements: ['id' => '\d+'])]
+    public function telechargerFacture(
+        int $id,
+        ReservationRepository $reservationRepo,
+        PdfService $pdfService
+    ): StreamedResponse {
+        /** @var \App\Entity\Locataire $locataire */
+        $locataire = $this->getUser();
+
+        $reservation = $reservationRepo->find($id);
+
+        if (!$reservation || $reservation->getLocataire() !== $locataire) {
+            throw $this->createNotFoundException('Réservation non trouvée');
+        }
+
+        $pdfContent = $pdfService->genererFacture($reservation);
+        $filename = 'facture-reservation-' . $reservation->getId() . '.pdf';
+
+        return new StreamedResponse(function () use ($pdfContent) {
+            echo $pdfContent;
+        }, 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+        ]);
+    }
+
     /**
      * Page "Mon profil"
      */

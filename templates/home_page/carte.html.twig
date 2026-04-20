@@ -13,204 +13,33 @@
           crossorigin=""/>
 
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        }
-
-        .carte-container {
-            display: flex;
-            height: calc(100vh - 80px);
-        }
-
-        .carte-sidebar {
-            width: 400px;
-            background: white;
-            overflow-y: auto;
-            border-right: 1px solid #e5e5e5;
-            padding: 20px;
-        }
-
-        .carte-sidebar h2 {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 20px;
-            color: #1a1a1a;
-        }
-
-        .carte-sidebar-search {
-            margin-bottom: 20px;
-        }
-
-        .carte-sidebar-search input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #e5e5e5;
-            border-radius: 8px;
-            font-size: 14px;
-        }
-
-        .carte-sidebar-filters {
-            margin-bottom: 20px;
-            padding: 16px;
-            background: #f8f9fa;
-            border-radius: 8px;
-        }
-
-        .carte-sidebar-filters h3 {
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 12px;
-            color: #333;
-        }
-
-        .filter-group {
-            margin-bottom: 12px;
-        }
-
-        .filter-group label {
-            display: block;
-            font-size: 12px;
-            color: #666;
-            margin-bottom: 4px;
-        }
-
-        .filter-group input,
-        .filter-group select {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #e5e5e5;
-            border-radius: 6px;
-            font-size: 13px;
-        }
-
-        .carte-emplacements-liste {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .carte-emplacement-card {
-            background: white;
-            border: 1px solid #e5e5e5;
-            border-radius: 8px;
-            padding: 12px;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-decoration: none;
-            color: inherit;
-            display: block;
-        }
-
-        .carte-emplacement-card:hover {
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            border-color: #1a1a1a;
-        }
-
-        .carte-emplacement-card.active {
-            border-color: #1a1a1a;
-            background: #f8f9fa;
-        }
-
-        .carte-emplacement-card h4 {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 6px;
-            color: #1a1a1a;
-        }
-
-        .carte-emplacement-card p {
-            font-size: 13px;
-            color: #666;
-            margin: 4px 0;
-        }
-
-        .carte-emplacement-price {
-            font-size: 18px;
-            font-weight: 700;
-            color: #1a1a1a;
-            margin-top: 8px;
-        }
-
-        #map {
-            flex: 1;
-            height: 100%;
-        }
-
-        .leaflet-popup-content {
-            margin: 8px;
-        }
-
-        .popup-content h3 {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #1a1a1a;
-        }
-
-        .popup-content p {
-            font-size: 13px;
-            color: #666;
-            margin: 4px 0;
-        }
-
-        .popup-content .popup-price {
-            font-size: 18px;
-            font-weight: 700;
-            color: #1a1a1a;
-            margin: 8px 0;
-        }
-
-        .popup-content a {
-            display: inline-block;
-            background: #1a1a1a;
-            color: white;
-            padding: 8px 16px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-size: 13px;
-            font-weight: 600;
-            margin-top: 8px;
-        }
-
-        .popup-content a:hover {
-            background: #000;
-        }
-
-        .btn-retour {
-            display: inline-block;
-            background: white;
-            color: #1a1a1a;
-            border: 2px solid #1a1a1a;
-            padding: 10px 20px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 20px;
-        }
-
-        .btn-retour:hover {
-            background: #1a1a1a;
-            color: white;
-        }
-
-        @media (max-width: 768px) {
-            .carte-container {
-                flex-direction: column;
-                height: auto;
-            }
-
-            .carte-sidebar {
-                width: 100%;
-                max-height: 50vh;
-            }
-
-            #map {
-                height: 50vh;
-            }
-        }
+        body { margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        .carte-container { display: flex; height: calc(100vh - 80px); }
+        .carte-sidebar { width: 400px; background: white; overflow-y: auto; border-right: 1px solid #e5e5e5; padding: 20px; }
+        .carte-sidebar h2 { font-size: 22px; font-weight: 700; margin-bottom: 16px; color: #1a1a1a; }
+        .carte-sidebar-search { margin-bottom: 16px; }
+        .carte-sidebar-search input { width: 100%; padding: 12px; border: 1px solid #e5e5e5; border-radius: 8px; font-size: 14px; box-sizing: border-box; }
+        .carte-sidebar-filters { margin-bottom: 16px; padding: 14px; background: #f8f9fa; border-radius: 8px; }
+        .carte-sidebar-filters h3 { font-size: 13px; font-weight: 600; margin-bottom: 10px; color: #333; }
+        .filter-group { margin-bottom: 10px; }
+        .filter-group label { display: block; font-size: 12px; color: #666; margin-bottom: 3px; }
+        .filter-group input, .filter-group select { width: 100%; padding: 7px; border: 1px solid #e5e5e5; border-radius: 6px; font-size: 13px; box-sizing: border-box; }
+        .carte-centres-liste { display: flex; flex-direction: column; gap: 10px; }
+        .carte-centre-card { background: white; border: 1px solid #e5e5e5; border-radius: 8px; padding: 14px; cursor: pointer; transition: all 0.2s; }
+        .carte-centre-card:hover, .carte-centre-card.active { box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-color: #6366f1; background: #fafafa; }
+        .carte-centre-card h4 { font-size: 15px; font-weight: 600; margin: 0 0 4px; color: #1a1a1a; }
+        .carte-centre-card p { font-size: 13px; color: #666; margin: 2px 0; }
+        .carte-centre-badge { display: inline-block; background: #6366f1; color: white; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 12px; margin-top: 6px; }
+        #map { flex: 1; height: 100%; }
+        .popup-content h3 { font-size: 16px; font-weight: 700; margin: 0 0 6px; }
+        .popup-content p { font-size: 13px; color: #555; margin: 3px 0; }
+        .popup-content .popup-count { font-size: 13px; font-weight: 600; color: #6366f1; margin: 6px 0; }
+        .popup-btn { display: inline-block; background: #1a1a1a; color: white; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-size: 13px; font-weight: 600; margin-top: 8px; }
+        .popup-btn:hover { background: #6366f1; }
+        .btn-retour { display: inline-block; background: white; color: #1a1a1a; border: 2px solid #1a1a1a; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-size: 13px; font-weight: 600; margin-bottom: 14px; }
+        .btn-retour:hover { background: #1a1a1a; color: white; }
+        .no-results { text-align: center; color: #999; padding: 30px 0; font-size: 14px; }
+        @media (max-width: 768px) { .carte-container { flex-direction: column; height: auto; } .carte-sidebar { width: 100%; max-height: 45vh; } #map { height: 55vh; } }
     </style>
 </head>
 <body>
@@ -220,27 +49,16 @@
         <nav class="nav">
             <a href="{{ path('app_home_page') }}#comment-ca-marche" class="nav-link">Comment ça marche</a>
             <a href="{{ path('app_home_page') }}#emplacements" class="nav-link">Emplacements populaires</a>
-
             {% if app.user %}
                 <a href="{{ path('app_my_account') }}" class="user-menu">
                     <div class="user-avatar">
                         {% if app.user.photoProfile is defined and app.user.photoProfile %}
-                            <img src="{{ asset('uploads/profiles/' ~ app.user.photoProfile) }}" alt="Photo de profil" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+                            <img src="{{ asset('uploads/profiles/' ~ app.user.photoProfile) }}" alt="Photo" style="width:40px;height:40px;border-radius:50%;object-fit:cover;">
                         {% else %}
-                            {% if app.user.nomCentre is defined %}
-                                {{ app.user.nomCentre|slice(0, 2)|upper }}
-                            {% else %}
-                                {{ app.user.nom|slice(0, 2)|upper }}
-                            {% endif %}
+                            {% if app.user.nomCentre is defined %}{{ app.user.nomCentre|slice(0,2)|upper }}{% else %}{{ app.user.nom|slice(0,2)|upper }}{% endif %}
                         {% endif %}
                     </div>
-                    <span class="user-name">
-                        {% if app.user.nomCentre is defined %}
-                            {{ app.user.nomCentre }}
-                        {% else %}
-                            {{ app.user.nom }}
-                        {% endif %}
-                    </span>
+                    <span class="user-name">{% if app.user.nomCentre is defined %}{{ app.user.nomCentre }}{% else %}{{ app.user.nom }}{% endif %}</span>
                 </a>
             {% else %}
                 <a href="{{ path('app_login') }}" class="nav-link">Connexion</a>
@@ -250,14 +68,13 @@
     </header>
 
     <div class="carte-container">
-        <!-- Sidebar avec liste d'emplacements -->
+        <!-- Sidebar centres -->
         <div class="carte-sidebar">
-            <a href="{{ path('app_home_page') }}" class="btn-retour">← Retour à l'accueil</a>
-
-            <h2>Rechercher sur la carte</h2>
+            <a href="{{ path('app_home_page') }}" class="btn-retour">← Retour</a>
+            <h2>Centres commerciaux</h2>
 
             <div class="carte-sidebar-search">
-                <input type="text" id="searchInput" placeholder="Rechercher une ville, un centre...">
+                <input type="text" id="searchInput" placeholder="Rechercher une ville, un centre…">
             </div>
 
             <div class="carte-sidebar-filters">
@@ -282,24 +99,37 @@
                 </div>
             </div>
 
-            <div class="carte-emplacements-liste" id="emplacementsListe">
-                {% for emplacement in emplacements %}
-                    <div class="carte-emplacement-card"
-                         data-id="{{ emplacement.id }}"
-                         data-ville="{{ emplacement.centreCommercial.ville|lower }}"
-                         data-centre="{{ emplacement.centreCommercial.nomCentre|lower }}"
-                         data-type="{{ emplacement.typeEmplacement|lower }}"
-                         data-prix="{{ (emplacement.tarifJour * 1.25 * 1.20)|number_format(2, '.', '') }}"
-                         data-surface="{{ emplacement.surface }}">
-                        <h4>{{ emplacement.centreCommercial.nomCentre }}</h4>
-                        <p>📍 {{ emplacement.centreCommercial.ville }} ({{ emplacement.centreCommercial.codePostal }})</p>
-                        <p>{{ emplacement.typeEmplacement|capitalize }} • {{ emplacement.surface }} m²</p>
-                        <div class="carte-emplacement-price">
-                            {{ (emplacement.tarifJour * 1.25 * 1.20)|number_format(2, ',', ' ') }}€/jour
-                        </div>
+            <div id="centresListe" class="carte-centres-liste">
+                {% for centre in centres %}
+                    {% set emplacementsActifs = centre.emplacements|filter(e => e.statutAnnonce == 'active') %}
+                    <div class="carte-centre-card"
+                         data-id="{{ centre.id }}"
+                         data-ville="{{ centre.ville|lower }}"
+                         data-nom="{{ centre.nomCentre|lower }}"
+                         data-emplacements-json="{{ emplacementsActifs|map(e => {type: e.typeEmplacement|lower, prix: (e.tarifJour * 1.25 * 1.20), surface: e.surface})|json_encode }}">
+                        <h4>{{ centre.nomCentre }}</h4>
+                        <p>📍 {{ centre.ville }} ({{ centre.codePostal }})</p>
+                        <p>{{ centre.adresse }}</p>
+                        {% set nc = notesCentres[centre.id] %}
+                        {% if nc.count > 0 %}
+                            <div style="margin:4px 0;font-size:13px;">
+                                {% set plein = nc.moyenne|round(0, 'floor') %}
+                                {% set demi = (nc.moyenne - plein) >= 0.5 ? 1 : 0 %}
+                                {% set vide = 5 - plein - demi %}
+                                {% if plein > 0 %}{% for i in 1..plein %}<span style="color:#f59e0b;">★</span>{% endfor %}{% endif %}
+                                {% if demi %}<span style="color:#f59e0b;">⯨</span>{% endif %}
+                                {% if vide > 0 %}{% for i in 1..vide %}<span style="color:#d1d5db;">★</span>{% endfor %}{% endif %}
+                                <strong>{{ nc.moyenne }}/5</strong>
+                                <span style="color:#999;">({{ nc.count }})</span>
+                            </div>
+                        {% else %}
+                            <div style="margin:4px 0;font-size:12px;color:#999;">Pas encore d'avis</div>
+                        {% endif %}
+                        <span class="carte-centre-badge">{{ emplacementsActifs|length }} emplacement{% if emplacementsActifs|length > 1 %}s{% endif %}</span>
                     </div>
                 {% endfor %}
             </div>
+            <div id="noResults" class="no-results" style="display:none;">Aucun centre trouvé</div>
         </div>
 
         <!-- Carte Leaflet -->
@@ -312,138 +142,237 @@
             crossorigin=""></script>
 
     <script>
-        // Données des emplacements
-        const emplacements = [
-            {% for emplacement in emplacements %}
+        // Données des centres depuis Twig
+        const centresData = [
+            {% for centre in centres %}
+            {% set emplacementsActifs = centre.emplacements|filter(e => e.statutAnnonce == 'active') %}
+            {% set prixList = emplacementsActifs|map(e => (e.tarifJour * 1.25 * 1.20)) %}
+            {% set prixMin = prixList|length > 0 ? min(prixList) : 0 %}
             {
-                id: {{ emplacement.id }},
-                nom: "{{ emplacement.centreCommercial.nomCentre|e('js') }}",
-                ville: "{{ emplacement.centreCommercial.ville|e('js') }}",
-                codePostal: "{{ emplacement.centreCommercial.codePostal|e('js') }}",
-                type: "{{ emplacement.typeEmplacement|e('js') }}",
-                surface: {{ emplacement.surface }},
-                prix: {{ (emplacement.tarifJour * 1.25 * 1.20)|number_format(2, '.', '') }},
-                // Coordonnées approximatives basées sur le code postal (à améliorer)
-                lat: {% if emplacement.centreCommercial.latitude is defined and emplacement.centreCommercial.latitude %}{{ emplacement.centreCommercial.latitude }}{% else %}46.603354 + (Math.random() * 5 - 2.5){% endif %},
-                lng: {% if emplacement.centreCommercial.longitude is defined and emplacement.centreCommercial.longitude %}{{ emplacement.centreCommercial.longitude }}{% else %}1.888334 + (Math.random() * 5 - 2.5){% endif %},
-                url: "{{ path('emplacement_detail', {id: emplacement.id}) }}"
+                id: {{ centre.id }},
+                nom: {{ centre.nomCentre|json_encode|raw }},
+                ville: {{ centre.ville|json_encode|raw }},
+                codePostal: {{ centre.codePostal|json_encode|raw }},
+                adresse: {{ centre.adresse|json_encode|raw }},
+                nbEmplacements: {{ emplacementsActifs|length }},
+                prixMin: {{ prixMin is not empty ? prixMin|number_format(2, '.', '') : 0 }},
+                lat: {{ centre.latitude is not null ? centre.latitude : 'null' }},
+                lng: {{ centre.longitude is not null ? centre.longitude : 'null' }},
+                profilUrl: {{ path('centre_profil_public', {id: centre.id})|json_encode|raw }},
+                noteMoyenne: {{ notesCentres[centre.id].moyenne is not null ? notesCentres[centre.id].moyenne : 'null' }},
+                nbAvis: {{ notesCentres[centre.id].count }},
+                emplacements: {{ emplacementsActifs|map(e => {
+                    type: e.typeEmplacement|lower,
+                    prix: (e.tarifJour * 1.25 * 1.20),
+                    surface: e.surface
+                })|json_encode|raw }}
             }{% if not loop.last %},{% endif %}
             {% endfor %}
         ];
 
-        // Initialiser la carte centrée sur la France
+        // Initialiser la carte
         const map = L.map('map').setView([46.603354, 1.888334], 6);
-
-        // Ajouter la couche de tuiles OpenStreetMap
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
             maxZoom: 19
         }).addTo(map);
 
-        // Icône personnalisée pour les marqueurs
+        // Icône personnalisée
         const customIcon = L.icon({
+            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-violet.png',
+            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
+            iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41]
+        });
+        const activeIcon = L.icon({
             iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
             shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
-            iconSize: [25, 41],
-            iconAnchor: [12, 41],
-            popupAnchor: [1, -34],
-            shadowSize: [41, 41]
+            iconSize: [30, 49], iconAnchor: [15, 49], popupAnchor: [1, -40], shadowSize: [41, 41]
         });
 
-        // Stocker les marqueurs
         const markers = {};
+        let currentActiveId = null;
 
-        // Ajouter les marqueurs sur la carte
-        emplacements.forEach(emplacement => {
-            const marker = L.marker([emplacement.lat, emplacement.lng], {icon: customIcon})
-                .addTo(map)
-                .bindPopup(`
-                    <div class="popup-content">
-                        <h3>${emplacement.nom}</h3>
-                        <p>📍 ${emplacement.ville} (${emplacement.codePostal})</p>
-                        <p>${emplacement.type} • ${emplacement.surface} m²</p>
-                        <div class="popup-price">${emplacement.prix}€/jour</div>
-                        <a href="${emplacement.url}">Voir les détails</a>
-                    </div>
-                `);
-
-            markers[emplacement.id] = marker;
-
-            // Événement au clic sur le marqueur
-            marker.on('click', () => {
-                highlightCard(emplacement.id);
-            });
-        });
-
-        // Fonction pour mettre en surbrillance une carte dans la sidebar
-        function highlightCard(id) {
-            document.querySelectorAll('.carte-emplacement-card').forEach(card => {
-                card.classList.remove('active');
-            });
-            const card = document.querySelector(`.carte-emplacement-card[data-id="${id}"]`);
-            if (card) {
-                card.classList.add('active');
-                card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        // Géocoder un centre via Nominatim puis placer le marqueur
+        // Essaie successivement : adresse complète → ville seule → nom du centre
+        async function geocoderEtPlacerMarqueur(centre) {
+            const tentatives = [
+                `${centre.adresse}, ${centre.codePostal} ${centre.ville}, France`,
+                `${centre.ville}, France`,
+                `${centre.nom}, France`,
+            ];
+            for (const query of tentatives) {
+                try {
+                    const url = `https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(query)}`;
+                    const resp = await fetch(url, { headers: { 'Accept-Language': 'fr' } });
+                    const data = await resp.json();
+                    if (data && data.length > 0) {
+                        const lat = parseFloat(data[0].lat);
+                        const lng = parseFloat(data[0].lon);
+                        centre.lat = lat;
+                        centre.lng = lng;
+                        placerMarqueur(centre);
+                        // Sauvegarder les coordonnées en base pour la prochaine fois
+                        fetch(`/centre/${centre.id}/coordonnees`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ lat, lng })
+                        });
+                        return; // succès, on arrête
+                    }
+                } catch (e) {
+                    console.warn('Géocodage échoué pour', centre.nom, '(tentative:', query, ')', e);
+                }
+                await new Promise(r => setTimeout(r, 1100)); // délai entre tentatives
             }
         }
 
-        // Événement au clic sur une carte dans la sidebar
-        document.querySelectorAll('.carte-emplacement-card').forEach(card => {
+        function placerMarqueur(centre) {
+            const marker = L.marker([centre.lat, centre.lng], {icon: customIcon})
+                .addTo(map)
+                .bindPopup(buildPopup(centre), {maxWidth: 280});
+            markers[centre.id] = marker;
+            marker.on('click', () => { activerCentre(centre.id); });
+        }
+
+        // Ajouter les marqueurs — géocoder si coordonnées manquantes
+        const geocodageQueue = [];
+        centresData.forEach(centre => {
+            if (centre.lat !== null && centre.lng !== null) {
+                placerMarqueur(centre);
+            } else {
+                geocodageQueue.push(centre);
+            }
+        });
+
+        // Géocoder les centres manquants avec un délai entre requêtes (respect Nominatim ToS)
+        (async () => {
+            for (const centre of geocodageQueue) {
+                await geocoderEtPlacerMarqueur(centre);
+                await new Promise(r => setTimeout(r, 1100)); // 1 req/s max Nominatim
+            }
+        })();
+
+        function renderEtoiles(note) {
+            if (note === null) return '<span style="color:#999;font-size:12px;">Pas encore d\'avis</span>';
+            const plein = Math.floor(note);
+            const demi = (note - plein) >= 0.5 ? 1 : 0;
+            const vide = 5 - plein - demi;
+            let s = '';
+            for (let i = 0; i < plein; i++) s += '<span style="color:#f59e0b;font-size:15px;">★</span>';
+            if (demi) s += '<span style="color:#f59e0b;font-size:15px;">⯨</span>';
+            for (let i = 0; i < vide; i++) s += '<span style="color:#d1d5db;font-size:15px;">★</span>';
+            return s;
+        }
+
+        function buildPopup(centre) {
+            const noteHtml = centre.noteMoyenne !== null
+                ? `${renderEtoiles(centre.noteMoyenne)} <strong style="font-size:13px;">${centre.noteMoyenne}/5</strong> <span style="color:#999;font-size:12px;">(${centre.nbAvis} avis)</span>`
+                : `<span style="color:#999;font-size:12px;">Pas encore d'avis</span>`;
+            return `
+                <div style="font-family:sans-serif;">
+                    <h3 style="margin:0 0 4px;font-size:16px;font-weight:700;">${centre.nom}</h3>
+                    <div style="margin:4px 0 8px;">${noteHtml}</div>
+                    <p style="margin:2px 0;font-size:13px;color:#555;">📍 ${centre.adresse}</p>
+                    <p style="margin:2px 0;font-size:13px;color:#555;">${centre.codePostal} ${centre.ville}</p>
+                    <p style="margin:8px 0 4px;font-size:13px;font-weight:600;color:#6366f1;">
+                        ${centre.nbEmplacements} emplacement${centre.nbEmplacements > 1 ? 's' : ''}
+                        ${centre.prixMin > 0 ? ' · à partir de ' + centre.prixMin.toFixed(2) + ' €/jour' : ''}
+                    </p>
+                    <a href="${centre.profilUrl}" style="display:inline-block;background:#1a1a1a;color:white;padding:8px 16px;border-radius:6px;text-decoration:none;font-size:13px;font-weight:600;margin-top:8px;">
+                        Voir les emplacements →
+                    </a>
+                </div>`;
+        }
+
+        function activerCentre(id) {
+            // Réinitialiser l'icône précédente
+            if (currentActiveId && markers[currentActiveId]) {
+                markers[currentActiveId].setIcon(customIcon);
+            }
+            // Activer le nouveau
+            if (markers[id]) {
+                markers[id].setIcon(activeIcon);
+            }
+            currentActiveId = id;
+
+            // Mettre en surbrillance la carte dans la sidebar
+            document.querySelectorAll('.carte-centre-card').forEach(c => c.classList.remove('active'));
+            const card = document.querySelector(`.carte-centre-card[data-id="${id}"]`);
+            if (card) {
+                card.classList.add('active');
+                card.scrollIntoView({behavior: 'smooth', block: 'nearest'});
+            }
+        }
+
+        // Clic sur une carte de la sidebar → zoom + ouvre popup
+        document.querySelectorAll('.carte-centre-card').forEach(card => {
             card.addEventListener('click', () => {
                 const id = parseInt(card.dataset.id);
-                const emplacement = emplacements.find(e => e.id === id);
-                if (emplacement && markers[id]) {
-                    map.setView([emplacement.lat, emplacement.lng], 13);
+                const centre = centresData.find(c => c.id === id);
+                if (!centre) return;
+                if (markers[id]) {
+                    map.setView([centre.lat, centre.lng], 14);
                     markers[id].openPopup();
-                    highlightCard(id);
+                    activerCentre(id);
+                } else {
+                    // Pas encore géocodé → essayer maintenant
+                    geocoderEtPlacerMarqueur(centre).then(() => {
+                        if (markers[id]) {
+                            map.setView([centre.lat, centre.lng], 14);
+                            markers[id].openPopup();
+                            activerCentre(id);
+                        }
+                    });
                 }
             });
         });
 
-        // Recherche
+        // === Filtres ===
         const searchInput = document.getElementById('searchInput');
         const filterType = document.getElementById('filterType');
         const filterPrix = document.getElementById('filterPrix');
         const filterSurface = document.getElementById('filterSurface');
 
-        function filterEmplacements() {
-            const searchTerm = searchInput.value.toLowerCase();
-            const typeFilter = filterType.value.toLowerCase();
+        function filtrerCentres() {
+            const term = searchInput.value.toLowerCase();
+            const type = filterType.value.toLowerCase();
             const prixMax = parseFloat(filterPrix.value) || Infinity;
             const surfaceMin = parseFloat(filterSurface.value) || 0;
 
-            document.querySelectorAll('.carte-emplacement-card').forEach(card => {
+            let visibleCount = 0;
+
+            document.querySelectorAll('.carte-centre-card').forEach(card => {
+                const id = parseInt(card.dataset.id);
                 const ville = card.dataset.ville;
-                const centre = card.dataset.centre;
-                const type = card.dataset.type;
-                const prix = parseFloat(card.dataset.prix);
-                const surface = parseFloat(card.dataset.surface);
+                const nom = card.dataset.nom;
+                const emps = JSON.parse(card.dataset.emplacementsJson || '[]');
 
-                const matchSearch = !searchTerm || ville.includes(searchTerm) || centre.includes(searchTerm);
-                const matchType = !typeFilter || type === typeFilter;
-                const matchPrix = prix <= prixMax;
-                const matchSurface = surface >= surfaceMin;
+                const matchSearch = !term || ville.includes(term) || nom.includes(term);
+                const matchType = !type || emps.some(e => e.type === type);
+                const matchPrix = emps.some(e => e.prix <= prixMax);
+                const matchSurface = emps.some(e => e.surface >= surfaceMin);
 
-                if (matchSearch && matchType && matchPrix && matchSurface) {
-                    card.style.display = 'block';
-                    const id = parseInt(card.dataset.id);
-                    if (markers[id]) {
+                const visible = matchSearch && matchType && matchPrix && matchSurface;
+                card.style.display = visible ? 'block' : 'none';
+                if (visible) visibleCount++;
+
+                // Afficher/masquer le marqueur sur la carte
+                if (markers[id]) {
+                    if (visible) {
                         markers[id].addTo(map);
-                    }
-                } else {
-                    card.style.display = 'none';
-                    const id = parseInt(card.dataset.id);
-                    if (markers[id]) {
+                    } else {
                         map.removeLayer(markers[id]);
                     }
                 }
             });
+
+            document.getElementById('noResults').style.display = visibleCount === 0 ? 'block' : 'none';
         }
 
-        searchInput.addEventListener('input', filterEmplacements);
-        filterType.addEventListener('change', filterEmplacements);
-        filterPrix.addEventListener('input', filterEmplacements);
-        filterSurface.addEventListener('input', filterEmplacements);
+        searchInput.addEventListener('input', filtrerCentres);
+        filterType.addEventListener('change', filtrerCentres);
+        filterPrix.addEventListener('input', filtrerCentres);
+        filterSurface.addEventListener('input', filtrerCentres);
     </script>
 </body>
 </html>

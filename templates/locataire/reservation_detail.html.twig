@@ -244,6 +244,27 @@
                         </button>
                     </form>
                 {% endif %}
+
+                {% if reservation.paiement and reservation.paiement.statut == 'complete' %}
+                    <a href="{{ path('locataire_reservation_facture', {id: reservation.id}) }}"
+                       class="btn-secondary btn-block" style="text-align:center;" target="_blank">
+                        📄 Télécharger la facture PDF
+                    </a>
+                {% endif %}
+
+                {% if reservation.statut.value == 'terminee' %}
+                    {% set avisExistant = reservation.avis|length > 0 %}
+                    {% if not avisExistant %}
+                        <a href="{{ path('locataire_avis_nouveau', {id: reservation.id}) }}"
+                           class="btn-primary btn-block" style="text-align:center;">
+                            ⭐ Laisser un avis
+                        </a>
+                    {% else %}
+                        <div style="text-align:center;padding:10px;background:#d4edda;color:#155724;border-radius:8px;font-size:14px;font-weight:600;">
+                            ✓ Avis soumis
+                        </div>
+                    {% endif %}
+                {% endif %}
             </div>
         </div>
 

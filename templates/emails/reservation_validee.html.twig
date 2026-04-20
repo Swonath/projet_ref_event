@@ -1,0 +1,32 @@
+{% extends 'emails/base_email.html.twig' %}
+
+{% block content %}
+<h2>Réservation validée !</h2>
+<p>Bonjour <strong>{{ locataire.nom }}</strong>,</p>
+<p>Bonne nouvelle ! Votre réservation a été <strong>validée</strong> par le centre commercial.</p>
+
+<div class="info-box">
+    <div class="info-row">
+        <span class="info-label">Emplacement</span>
+        <span class="info-value">{{ reservation.emplacement.titreAnnonce }}</span>
+    </div>
+    <div class="info-row">
+        <span class="info-label">Centre commercial</span>
+        <span class="info-value">{{ reservation.emplacement.centreCommercial.nomCentre }}</span>
+    </div>
+    <div class="info-row">
+        <span class="info-label">Adresse</span>
+        <span class="info-value">{{ reservation.emplacement.centreCommercial.adresse }}, {{ reservation.emplacement.centreCommercial.ville }}</span>
+    </div>
+    <div class="info-row">
+        <span class="info-label">Dates</span>
+        <span class="info-value">{{ reservation.dateDebut|date('d/m/Y') }} → {{ reservation.dateFin|date('d/m/Y') }}</span>
+    </div>
+    <div class="info-row">
+        <span class="info-label">Statut</span>
+        <span class="info-value"><span class="badge badge-green">Validée</span></span>
+    </div>
+</div>
+
+<p>Vous pouvez consulter les détails de votre réservation depuis votre espace locataire.</p>
+{% endblock %}

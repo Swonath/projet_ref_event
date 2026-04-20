@@ -11,6 +11,7 @@ use App\Repository\EmplacementRepository;
 use App\Repository\ReservationRepository;
 use App\Service\StripeService;
 use App\Service\ReservationCalculatorService;
+use App\Service\EmailNotificationService;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -27,7 +28,8 @@ class ReservationController extends AbstractController
         private readonly StripeService $stripeService,
         private readonly ReservationCalculatorService $calculatorService,
         private readonly EntityManagerInterface $em,
-        private readonly LoggerInterface $logger
+        private readonly LoggerInterface $logger,
+        private readonly EmailNotificationService $emailNotification
     ) {
     }
 
@@ -283,6 +285,9 @@ class ReservationController extends AbstractController
 
             // Nettoyer la session
             $session->remove('reservation_data');
+
+            // Envoyer les notifications email
+            $this->emailNotification->notifierNouvelleReservation($reservation);
 
             $this->addFlash('success', 'Votre réservation a été enregistrée avec succès ! Le centre commercial va maintenant valider votre demande.');
 

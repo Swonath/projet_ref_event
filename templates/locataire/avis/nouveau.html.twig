@@ -1,0 +1,125 @@
+{% extends 'locataire/base_dashboard.html.twig' %}
+
+{% block title %}Laisser un avis - Références Événements{% endblock %}
+
+{% block dashboard_content %}
+<div class="section">
+    <div class="page-header">
+        <h1 class="page-title">Laisser un avis</h1>
+        <p class="page-subtitle">{{ reservation.emplacement.titreAnnonce }} — {{ reservation.emplacement.centreCommercial.nomCentre }}</p>
+    </div>
+
+    {% for type, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ type }}" style="padding:12px 16px;border-radius:8px;margin-bottom:16px;background:{% if type=='success' %}#d4edda;color:#155724{% elseif type=='error' %}#f8d7da;color:#721c24{% else %}#fff3cd;color:#856404{% endif %}">{{ message }}</div>
+        {% endfor %}
+    {% endfor %}
+
+    <form method="POST" style="max-width:680px;">
+        <input type="hidden" name="_token" value="{{ csrf_token('avis_' ~ reservation.id) }}">
+
+        <div style="background:white;border-radius:12px;padding:28px;box-shadow:0 2px 8px rgba(0,0,0,0.08);margin-bottom:20px;">
+            <h3 style="margin:0 0 20px;font-size:18px;font-weight:700;color:#1a1a1a;">Note globale <span style="color:#dc3545;">*</span></h3>
+
+            <div class="star-rating" style="display:flex;gap:8px;margin-bottom:8px;">
+                {% for i in 1..5 %}
+                <label style="cursor:pointer;font-size:36px;color:#ddd;transition:color 0.15s;" data-value="{{ i }}">
+                    <input type="radio" name="note_globale" value="{{ i }}" required style="display:none;">
+                    ★
+                </label>
+                {% endfor %}
+            </div>
+            <p style="font-size:13px;color:#999;">Cliquez sur une étoile pour noter</p>
+        </div>
+
+        <div style="background:white;border-radius:12px;padding:28px;box-shadow:0 2px 8px rgba(0,0,0,0.08);margin-bottom:20px;">
+            <h3 style="margin:0 0 20px;font-size:18px;font-weight:700;color:#1a1a1a;">Notes détaillées (optionnel)</h3>
+
+            {% set criteres = [
+                {name: 'note_proprete', label: 'Propreté & conformité'},
+                {name: 'note_emplacement', label: 'Qualité de l\'emplacement'},
+                {name: 'note_qualite_prix', label: 'Rapport qualité/prix'},
+                {name: 'note_communication', label: 'Communication avec le centre'},
+            ] %}
+            {% for critere in criteres %}
+            <div style="margin-bottom:16px;">
+                <label style="display:block;font-size:14px;font-weight:600;color:#333;margin-bottom:8px;">{{ critere.label }}</label>
+                <div style="display:flex;gap:6px;">
+                    {% for i in 1..5 %}
+                    <label style="cursor:pointer;font-size:28px;color:#ddd;transition:color 0.15s;" class="star-label" data-group="{{ critere.name }}">
+                        <input type="radio" name="{{ critere.name }}" value="{{ i }}" style="display:none;">
+                        ★
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div style="background:white;border-radius:12px;padding:28px;box-shadow:0 2px 8px rgba(0,0,0,0.08);margin-bottom:20px;">
+            <h3 style="margin:0 0 12px;font-size:18px;font-weight:700;color:#1a1a1a;">Commentaire (optionnel)</h3>
+            <textarea name="commentaire" rows="5"
+                      placeholder="Partagez votre expérience avec cet emplacement…"
+                      style="width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;font-size:15px;font-family:inherit;resize:vertical;box-sizing:border-box;"></textarea>
+        </div>
+
+        <div style="display:flex;gap:12px;">
+            <button type="submit"
+                    style="flex:1;padding:14px;background:#6366f1;color:white;border:none;border-radius:8px;font-size:16px;font-weight:600;cursor:pointer;">
+                Soumettre mon avis
+            </button>
+            <a href="{{ path('locataire_reservation_detail', {id: reservation.id}) }}"
+               style="padding:14px 24px;background:white;color:#1a1a1a;border:2px solid #1a1a1a;border-radius:8px;font-size:15px;font-weight:600;text-decoration:none;white-space:nowrap;">
+                Annuler
+            </a>
+        </div>
+    </form>
+</div>
+
+<script>
+    // Gestion des étoiles pour la note globale
+    const globalLabels = document.querySelectorAll('.star-rating label');
+    globalLabels.forEach((label, index) => {
+        label.addEventListener('mouseenter', () => {
+            globalLabels.forEach((l, i) => { l.style.color = i <= index ? '#fbbf24' : '#ddd'; });
+        });
+        label.addEventListener('click', () => {
+            label.querySelector('input').checked = true;
+            globalLabels.forEach((l, i) => { l.style.color = i <= index ? '#fbbf24' : '#ddd'; });
+        });
+    });
+    document.querySelector('.star-rating').addEventListener('mouseleave', () => {
+        const checked = document.querySelector('.star-rating input:checked');
+        const val = checked ? parseInt(checked.value) - 1 : -1;
+        globalLabels.forEach((l, i) => { l.style.color = i <= val ? '#fbbf24' : '#ddd'; });
+    });
+
+    // Gestion des étoiles pour les critères détaillés
+    document.querySelectorAll('[data-group]').forEach(label => {
+        const group = label.dataset.group;
+        const groupLabels = document.querySelectorAll(`[data-group="${group}"]`);
+        const idx = Array.from(groupLabels).indexOf(label);
+
+        label.addEventListener('mouseenter', () => {
+            groupLabels.forEach((l, i) => { l.style.color = i <= idx ? '#fbbf24' : '#ddd'; });
+        });
+        label.addEventListener('click', () => {
+            label.querySelector('input').checked = true;
+            groupLabels.forEach((l, i) => { l.style.color = i <= idx ? '#fbbf24' : '#ddd'; });
+        });
+    });
+    document.querySelectorAll('.star-rating, [data-group]').forEach(el => {
+        const parent = el.closest('[style*="display:flex"]');
+        if (parent) {
+            parent.addEventListener('mouseleave', () => {
+                const group = el.dataset.group;
+                if (!group) return;
+                const groupLabels = document.querySelectorAll(`[data-group="${group}"]`);
+                const checked = parent.querySelector('input:checked');
+                const val = checked ? parseInt(checked.value) - 1 : -1;
+                groupLabels.forEach((l, i) => { l.style.color = i <= val ? '#fbbf24' : '#ddd'; });
+            });
+        }
+    });
+</script>
+{% endblock %}

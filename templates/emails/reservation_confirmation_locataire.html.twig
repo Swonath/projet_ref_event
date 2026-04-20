@@ -1,0 +1,32 @@
+{% extends 'emails/base_email.html.twig' %}
+
+{% block content %}
+<h2>Demande de réservation reçue</h2>
+<p>Bonjour <strong>{{ locataire.nom }}</strong>,</p>
+<p>Votre demande de réservation a bien été enregistrée et le paiement a été traité avec succès. Le centre commercial va maintenant examiner votre demande.</p>
+
+<div class="info-box">
+    <div class="info-row">
+        <span class="info-label">Emplacement</span>
+        <span class="info-value">{{ reservation.emplacement.titreAnnonce }}</span>
+    </div>
+    <div class="info-row">
+        <span class="info-label">Centre commercial</span>
+        <span class="info-value">{{ reservation.emplacement.centreCommercial.nomCentre }}</span>
+    </div>
+    <div class="info-row">
+        <span class="info-label">Dates</span>
+        <span class="info-value">{{ reservation.dateDebut|date('d/m/Y') }} → {{ reservation.dateFin|date('d/m/Y') }}</span>
+    </div>
+    <div class="info-row">
+        <span class="info-label">Montant débité</span>
+        <span class="info-value">{{ reservation.montantTotal }} €</span>
+    </div>
+    <div class="info-row">
+        <span class="info-label">Statut</span>
+        <span class="info-value"><span class="badge badge-orange">En attente de validation</span></span>
+    </div>
+</div>
+
+<p>Vous recevrez un email dès que le centre commercial aura validé ou refusé votre demande.</p>
+{% endblock %}

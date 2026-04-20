@@ -6,6 +6,7 @@ use App\Entity\CentreCommercial;
 use App\Enum\StatutReservation;
 use App\Repository\ReservationRepository;
 use App\Service\StripeService;
+use App\Service\EmailNotificationService;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,7 +23,8 @@ class ReservationController extends AbstractController
 {
     public function __construct(
         private readonly StripeService $stripeService,
-        private readonly LoggerInterface $logger
+        private readonly LoggerInterface $logger,
+        private readonly EmailNotificationService $emailNotification
     ) {
     }
 
@@ -152,6 +154,8 @@ class ReservationController extends AbstractController
         $reservation->setDateValidation(new \DateTime());
         $entityManager->flush();
 
+        $this->emailNotification->notifierReservationValidee($reservation);
+
         $this->addFlash('success', 'Réservation validée avec succès !');
         return $this->redirectToRoute('centre_reservations_detail', ['id' => $id]);
     }
@@ -214,6 +218,7 @@ class ReservationController extends AbstractController
 
                 $entityManager->flush();
 
+                $this->emailNotification->notifierReservationRefusee($reservation);
                 $this->addFlash('success', 'Réservation refusée et paiement remboursé automatiquement au locataire.');
             } catch (\Exception $e) {
                 $this->logger->error('Erreur remboursement automatique', [
@@ -227,6 +232,7 @@ class ReservationController extends AbstractController
             }
         } else {
             $entityManager->flush();
+            $this->emailNotification->notifierReservationRefusee($reservation);
             $this->addFlash('success', 'Réservation refusée.');
         }
 

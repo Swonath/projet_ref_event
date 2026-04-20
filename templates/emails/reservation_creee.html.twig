@@ -1,0 +1,33 @@
+{% extends 'emails/base_email.html.twig' %}
+
+{% block content %}
+<h2>Nouvelle demande de réservation</h2>
+<p>Bonjour <strong>{{ centre.nomCentre }}</strong>,</p>
+<p>Vous avez reçu une nouvelle demande de réservation pour votre emplacement <strong>{{ reservation.emplacement.titreAnnonce }}</strong>.</p>
+
+<div class="info-box">
+    <div class="info-row">
+        <span class="info-label">Locataire</span>
+        <span class="info-value">{{ locataire.nom }}</span>
+    </div>
+    <div class="info-row">
+        <span class="info-label">Email</span>
+        <span class="info-value">{{ locataire.email }}</span>
+    </div>
+    <div class="info-row">
+        <span class="info-label">Dates</span>
+        <span class="info-value">{{ reservation.dateDebut|date('d/m/Y') }} → {{ reservation.dateFin|date('d/m/Y') }}</span>
+    </div>
+    <div class="info-row">
+        <span class="info-label">Montant</span>
+        <span class="info-value">{{ reservation.montantTotal }} €</span>
+    </div>
+    <div class="info-row">
+        <span class="info-label">Statut</span>
+        <span class="info-value"><span class="badge badge-orange">En attente de validation</span></span>
+    </div>
+</div>
+
+<p>Connectez-vous à votre dashboard pour valider ou refuser cette réservation.</p>
+<p><strong>Important :</strong> Le locataire a déjà effectué le paiement. En cas de refus, il sera remboursé automatiquement.</p>
+{% endblock %}

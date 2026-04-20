@@ -16,28 +16,51 @@ class AvisRepository extends ServiceEntityRepository
         parent::__construct($registry, Avis::class);
     }
 
-    //    /**
-    //     * @return Avis[] Returns an array of Avis objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('a')
-    //            ->andWhere('a.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('a.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    /**
+     * Note moyenne + nombre d'avis publiés pour un centre commercial
+     * (via Avis → Reservation → Emplacement → CentreCommercial)
+     *
+     * @return array{moyenne: float|null, count: int}
+     */
+    public function getStatsCentre(int $centreId): array
+    {
+        $result = $this->createQueryBuilder('a')
+            ->select('AVG(a.noteGlobale) as moyenne, COUNT(a.id) as count')
+            ->join('a.reservation', 'r')
+            ->join('r.emplacement', 'e')
+            ->join('e.centreCommercial', 'c')
+            ->where('c.id = :centreId')
+            ->andWhere('a.estPublie = true')
+            ->setParameter('centreId', $centreId)
+            ->getQuery()
+            ->getSingleResult();
 
-    //    public function findOneBySomeField($value): ?Avis
-    //    {
-    //        return $this->createQueryBuilder('a')
-    //            ->andWhere('a.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        return [
+            'moyenne' => $result['moyenne'] !== null ? round((float) $result['moyenne'], 1) : null,
+            'count'   => (int) $result['count'],
+        ];
+    }
+
+    /**
+     * Note moyenne + nombre d'avis publiés pour un emplacement
+     *
+     * @return array{moyenne: float|null, count: int}
+     */
+    public function getStatsEmplacement(int $emplacementId): array
+    {
+        $result = $this->createQueryBuilder('a')
+            ->select('AVG(a.noteGlobale) as moyenne, COUNT(a.id) as count')
+            ->join('a.reservation', 'r')
+            ->join('r.emplacement', 'e')
+            ->where('e.id = :emplacementId')
+            ->andWhere('a.estPublie = true')
+            ->setParameter('emplacementId', $emplacementId)
+            ->getQuery()
+            ->getSingleResult();
+
+        return [
+            'moyenne' => $result['moyenne'] !== null ? round((float) $result['moyenne'], 1) : null,
+            'count'   => (int) $result['count'],
+        ];
+    }
 }

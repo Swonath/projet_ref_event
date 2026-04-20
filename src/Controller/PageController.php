@@ -58,35 +58,42 @@ class PageController extends AbstractController
         $error = null;
 
         if ($request->isMethod('POST')) {
-            $nom = $request->request->get('nom');
-            $email = $request->request->get('email');
-            $sujet = $request->request->get('sujet');
-            $message = $request->request->get('message');
-
-            // Validation basique
-            if (empty($nom) || empty($email) || empty($sujet) || empty($message)) {
-                $error = 'Tous les champs sont obligatoires.';
-            } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $error = 'Adresse email invalide.';
+            // Vérification CSRF
+            $submittedToken = $request->request->get('_token');
+            if (!$this->isCsrfTokenValid('contact_form', $submittedToken)) {
+                $error = 'Token de sécurité invalide. Veuillez réessayer.';
             } else {
-                try {
-                    // Créer et envoyer l'email
-                    $emailMessage = (new Email())
-                        ->from($email)
-                        ->to('contact@references-evenements.fr')
-                        ->subject('Contact: ' . $sujet)
-                        ->html(sprintf(
-                            '<p><strong>De:</strong> %s (%s)</p><p><strong>Sujet:</strong> %s</p><p><strong>Message:</strong></p><p>%s</p>',
-                            htmlspecialchars($nom),
-                            htmlspecialchars($email),
-                            htmlspecialchars($sujet),
-                            nl2br(htmlspecialchars($message))
-                        ));
+                $nom = $request->request->get('nom');
+                $email = $request->request->get('email');
+                $sujet = $request->request->get('sujet');
+                $message = $request->request->get('message');
 
-                    $mailer->send($emailMessage);
-                    $success = true;
-                } catch (\Exception $e) {
-                    $error = 'Une erreur est survenue lors de l\'envoi du message. Veuillez réessayer plus tard.';
+                // Validation basique
+                if (empty($nom) || empty($email) || empty($sujet) || empty($message)) {
+                    $error = 'Tous les champs sont obligatoires.';
+                } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                    $error = 'Adresse email invalide.';
+                } else {
+                    try {
+                        $emailMessage = (new Email())
+                            ->from(new \Symfony\Component\Mime\Address('lanathaud@gmail.com', $nom))
+                            ->replyTo(new \Symfony\Component\Mime\Address($email, $nom))
+                            ->to('lanathaud@gmail.com')
+                            ->subject($sujet)
+                            ->text(sprintf("De : %s <%s>\n\n%s", $nom, $email, $message))
+                            ->html(sprintf(
+                                '<p style="color:#888;font-size:13px;">De : <strong>%s</strong> &lt;%s&gt;</p><hr style="border:none;border-top:1px solid #eee;margin:12px 0;"><p style="font-size:15px;line-height:1.7;">%s</p>',
+                                htmlspecialchars($nom),
+                                htmlspecialchars($email),
+                                nl2br(htmlspecialchars($message))
+                            ));
+
+                        $mailer->send($emailMessage);
+                        $this->addFlash('success', 'Votre message a bien été envoyé ! Nous vous répondrons dans les plus brefs délais.');
+                        return $this->redirectToRoute('page_contact');
+                    } catch (\Exception) {
+                        $error = 'Une erreur est survenue lors de l\'envoi du message. Veuillez réessayer plus tard.';
+                    }
                 }
             }
         }

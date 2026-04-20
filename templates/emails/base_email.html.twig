@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: Arial, sans-serif; background: #f4f4f4; margin: 0; padding: 0; }
+        .container { max-width: 600px; margin: 30px auto; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .header { background: #1a1a1a; color: white; padding: 30px; text-align: center; }
+        .header h1 { margin: 0; font-size: 24px; }
+        .header p { margin: 8px 0 0; opacity: 0.8; font-size: 14px; }
+        .body { padding: 30px; color: #333; line-height: 1.6; }
+        .body h2 { color: #1a1a1a; margin-top: 0; }
+        .info-box { background: #f8f9fa; border-left: 4px solid #6366f1; padding: 16px 20px; border-radius: 4px; margin: 20px 0; }
+        .info-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #e9ecef; }
+        .info-row:last-child { border-bottom: none; }
+        .info-label { color: #666; font-size: 14px; }
+        .info-value { font-weight: 600; color: #1a1a1a; font-size: 14px; }
+        .btn { display: inline-block; background: #6366f1; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: 600; margin-top: 20px; }
+        .footer { background: #f8f9fa; padding: 20px 30px; text-align: center; font-size: 12px; color: #999; border-top: 1px solid #e9ecef; }
+        .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 13px; font-weight: 600; }
+        .badge-orange { background: #fff3cd; color: #856404; }
+        .badge-green { background: #d4edda; color: #155724; }
+        .badge-red { background: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>Références Événements</h1>
+        <p>La plateforme de location d'emplacements événementiels</p>
+    </div>
+    <div class="body">
+        {% block content %}{% endblock %}
+    </div>
+    <div class="footer">
+        <p>Références Événements — <a href="mailto:accueil@refevent.fr" style="color:#6366f1;">accueil@refevent.fr</a></p>
+        <p>Cet email a été envoyé automatiquement, merci de ne pas y répondre directement.</p>
+    </div>
+</div>
+</body>
+</html>

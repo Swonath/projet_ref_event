@@ -2,11 +2,16 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Paiement;
+use App\Enum\StatutReservation;
 use App\Repository\LocataireRepository;
 use App\Repository\CentreCommercialRepository;
 use App\Repository\ReservationRepository;
 use App\Repository\EmplacementRepository;
+use App\Service\StripeService;
+use App\Service\EmailNotificationService;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -375,5 +380,110 @@ class DashboardController extends AbstractController
             'reservations' => $reservations,
             'filtre' => $filtre,
         ]);
+    }
+
+    /**
+     * Détail d'une réservation (admin)
+     */
+    #[Route('/reservations/{id}', name: 'reservation_detail', requirements: ['id' => '\d+'])]
+    public function reservationDetail(
+        int $id,
+        ReservationRepository $reservationRepo
+    ): Response {
+        $reservation = $reservationRepo->find($id);
+        if (!$reservation) {
+            throw $this->createNotFoundException('Réservation non trouvée');
+        }
+
+        return $this->render('admin/reservation_detail.html.twig', [
+            'reservation' => $reservation,
+        ]);
+    }
+
+    /**
+     * Forcer le statut d'une réservation (admin)
+     */
+    #[Route('/reservations/{id}/forcer-statut', name: 'reservation_forcer_statut', methods: ['POST'], requirements: ['id' => '\d+'])]
+    public function forcerStatut(
+        int $id,
+        Request $request,
+        ReservationRepository $reservationRepo,
+        EntityManagerInterface $em
+    ): Response {
+        $token = $request->request->get('_token');
+        if (!$this->isCsrfTokenValid('admin_forcer_statut_' . $id, $token)) {
+            $this->addFlash('error', 'Token CSRF invalide');
+            return $this->redirectToRoute('admin_reservation_detail', ['id' => $id]);
+        }
+
+        $reservation = $reservationRepo->find($id);
+        if (!$reservation) {
+            throw $this->createNotFoundException('Réservation non trouvée');
+        }
+
+        $nouveauStatut = $request->request->get('statut');
+        $statutEnum = StatutReservation::tryFrom($nouveauStatut);
+
+        if (!$statutEnum) {
+            $this->addFlash('error', 'Statut invalide');
+            return $this->redirectToRoute('admin_reservation_detail', ['id' => $id]);
+        }
+
+        $reservation->setStatut($statutEnum);
+        $em->flush();
+
+        $this->addFlash('success', 'Statut mis à jour : ' . $statutEnum->getLibelle());
+        return $this->redirectToRoute('admin_reservation_detail', ['id' => $id]);
+    }
+
+    /**
+     * Déclencher un remboursement Stripe (admin)
+     */
+    #[Route('/reservations/{id}/rembourser', name: 'reservation_rembourser', methods: ['POST'], requirements: ['id' => '\d+'])]
+    public function rembourser(
+        int $id,
+        Request $request,
+        ReservationRepository $reservationRepo,
+        EntityManagerInterface $em,
+        StripeService $stripeService,
+        LoggerInterface $logger
+    ): Response {
+        $token = $request->request->get('_token');
+        if (!$this->isCsrfTokenValid('admin_rembourser_' . $id, $token)) {
+            $this->addFlash('error', 'Token CSRF invalide');
+            return $this->redirectToRoute('admin_reservation_detail', ['id' => $id]);
+        }
+
+        $reservation = $reservationRepo->find($id);
+        if (!$reservation) {
+            throw $this->createNotFoundException('Réservation non trouvée');
+        }
+
+        $paiement = $reservation->getPaiement();
+        if (!$paiement || !$paiement->getTransactionId()) {
+            $this->addFlash('error', 'Aucun paiement Stripe associé à cette réservation');
+            return $this->redirectToRoute('admin_reservation_detail', ['id' => $id]);
+        }
+
+        if ($paiement->getStatut() === 'rembourse') {
+            $this->addFlash('warning', 'Cette réservation a déjà été remboursée');
+            return $this->redirectToRoute('admin_reservation_detail', ['id' => $id]);
+        }
+
+        try {
+            $stripeService->createRefund($paiement->getTransactionId());
+            $paiement->setStatut('rembourse');
+            $paiement->setDateRemboursement(new \DateTime());
+            $paiement->setMontantRembourse($paiement->getMontant());
+            $reservation->setStatut(StatutReservation::ANNULEE);
+            $em->flush();
+
+            $this->addFlash('success', 'Remboursement de ' . $paiement->getMontant() . ' € effectué avec succès');
+        } catch (\Exception $e) {
+            $logger->error('Erreur remboursement admin', ['error' => $e->getMessage(), 'reservation_id' => $id]);
+            $this->addFlash('error', 'Erreur lors du remboursement : ' . $e->getMessage());
+        }
+
+        return $this->redirectToRoute('admin_reservation_detail', ['id' => $id]);
     }
 }

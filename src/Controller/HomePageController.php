@@ -4,8 +4,12 @@ namespace App\Controller;
 
 use App\Entity\Locataire;
 use App\Entity\CentreCommercial;
+use App\Repository\AvisRepository;
 use App\Repository\EmplacementRepository;
+use App\Repository\CentreCommercialRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -239,10 +243,59 @@ class HomePageController extends AbstractController
     /**
      * Page de recherche avec carte interactive
      */
+    /**
+     * Sauvegarde les coordonnées GPS d'un centre (appelé depuis le JS après géocodage Nominatim)
+     */
+    #[Route('/centre/{id}/coordonnees', name: 'centre_save_coords', methods: ['POST'], requirements: ['id' => '\d+'])]
+    public function saveCentreCoords(
+        int $id,
+        Request $request,
+        CentreCommercialRepository $centreRepo,
+        EntityManagerInterface $em
+    ): JsonResponse {
+        $centre = $centreRepo->find($id);
+        if (!$centre) {
+            return new JsonResponse(['ok' => false], 404);
+        }
+
+        $data = json_decode($request->getContent(), true);
+        $lat = isset($data['lat']) ? (float) $data['lat'] : null;
+        $lng = isset($data['lng']) ? (float) $data['lng'] : null;
+
+        if ($lat && $lng) {
+            $centre->setLatitude($lat);
+            $centre->setLongitude($lng);
+            $em->flush();
+        }
+
+        return new JsonResponse(['ok' => true]);
+    }
+
     #[Route('/recherche-carte', name: 'recherche_carte')]
-    public function rechercheCarte(EmplacementRepository $emplacementRepo): Response
-    {
-        // Récupérer tous les emplacements actifs avec leurs centres commerciaux
+    public function rechercheCarte(
+        EmplacementRepository $emplacementRepo,
+        CentreCommercialRepository $centreRepo,
+        AvisRepository $avisRepo
+    ): Response {
+        // Récupérer tous les centres actifs ayant au moins un emplacement actif
+        $centres = $centreRepo->createQueryBuilder('c')
+            ->join('c.emplacements', 'e')
+            ->where('c.statutCompte = :statut')
+            ->andWhere('e.statutAnnonce = :emplacementStatut')
+            ->setParameter('statut', 'actif')
+            ->setParameter('emplacementStatut', 'active')
+            ->groupBy('c.id')
+            ->orderBy('c.nomCentre', 'ASC')
+            ->getQuery()
+            ->getResult();
+
+        // Notes par centre
+        $notesCentres = [];
+        foreach ($centres as $centre) {
+            $notesCentres[$centre->getId()] = $avisRepo->getStatsCentre($centre->getId());
+        }
+
+        // Récupérer les emplacements actifs (pour la sidebar)
         $emplacements = $emplacementRepo->createQueryBuilder('e')
             ->join('e.centreCommercial', 'c')
             ->where('e.statutAnnonce = :statut')
@@ -252,7 +305,9 @@ class HomePageController extends AbstractController
             ->getResult();
 
         return $this->render('home_page/carte.html.twig', [
+            'centres'      => $centres,
             'emplacements' => $emplacements,
+            'notesCentres' => $notesCentres,
         ]);
     }
 }

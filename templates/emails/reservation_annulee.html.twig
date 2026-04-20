@@ -1,0 +1,33 @@
+{% extends 'emails/base_email.html.twig' %}
+
+{% block content %}
+<h2>Annulation de réservation</h2>
+<p>Une réservation a été annulée {{ annuleePar == 'locataire' ? 'par le locataire' : 'par le centre commercial' }}.</p>
+
+<div class="info-box">
+    <div class="info-row">
+        <span class="info-label">Emplacement</span>
+        <span class="info-value">{{ reservation.emplacement.titreAnnonce }}</span>
+    </div>
+    <div class="info-row">
+        <span class="info-label">Centre commercial</span>
+        <span class="info-value">{{ reservation.emplacement.centreCommercial.nomCentre }}</span>
+    </div>
+    <div class="info-row">
+        <span class="info-label">Locataire</span>
+        <span class="info-value">{{ reservation.locataire.nom }}</span>
+    </div>
+    <div class="info-row">
+        <span class="info-label">Dates</span>
+        <span class="info-value">{{ reservation.dateDebut|date('d/m/Y') }} → {{ reservation.dateFin|date('d/m/Y') }}</span>
+    </div>
+    <div class="info-row">
+        <span class="info-label">Date d'annulation</span>
+        <span class="info-value">{{ reservation.dateAnnulation|date('d/m/Y à H:i') }}</span>
+    </div>
+    <div class="info-row">
+        <span class="info-label">Statut</span>
+        <span class="info-value"><span class="badge badge-red">Annulée</span></span>
+    </div>
+</div>
+{% endblock %}

@@ -707,6 +707,21 @@
     </style>
 
     <script>
+        const isLoggedIn = {{ app.user ? 'true' : 'false' }};
+
+        function ouvrirModal() {
+            const modal = document.getElementById('modalConnexion');
+            modal.style.display = 'flex';
+        }
+        function fermerModal() {
+            document.getElementById('modalConnexion').style.display = 'none';
+        }
+        // Fermer en cliquant en dehors
+        document.addEventListener('click', function(e) {
+            const modal = document.getElementById('modalConnexion');
+            if (e.target === modal) fermerModal();
+        });
+
         let currentOffset = {{ emplacements|length }};
         const totalEmplacements = {{ total }};
         const searchQuery = '{{ search }}';
@@ -789,6 +804,34 @@
                 if (filtres.style.display !== 'none') {
                     btn.textContent = '🔼 Masquer les filtres';
                 }
+            }
+
+            // Bloquer recherche + clics si non connecté
+            if (!isLoggedIn) {
+                // Intercepter soumission du formulaire de recherche
+                const form = document.getElementById('searchForm');
+                if (form) {
+                    form.addEventListener('submit', function(e) {
+                        e.preventDefault();
+                        ouvrirModal();
+                    });
+                }
+
+                // Intercepter bouton "Rechercher avec la carte"
+                document.querySelectorAll('.btn-carte-recherche').forEach(el => {
+                    el.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        ouvrirModal();
+                    });
+                });
+
+                // Intercepter clics sur les cards d'emplacements (carousel populaires)
+                document.querySelectorAll('.carousel-card, .emplacement-card').forEach(el => {
+                    el.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        ouvrirModal();
+                    });
+                });
             }
 
             // Initialiser le carousel
@@ -913,6 +956,28 @@
             });
         }
     </script>
+
+    <!-- Modal : connexion requise -->
+    <div id="modalConnexion" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center;">
+        <div style="background:white;border-radius:16px;padding:40px 36px;max-width:440px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.2);">
+            <div style="font-size:48px;margin-bottom:16px;">🔒</div>
+            <h2 style="font-size:22px;font-weight:700;margin-bottom:10px;color:#1a1a1a;">Connexion requise</h2>
+            <p style="color:#666;font-size:15px;margin-bottom:28px;line-height:1.6;">
+                Pour accéder aux emplacements et effectuer une recherche, vous devez être connecté à votre compte.
+            </p>
+            <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+                <a href="{{ path('app_login') }}" style="background:#1a1a1a;color:white;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600;font-size:15px;">
+                    Se connecter
+                </a>
+                <a href="{{ path('app_register') }}" style="background:white;color:#1a1a1a;border:2px solid #1a1a1a;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600;font-size:15px;">
+                    Créer un compte
+                </a>
+            </div>
+            <button onclick="fermerModal()" style="margin-top:20px;background:none;border:none;color:#999;font-size:13px;cursor:pointer;text-decoration:underline;">
+                Continuer à naviguer
+            </button>
+        </div>
+    </div>
 
     <!-- Footer -->
     {% include 'partials/_footer.html.twig' %}
